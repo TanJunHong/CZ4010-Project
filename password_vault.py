@@ -1,9 +1,21 @@
+import sqlite3
 import tkinter
 
 import passlib.context
 
 main_window = tkinter.Tk()
 main_window.title(string="Password Manager")
+
+with sqlite3.connect("password_vault.db") as db:
+    cursor = db.cursor()
+
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS user_accounts(
+    id INTEGER PRIMARY KEY,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+""")
 
 
 def login_screen():
