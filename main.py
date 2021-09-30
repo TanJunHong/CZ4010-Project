@@ -2,9 +2,16 @@ import sqlite3
 import tkinter
 
 import passlib.context
+import passlib.hash
 
 with sqlite3.connect("password_vault.db") as db:
     cursor = db.cursor()
+
+site_wide_salt = bytes("CZ4010", "utf8")
+
+# cursor.execute("""
+# DROP TABLE user_accounts;
+# """)
 
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS user_accounts(
@@ -62,9 +69,10 @@ def registration():
             another_label.config(text="Passwords do not match!")
             return
 
+        username_hash = passlib.hash.pbkdf2_sha256.hash(username_entry.get(), salt=site_wide_salt).split("$")[-1]
         password_hash = context.hash(password_entry.get())
         insert_password = """INSERT INTO user_accounts (username, password) VALUES (?, ?) """
-        cursor.execute(insert_password, [username_entry.get(), password_hash])
+        cursor.execute(insert_password, [username_hash, password_hash])
         db.commit()
         another_label.config(text="Successfully Created!")
         new_window.destroy()
@@ -140,7 +148,8 @@ def login_screen():
     another_label.pack()
 
     def verify_login():
-        cursor.execute("SELECT password FROM user_accounts WHERE username = ?", [username_entry.get()])
+        username_hash = passlib.hash.pbkdf2_sha256.hash(username_entry.get(), salt=site_wide_salt).split("$")[-1]
+        cursor.execute("SELECT password FROM user_accounts WHERE username = ?", [username_hash])
         password_hash = cursor.fetchone()
         if not username_entry.get() or not password_entry.get():
             another_label.config(text="Please ensure all fields are filled!")
@@ -148,7 +157,8 @@ def login_screen():
         if not password_hash or not context.verify(password_entry.get(), password_hash[0]):
             another_label.config(text="Wrong Username or Password!")
             return
-        password_vault()
+        # another_label.config(text="Login Successful! Redirecting you...")
+        curr_window.after(1000, password_vault)
 
     submit_button = tkinter.Button(main_window, text="Submit", font=("Arial", 25), command=verify_login)
     submit_button.pack()
