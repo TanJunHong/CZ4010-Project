@@ -157,7 +157,8 @@ def login_screen():
         if not password_hash or not context.verify(password_entry.get(), password_hash[0]):
             another_label.config(text="Wrong Username or Password!")
             return
-        # another_label.config(text="Login Successful! Redirecting you...")
+        another_label.config(text="Login Successful! Redirecting you...")
+        curr_window.after(1000, lambda: another_label.config(text=""))
         curr_window.after(1000, password_vault)
 
     submit_button = tkinter.Button(main_window, text="Submit", font=("Arial", 25), command=verify_login)
