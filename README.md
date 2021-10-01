@@ -1,5 +1,5 @@
 # CZ4010-Applied Cryptography Project
-> This password manager tool was created as a project and is NOT intended for actual use.
+> Note: This password manager tool was created as a project and is NOT intended for actual use.
 
 ## Encryption
 XX
