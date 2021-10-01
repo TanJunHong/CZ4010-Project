@@ -1,6 +1,7 @@
 import sqlite3
 import tkinter
 from tkinter import ttk
+from functools import partial
 
 # import the Fernet class
 import cryptography.fernet
@@ -44,6 +45,7 @@ context = passlib.context.CryptContext(
     default="pbkdf2_sha256",
     pbkdf2_sha256__default_rounds=50000
 )
+
 
 
 def clear_fields(window):
@@ -228,6 +230,49 @@ def password_vault():
 
         gui_helper.centre_window(new_window)
 
+    def delete_page():
+        def delete_from_vault():
+            cursor.execute("DELETE FROM password_vault WHERE id =?", (input,))
+            db.commit()
+
+        new_window = tkinter.Toplevel()
+        new_window.geometry("640x480")
+        new_window.title(string="Delete Item")
+
+        website_lbl = ttk.Label(new_window, text="Website")
+        website_lbl.grid(row=2, column=0, padx=80)
+
+        username_lbl = ttk.Label(new_window, text="Username")
+        username_lbl.grid(row=2, column=1, padx=80)
+
+        password_lbl = ttk.Label(new_window, text="Password")
+        password_lbl.grid(row=2, column=2, padx=80)
+
+        cursor.execute('SELECT website, username, password FROM password_vault')
+        if (cursor.fetchall() != None):
+            i = 0
+            while True:
+                cursor.execute('SELECT website, username,password FROM password_vault')
+                array = cursor.fetchall()
+                website_lbl1 = ttk.Label(new_window, text=(array[i][0]), font=("Arial", 12))
+                website_lbl1.grid(column=0, row=(i + 3))
+
+                username_lbl2 = ttk.Label(new_window, text=(array[i][1]), font=("Arial", 12))
+                username_lbl2.grid(column=1, row=(i + 3))
+
+                password_lbl3 = ttk.Label(new_window, text=(array[i][2]), font=("Arial", 12))
+                password_lbl3.grid(column=2, row=(i + 3))
+
+                delete_btn = ttk.Button(new_window, text="Delete", command=partial(delete_from_vault, array[i][0]))
+                delete_btn.grid(column=3, row=(i + 3), pady=10)
+
+                i = i + 1
+                cursor.execute('SELECT website, username, password FROM password_vault')
+                if (len(cursor.fetchall()) <= i):
+                    break
+
+        gui_helper.centre_window(new_window)
+
     clear_fields(curr_window)
 
     curr_window.withdraw()
@@ -244,6 +289,9 @@ def password_vault():
 
     add_button = ttk.Button(new_window, text="Add Vault", style="TButton", command=add_page)
     add_button.pack()
+
+    delete_button = ttk.Button(new_window, text="Delete Vault", style="TButton", command=delete_page)
+    delete_button.pack()
     gui_helper.centre_window(new_window)
     # new_window.mainloop()
 
