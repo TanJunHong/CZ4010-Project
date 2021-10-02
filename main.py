@@ -270,6 +270,41 @@ def password_vault():
                 cursor.execute('SELECT website, username, password FROM password_vault')
                 if (len(cursor.fetchall()) <= i):
                     break
+        gui_helper.centre_window(new_window)
+
+    def pgenerator_page():
+        def pgenerator():
+            print("bIJ")
+        new_window = tkinter.Toplevel()
+        new_window.geometry("640x480")
+        new_window.title(string="Password Generator")
+
+        # Get length of password to generate
+        plength_label = ttk.Label(new_window, text="Length of password:", font=("Arial", 12))
+        plength_label.grid(row=0, column=0, padx=10)
+
+        plength_entry = ttk.Entry(new_window, font=("Arial", 12))
+        plength_entry.grid(row=0, column=1)
+
+        # Get type of characters to include in password
+        ptype_label = ttk.Label(new_window, text="Type of characters:", font=("Arial",12))
+        ptype_label.grid(row=1, column=0, padx=10)
+
+        ptype1_cbox = ttk.Checkbutton(new_window, text="Upper Case A-Z")
+        ptype1_cbox.grid(row=1, column=1)
+
+        ptype2_cbox = ttk.Checkbutton(new_window, text="Lower Case a-z")
+        ptype2_cbox.grid(row=1, column=2)
+
+        ptype3_cbox = ttk.Checkbutton(new_window, text="Numeric 0-9")
+        ptype3_cbox.grid(row=2, column=1)
+
+        ptype4_cbox = ttk.Checkbutton(new_window, text="!@#$%^&*")
+        ptype4_cbox.grid(row=2, column=2)
+
+        # Generate password
+        generate_button = ttk.Button(new_window, text="Generate", style="TButton", command=pgenerator)
+        generate_button.grid(row=3, column=1)
 
         gui_helper.centre_window(new_window)
 
@@ -292,6 +327,10 @@ def password_vault():
 
     delete_button = ttk.Button(new_window, text="Delete Vault", style="TButton", command=delete_page)
     delete_button.pack()
+
+    pgenerator_button = ttk.Button(new_window, text="Password Generator", style="TButton", command=pgenerator_page)
+    pgenerator_button.pack()
+
     gui_helper.centre_window(new_window)
     # new_window.mainloop()
 
