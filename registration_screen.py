@@ -5,6 +5,7 @@ from passlib import hash
 
 import gui_helper
 import helper
+import password_helper
 
 
 class RegistrationScreen:
@@ -57,7 +58,8 @@ class RegistrationScreen:
             self.notification_label.config(text="Please ensure all fields are filled!")
             return
 
-        username_hash = hash.pbkdf2_sha256.hash(self.username_entry.get(), salt=helper.site_wide_salt).split("$")[-1]
+        username_hash = \
+        hash.pbkdf2_sha256.hash(secret=self.username_entry.get(), salt=password_helper.site_wide_salt).split("$")[-1]
 
         helper.cursor.execute("SELECT 1 FROM user_accounts WHERE username = ? LIMIT 1", [username_hash])
         if len(helper.cursor.fetchall()) > 0:
@@ -67,7 +69,7 @@ class RegistrationScreen:
             self.notification_label.config(text="Passwords do not match!")
             return
 
-        password_hash = helper.context.hash(self.password_entry.get())
+        password_hash = password_helper.context.hash(self.password_entry.get())
 
         gui_helper.clear_fields(self.window)
 
