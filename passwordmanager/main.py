@@ -1,5 +1,5 @@
-import login_screen
-from helper import cursor
+from passwordmanager.helper.db_helper import cursor
+from passwordmanager.ui import login_screen
 
 if __name__ == "__main__":
     # cursor.execute("""

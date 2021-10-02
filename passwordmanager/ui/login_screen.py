@@ -3,12 +3,9 @@ from tkinter import ttk
 import ttkthemes
 from passlib import hash
 
-import gui_helper
-import helper
-import password_helper
-import registration_screen
-import vault_screen
-from password_helper import context
+from passwordmanager.helper import db_helper, gui_helper, password_helper
+from passwordmanager.helper.password_helper import context
+from passwordmanager.ui import registration_screen, vault_screen
 
 
 class LoginScreen:
@@ -60,10 +57,11 @@ class LoginScreen:
             return
 
         username_hash = \
-        hash.pbkdf2_sha256.hash(secret=self.username_entry.get(), salt=password_helper.site_wide_salt).split("$")[-1]
+            hash.pbkdf2_sha256.hash(secret=self.username_entry.get(), salt=password_helper.site_wide_salt).split("$")[
+                -1]
 
-        helper.cursor.execute("SELECT password FROM user_accounts WHERE username = ?", [username_hash])
-        password_hash = helper.cursor.fetchone()
+        db_helper.cursor.execute("SELECT password FROM user_accounts WHERE username = ?", [username_hash])
+        password_hash = db_helper.cursor.fetchone()
 
         if not password_hash or not context.verify(self.password_entry.get(), password_hash[0]):
             self.notification_label.config(text="Wrong Username or Password!")

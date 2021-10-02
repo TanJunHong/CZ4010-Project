@@ -3,9 +3,7 @@ from tkinter import ttk
 
 from passlib import hash
 
-import gui_helper
-import helper
-import password_helper
+from passwordmanager.helper import db_helper, gui_helper, password_helper
 
 
 class RegistrationScreen:
@@ -59,10 +57,11 @@ class RegistrationScreen:
             return
 
         username_hash = \
-        hash.pbkdf2_sha256.hash(secret=self.username_entry.get(), salt=password_helper.site_wide_salt).split("$")[-1]
+            hash.pbkdf2_sha256.hash(secret=self.username_entry.get(), salt=password_helper.site_wide_salt).split("$")[
+                -1]
 
-        helper.cursor.execute("SELECT 1 FROM user_accounts WHERE username = ? LIMIT 1", [username_hash])
-        if len(helper.cursor.fetchall()) > 0:
+        db_helper.cursor.execute("SELECT 1 FROM user_accounts WHERE username = ? LIMIT 1", [username_hash])
+        if len(db_helper.cursor.fetchall()) > 0:
             self.notification_label.config(text="Username already exists!")
             return
         if self.password_entry.get() != self.confirm_password_entry.get():
@@ -73,9 +72,9 @@ class RegistrationScreen:
 
         gui_helper.clear_fields(self.window)
 
-        helper.cursor.execute("""INSERT INTO user_accounts (username, password) VALUES (?, ?) """,
-                              [username_hash, password_hash])
-        helper.db.commit()
+        db_helper.cursor.execute("""INSERT INTO user_accounts (username, password) VALUES (?, ?) """,
+                                 [username_hash, password_hash])
+        db_helper.db.commit()
 
         self.notification_label.config(text="Successfully Created!")
         self.window.after(1000, lambda: gui_helper.back(root=self.master, me=self.window))

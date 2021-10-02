@@ -3,8 +3,8 @@ from tkinter import ttk
 
 from cryptography import fernet
 
-import gui_helper
-from helper import cursor, db
+from passwordmanager.helper import gui_helper
+from passwordmanager.helper.db_helper import cursor, db
 
 
 class VaultScreen:
