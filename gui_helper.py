@@ -1,3 +1,7 @@
+import tkinter
+from tkinter import ttk
+
+
 def centre_window(window):
     """Centres main window given 'window'
     Function centre_window(window) centres the given 'window' by taking into account main window geometry and screen
@@ -27,3 +31,14 @@ def back(root, me):
 
     me.destroy()
     root.deiconify()
+
+
+def create_style():
+    style = ttk.Style()
+    style.configure(style="TButton", font=("Arial", 25))
+
+
+def clear_fields(window):
+    for widget in window.winfo_children():
+        if type(widget) == ttk.Entry:
+            widget.delete(first=0, last=tkinter.END)
