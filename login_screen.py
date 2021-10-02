@@ -7,7 +7,7 @@ import gui_helper
 import helper
 import password_helper
 import registration_screen
-from main import password_vault
+import vault_screen
 from password_helper import context
 
 
@@ -73,5 +73,4 @@ class LoginScreen:
 
         self.notification_label.config(text="Login Successful! Redirecting you...")
         self.window.after(1000, lambda: self.notification_label.config(text=""))
-        self.window.after(1000, self.window.withdraw)
-        self.window.after(1000, password_vault)
+        self.window.after(1000, lambda: vault_screen.VaultScreen(master=self.window))
