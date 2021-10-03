@@ -1,5 +1,5 @@
 from passwordmanager.helper.db_helper import cursor
-from passwordmanager.ui import login_screen
+from passwordmanager.ui import login_page
 
 if __name__ == "__main__":
     # cursor.execute("""
@@ -27,4 +27,4 @@ if __name__ == "__main__":
     );
     """)
 
-    login_screen.LoginScreen()
+    login_page.LoginPage()

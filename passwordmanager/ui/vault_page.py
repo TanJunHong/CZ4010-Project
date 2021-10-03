@@ -1,4 +1,5 @@
 import tkinter
+from functools import partial
 from tkinter import ttk
 
 from cryptography import fernet
@@ -7,35 +8,37 @@ from passwordmanager.helper import gui_helper
 from passwordmanager.helper.db_helper import cursor, db
 
 
-class VaultScreen:
+class VaultPage:
     def __init__(self, master):
-        self.master = master
-        self.master.withdraw()
+        self.__master = master
+        self.__master.withdraw()
 
-        self.window = tkinter.Toplevel()
-        self.window.geometry("640x480")
-        self.window.title(string="Password Manager")
-        self.welcome_label = ttk.Label(master=self.window, text="Password Vault")
-        self.welcome_label.config(anchor=tkinter.CENTER)
-        self.welcome_label.pack()
+        self.__window = tkinter.Toplevel()
+        self.__window.geometry("640x480")
+        self.__window.title(string="Password Manager")
+        self.__welcome_label = ttk.Label(master=self.__window, text="Password Vault")
+        self.__welcome_label.config(anchor=tkinter.CENTER)
+        self.__welcome_label.pack()
 
-        self.add_button = ttk.Button(master=self.window, text="Add Vault", style="TButton", command=self.add_page)
-        self.add_button.pack()
+        self.__add_button = ttk.Button(master=self.__window, text="Add Vault", style="TButton",
+                                       command=self.__show_add_page)
+        self.__add_button.pack()
 
-        self.delete_button = ttk.Button(master=self.window, text="Delete Vault", style="TButton",
-                                        command=self.delete_page)
-        self.delete_button.pack()
+        self.__delete_button = ttk.Button(master=self.__window, text="Delete Vault", style="TButton",
+                                          command=self.__show_delete_page)
+        self.__delete_button.pack()
 
-        self.pgenerator_button = ttk.Button(master=self.window, text="Password Generator", style="TButton",
-                                            command=self.pgenerator_page)
-        self.pgenerator_button.pack()
+        self.__pgenerator_button = ttk.Button(master=self.__window, text="Password Generator", style="TButton",
+                                              command=self.__show_pgenerator_page)
+        self.__pgenerator_button.pack()
 
-        self.window.protocol(func=lambda: gui_helper.back(root=self.master, me=self.window), name="WM_DELETE_WINDOW")
+        self.__window.protocol(func=lambda: gui_helper.back(root=self.__master, me=self.__window),
+                               name="WM_DELETE_WINDOW")
 
-        gui_helper.centre_window(window=self.window)
-        self.window.mainloop()
+        gui_helper.centre_window(window=self.__window)
+        self.__window.mainloop()
 
-    def add_page(self):
+    def __show_add_page(self):
         def add_to_vault():
             # username_hash = passlib.hash.pbkdf2_sha256.hash(username_entry.get(), salt=site_wide_salt).split("$")[-1]
             # generate key
@@ -43,8 +46,7 @@ class VaultScreen:
             f = fernet.Fernet(key)
             encrypted_password = f.encrypt(bytes(password_entry.get(), "utf8"))
             insert_query = """INSERT INTO password_vault (username, website, login_username, password) VALUES (?, ?, ?, ?) """
-            cursor.execute(insert_query,
-                           [username_hash, website_entry.get(), username_entry.get(), encrypted_password])
+            cursor.execute(insert_query, [username_hash, website_entry.get(), username_entry.get(), encrypted_password])
             db.commit()
 
         window = tkinter.Toplevel()
@@ -80,7 +82,7 @@ class VaultScreen:
 
         gui_helper.centre_window(window)
 
-    def delete_page(self):
+    def __show_delete_page(self):
         def delete_from_vault():
             cursor.execute("DELETE FROM password_vault WHERE id =?", (input,))
             db.commit()
@@ -123,7 +125,7 @@ class VaultScreen:
                     break
         gui_helper.centre_window(new_window)
 
-    def pgenerator_page(self):
+    def __show_pgenerator_page(self):
         def pgenerator():
             print("bIJ")
 
