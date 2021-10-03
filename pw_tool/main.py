@@ -1,5 +1,5 @@
-from passwordmanager.helper.db_helper import cursor
-from passwordmanager.ui import login_page
+from pw_tool.helper.db_helper import cursor
+from pw_tool.ui.login import login_page
 
 if __name__ == "__main__":
     # cursor.execute("""

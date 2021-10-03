@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import ttk
+import tkinter.ttk
 
 
 def centre_window(window):
@@ -18,7 +18,7 @@ def centre_window(window):
     # Calculations to centre the window
     x = (window.winfo_screenwidth() - max(window.winfo_width(), window.winfo_reqwidth())) / 2
     y = (window.winfo_screenheight() - max(window.winfo_height(), window.winfo_reqheight())) / 2
-    window.geometry(newGeometry='+%d+%d' % (x, y))
+    window.geometry(newGeometry="+%d+%d" % (x, y))
 
     # Show window
     window.deiconify()
@@ -34,11 +34,11 @@ def back(root, me):
 
 
 def create_style():
-    style = ttk.Style()
+    style = tkinter.ttk.Style()
     style.configure(style="TButton", font=("Arial", 25))
 
 
 def clear_fields(window):
     for widget in window.winfo_children():
-        if type(widget) == ttk.Entry:
+        if type(widget) == tkinter.ttk.Entry:
             widget.delete(first=0, last=tkinter.END)
