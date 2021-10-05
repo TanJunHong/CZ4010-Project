@@ -1,7 +1,9 @@
+import secrets
 import tkinter.ttk
 from tkinter import IntVar
+
 import pw_tool.helper.ui_helper
-import secrets
+
 
 class GenPage:
     def __init__(self, master):
@@ -12,8 +14,8 @@ class GenPage:
         self.__window.title(string="Password Generator")
 
         # Get length of password to generate
-        self.__plength_label = tkinter.ttk.Label(master=self.__window, text="Length of password:\n(Minimum length = 12)",
-                                                 font=("Arial", 12))
+        self.__plength_label = tkinter.ttk.Label(master=self.__window,
+                                                 text="Length of password:\n(Minimum length = 12)", font=("Arial", 12))
         self.__plength_label.grid(row=0, column=0, padx=10)
 
         self.__plength_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 12))
@@ -28,13 +30,16 @@ class GenPage:
         self.__ptype_label = tkinter.ttk.Label(master=self.__window, text="Type of characters:", font=("Arial", 12))
         self.__ptype_label.grid(row=1, column=0, padx=10)
 
-        self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Upper Case A-Z", variable=self.__var_upper)
+        self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Upper Case A-Z",
+                                                     variable=self.__var_upper)
         self.__ptype1_cbox.grid(row=1, column=1)
 
-        self.__ptype2_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Lower Case a-z", variable=self.__var_lower)
+        self.__ptype2_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Lower Case a-z",
+                                                     variable=self.__var_lower)
         self.__ptype2_cbox.grid(row=1, column=2)
 
-        self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Numeric 0-9", variable=self.__var_numeric)
+        self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Numeric 0-9",
+                                                     variable=self.__var_numeric)
         self.__ptype3_cbox.grid(row=2, column=1)
 
         self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="!@#$%^&*", variable=self.__var_symbol)

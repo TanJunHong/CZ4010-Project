@@ -1,14 +1,8 @@
 from pw_tool.helper.db_helper import cursor
 from pw_tool.ui.login import login_page
 
-if __name__ == "__main__":
-    # cursor.execute("""
-    # DROP TABLE user_accounts;
-    # """)
-    # cursor.execute("""
-    # DROP TABLE password_vault;
-    # """)
 
+def main():
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS user_accounts(
         id INTEGER PRIMARY KEY,
@@ -28,3 +22,7 @@ if __name__ == "__main__":
     """)
 
     login_page.LoginPage()
+
+
+if __name__ == "__main__":
+    main()
