@@ -51,15 +51,15 @@ class AddPage:
 
     def __add_to_vault(self):
         username_hash = passlib.hash.pbkdf2_sha256.hash(self.__username_entry.get(),
-                                                        salt=pw_tool.helper.pw_helper.site_wide_salt).split("$")[-1]
+                                                        salt=pw_tool.helper.pw_helper.vault_iv).split("$")[-1]
         # generate key
         key = cryptography.fernet.Fernet.generate_key()
         f = cryptography.fernet.Fernet(key=key)
         encrypted_password = f.encrypt(bytes(self.__password_entry.get(), "utf8"))
-        pw_tool.helper.firebase_helper.cursor.execute(
-            """INSERT INTO password_vault (username, website, login_username, password) VALUES (?, ?, ?, ?) """,
-            [username_hash, self.__website_entry.get(), self.__username_entry.get(), encrypted_password])
-        pw_tool.helper.firebase_helper.db.commit()
+        # pw_tool.helper.firebase_helper.cursor.execute(
+        #     """INSERT INTO password_vault (username, website, login_username, password) VALUES (?, ?, ?, ?) """,
+        #     [username_hash, self.__website_entry.get(), self.__username_entry.get(), encrypted_password])
+        # pw_tool.helper.firebase_helper.db.commit()
 
         self.__notification_label.config(text="Successfully Added!")
         self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
