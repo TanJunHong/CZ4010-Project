@@ -71,11 +71,11 @@ class LoginPage:
             self.__notification_label.config(text=formatted_message)
             return
 
-        vault_key = pw_tool.helper.pw_helper.context.hash(secret=self.__email_entry.get() + self.__password_entry.get(),
-                                                          salt=pw_tool.helper.pw_helper.vault_iv)
-
-        auth_key = pw_tool.helper.pw_helper.context.hash(secret=vault_key + self.__password_entry.get(),
-                                                         salt=pw_tool.helper.pw_helper.vault_iv)
+        pw_tool.helper.pw_helper.vault_key = pw_tool.helper.pw_helper.context.hash(
+            secret=self.__email_entry.get() + self.__password_entry.get(), salt=pw_tool.helper.pw_helper.vault_iv)
+        pw_tool.helper.firebase_helper.auth_key = pw_tool.helper.pw_helper.context.hash(
+            secret=pw_tool.helper.pw_helper.vault_key + self.__password_entry.get(),
+            salt=pw_tool.helper.pw_helper.vault_iv)
 
         pw_tool.helper.ui_helper.clear_fields(self.__window)
 

@@ -1,7 +1,8 @@
+import json
 import tkinter.ttk
 
-import cryptography.fernet
-import passlib.hash
+import Crypto.Cipher.AES
+import Crypto.Util.Padding
 
 import pw_tool.helper.firebase_helper
 import pw_tool.helper.pw_helper
@@ -9,8 +10,9 @@ import pw_tool.helper.ui_helper
 
 
 class AddPage:
-    def __init__(self, master):
+    def __init__(self, master, vault):
         self.__master = master
+        self.__vault = vault
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
@@ -50,16 +52,15 @@ class AddPage:
             name="WM_DELETE_WINDOW")
 
     def __add_to_vault(self):
-        username_hash = passlib.hash.pbkdf2_sha256.hash(self.__username_entry.get(),
-                                                        salt=pw_tool.helper.pw_helper.vault_iv).split("$")[-1]
-        # generate key
-        key = cryptography.fernet.Fernet.generate_key()
-        f = cryptography.fernet.Fernet(key=key)
-        encrypted_password = f.encrypt(bytes(self.__password_entry.get(), "utf8"))
-        # pw_tool.helper.firebase_helper.cursor.execute(
-        #     """INSERT INTO password_vault (username, website, login_username, password) VALUES (?, ?, ?, ?) """,
-        #     [username_hash, self.__website_entry.get(), self.__username_entry.get(), encrypted_password])
-        # pw_tool.helper.firebase_helper.db.commit()
+        data = ""
+        self.__vault[self.__website_entry.get()] = {"username": self.__username_entry.get(),
+                                                    "password": self.__password_entry.get()}
+        vault_bytes = json.dumps(obj=self.__vault).encode(encoding="utf-8")
+        vault_key_bytes = pw_tool.helper.pw_helper.vault_key.encode(encodings="utf-8")
+        cipher = Crypto.Cipher.AES.new(key=vault_key_bytes, mode=Crypto.Cipher.AES.MODE_CBC)
+        encrypted_vault = cipher.encrypt(
+            Crypto.Util.Padding.pad(data_to_pad=vault_bytes, block_size=Crypto.Cipher.AES.block_size))
+        # pw_tool.helper.firebase_helper.database.child("vault").child(pw_tool.helper.firebase_helper.auth_key).push()
 
         self.__notification_label.config(text="Successfully Added!")
         self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
