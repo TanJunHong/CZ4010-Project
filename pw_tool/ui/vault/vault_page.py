@@ -1,7 +1,7 @@
 import tkinter
 import tkinter.ttk
 
-import pw_tool.helper.db_helper
+import pw_tool.helper.firebase_helper
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.add_page
 import pw_tool.ui.vault.delete_page

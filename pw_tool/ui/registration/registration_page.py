@@ -1,9 +1,10 @@
+import json
 import tkinter
 import tkinter.ttk
 
-import passlib.hash
+import requests
 
-import pw_tool.helper.db_helper
+import pw_tool.helper.firebase_helper
 import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
 
@@ -15,13 +16,13 @@ class RegistrationPage:
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Registration Page")
 
-        self.__username_label = tkinter.ttk.Label(master=self.__window, text="Username", font=("Arial", 25),
-                                                  background="SystemButtonFace")
-        self.__username_label.pack()
+        self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
+                                               background="SystemButtonFace")
+        self.__email_label.pack()
 
-        self.__username_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
-        self.__username_entry.pack()
-        self.__username_entry.focus()
+        self.__email_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
+        self.__email_entry.pack()
+        self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__window, text="Enter Password", font=("Arial", 25),
                                                   background="SystemButtonFace")
@@ -49,34 +50,29 @@ class RegistrationPage:
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
-        self.__window.protocol(
-            func=lambda root=master, window=self.__window: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
-            name="WM_DELETE_WINDOW")
+        self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
+                               name="WM_DELETE_WINDOW")
 
     def __create_account(self):
-        if not self.__username_entry.get() or not self.__password_entry.get() or not self.confirm_password_entry.get():
+        if not self.__email_entry.get() or not self.__password_entry.get() or not self.confirm_password_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
-        username_hash = passlib.hash.pbkdf2_sha256.hash(secret=self.__username_entry.get(),
-                                                        salt=pw_tool.helper.pw_helper.site_wide_salt).split("$")[-1]
-
-        pw_tool.helper.db_helper.cursor.execute("SELECT 1 FROM user_accounts WHERE username = ? LIMIT 1",
-                                                [username_hash])
-        if len(pw_tool.helper.db_helper.cursor.fetchall()) > 0:
-            self.__notification_label.config(text="Username already exists!")
-            return
         if self.__password_entry.get() != self.confirm_password_entry.get():
             self.__notification_label.config(text="Passwords do not match!")
             return
 
-        password_hash = pw_tool.helper.pw_helper.context.hash(self.__password_entry.get())
+        try:
+            pw_tool.helper.firebase_helper.auth.create_user_with_email_and_password(self.__email_entry.get(),
+                                                                                    self.__password_entry.get())
+        except requests.HTTPError as error:
+            error_json = error.args[1]
+            message = json.loads(error_json)["error"]["message"]
+            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
+            self.__notification_label.config(text=formatted_message)
+            return
 
-        pw_tool.helper.ui_helper.clear_fields(self.__window)
-
-        pw_tool.helper.db_helper.cursor.execute("""INSERT INTO user_accounts (username, password) VALUES (?, ?) """,
-                                                [username_hash, password_hash])
-        pw_tool.helper.db_helper.db.commit()
+        pw_tool.helper.ui_helper.clear_fields(window=self.__window)
 
         self.__notification_label.config(text="Successfully Created!")
         self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

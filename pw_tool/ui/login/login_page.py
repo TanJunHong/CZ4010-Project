@@ -1,9 +1,10 @@
+import json
 import tkinter.ttk
 
-import passlib.hash
+import requests
 import ttkthemes
 
-import pw_tool.helper.db_helper
+import pw_tool.helper.firebase_helper
 import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
 import pw_tool.ui.registration.registration_page
@@ -18,13 +19,13 @@ class LoginPage:
 
         pw_tool.helper.ui_helper.create_style()
 
-        self.__username_label = tkinter.ttk.Label(master=self.__window, text="Username", font=("Arial", 25),
-                                                  background="SystemButtonFace")
-        self.__username_label.pack()
+        self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
+                                               background="SystemButtonFace")
+        self.__email_label.pack()
 
-        self.__username_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
-        self.__username_entry.pack()
-        self.__username_entry.focus()
+        self.__email_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
+        self.__email_entry.pack()
+        self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__window, text="Enter Master Password",
                                                   font=("Arial", 25), background="SystemButtonFace")
@@ -55,20 +56,19 @@ class LoginPage:
         pw_tool.ui.registration.registration_page.RegistrationPage(master=self.__window)
 
     def __verify_login(self):
-        if not self.__username_entry.get() or not self.__password_entry.get():
+        if not self.__email_entry.get() or not self.__password_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
-        username_hash = passlib.hash.pbkdf2_sha256.hash(secret=self.__username_entry.get(),
-                                                        salt=pw_tool.helper.pw_helper.site_wide_salt).split("$")[-1]
-
-        pw_tool.helper.db_helper.cursor.execute("SELECT password FROM user_accounts WHERE username = ?",
-                                                [username_hash])
-        password_hash = pw_tool.helper.db_helper.cursor.fetchone()
-
-        if not password_hash or not pw_tool.helper.pw_helper.context.verify(self.__password_entry.get(),
-                                                                            password_hash[0]):
-            self.__notification_label.config(text="Wrong Username or Password!")
+        try:
+            user = pw_tool.helper.firebase_helper.auth.sign_in_with_email_and_password(self.__email_entry.get(),
+                                                                                       self.__password_entry.get())
+            print(user)
+        except requests.HTTPError as error:
+            error_json = error.args[1]
+            message = json.loads(error_json)["error"]["message"]
+            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
+            self.__notification_label.config(text=formatted_message)
             return
 
         pw_tool.helper.ui_helper.clear_fields(self.__window)
