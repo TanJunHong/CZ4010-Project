@@ -2,6 +2,9 @@ import json
 import tkinter
 import tkinter.ttk
 
+import Crypto.Cipher.AES
+import requests
+
 import pw_tool.helper.firebase_helper
 import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
@@ -21,11 +24,26 @@ class VaultPage:
         self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault")
         self.__welcome_label.pack()
 
-        # encrypted_vault = database.child("vault").child(pw_tool.helper.firebase_helper.auth_key).get()
-        # cipher = Crypto.Cipher.AES.new(key=pw_tool.helper.pw_helper.vault_key, mode=Crypto.Cipher.AES.MODE_CBC)
-        # vault_bytes = cipher.decrypt(ciphertext=encrypted_vault)
-        # self.__vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
-        # print(self.__vault)
+        try:
+            encrypted_vault = pw_tool.helper.firebase_helper.database.child("vault").child(
+                pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get()
+            if encrypted_vault.val() is not None:
+                cipher = Crypto.Cipher.AES.new(key=pw_tool.helper.pw_helper.vault_key, mode=Crypto.Cipher.AES.MODE_CBC)
+                print(encrypted_vault.val())
+                # TODO: solve bug
+                for vault in encrypted_vault.each():
+                    print(vault.val())  # {name": "Mortimer 'Morty' Smith"}
+                vault_bytes = cipher.decrypt(ciphertext=encrypted_vault.val())
+                self.__vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
+                print(self.__vault)
+            else:
+                self.__vault = {}
+
+        except requests.HTTPError as error:
+            error_json = error.args[1]
+            message = json.loads(error_json)["error"]
+            print(message)
+            self.__vault = {}
 
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add Vault", style="TButton",
                                                command=self.__show_add_page)
