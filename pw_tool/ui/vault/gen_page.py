@@ -1,7 +1,7 @@
+import binascii
 import secrets
 import tkinter.ttk
 from tkinter import *
-import binascii
 
 import pw_tool.helper.ui_helper
 
@@ -16,7 +16,8 @@ class GenPage:
 
         # Get length of password to generate
         self.__plength_label = tkinter.ttk.Label(master=self.__window,
-                                                 text="Length of password:\n(Minimum length = 12)", font=("Arial", 12))
+                                                 text="Length of password:\n(Minimum length = 12)", font=("Arial", 12),
+                                                 background="SystemButtonFace")
         self.__plength_label.grid(row=0, column=0, padx=10)
 
         self.__plength_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 12))
@@ -28,7 +29,8 @@ class GenPage:
         self.__var_symbol = IntVar()
 
         # Get type of characters to include in password
-        self.__ptype_label = tkinter.ttk.Label(master=self.__window, text="Type of characters:", font=("Arial", 12))
+        self.__ptype_label = tkinter.ttk.Label(master=self.__window, text="Type of characters:", font=("Arial", 12),
+                                               background="SystemButtonFace")
         self.__ptype_label.grid(row=1, column=0, padx=10)
 
         self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Upper Case A-Z",
@@ -56,7 +58,8 @@ class GenPage:
         self.__generate_button.grid(row=4, column=1)
 
         # Display Generated Password
-        self.__gpassword_label = tkinter.ttk.Label(master=self.__window, text="Generated Password:", font=("Arial", 12))
+        self.__gpassword_label = tkinter.ttk.Label(master=self.__window, text="Generated Password:", font=("Arial", 12),
+                                                   background="SystemButtonFace")
         self.__gpassword_label["state"] = DISABLED
         self.__gpassword_label.grid(row=5, column=0, padx=10)
 
@@ -249,7 +252,8 @@ class GenPage:
         print("Retrieved Plain Text is: ", self.__decrypt)
 
         # display generated password
-        self.__password_label = tkinter.ttk.Label(master=self.__window, text=self.__password, font=("Arial", 12))
+        self.__password_label = tkinter.ttk.Label(master=self.__window, text=self.__password, font=("Arial", 12),
+                                                  background="SystemButtonFace")
         self.__password_label.grid(row=5, column=1, padx=10)
 
         # password = "".join(password_list[])

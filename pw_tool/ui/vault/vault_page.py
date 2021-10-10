@@ -22,7 +22,8 @@ class VaultPage:
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
-        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault")
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault",
+                                                 background="SystemButtonFace")
         self.__welcome_label.pack()
 
         try:
@@ -47,6 +48,8 @@ class VaultPage:
             message = json.loads(error_json)["error"]
             print(message)
             self.__vault = {}
+
+        print(self.__vault)
 
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add Vault", style="TButton",
                                                command=self.__show_add_page)

@@ -13,13 +13,13 @@ class DeletePage:
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Delete Item")
 
-        self.__website_label = tkinter.ttk.Label(master=self.__window, text="Website")
+        self.__website_label = tkinter.ttk.Label(master=self.__window, text="Website", background="SystemButtonFace")
         self.__website_label.grid(row=2, column=0, padx=80)
 
-        self.__username_label = tkinter.ttk.Label(master=self.__window, text="Username")
+        self.__username_label = tkinter.ttk.Label(master=self.__window, text="Username", background="SystemButtonFace")
         self.__username_label.grid(row=2, column=1, padx=80)
 
-        self.__password_label = tkinter.ttk.Label(master=self.__window, text="Password")
+        self.__password_label = tkinter.ttk.Label(master=self.__window, text="Password", background="SystemButtonFace")
         self.__password_label.grid(row=2, column=2, padx=80)
 
         pw_tool.helper.firebase_helper.cursor.execute("SELECT website, username, password FROM password_vault")
@@ -28,13 +28,16 @@ class DeletePage:
             while True:
                 pw_tool.helper.firebase_helper.cursor.execute("SELECT website, username,password FROM password_vault")
                 array = pw_tool.helper.firebase_helper.cursor.fetchall()
-                self.__website_label1 = tkinter.ttk.Label(master=self.__window, text=(array[i][0]), font=("Arial", 12))
+                self.__website_label1 = tkinter.ttk.Label(master=self.__window, text=(array[i][0]), font=("Arial", 12),
+                                                          background="SystemButtonFace")
                 self.__website_label1.grid(column=0, row=(i + 3))
 
-                self.__username_label2 = tkinter.ttk.Label(master=self.__window, text=(array[i][1]), font=("Arial", 12))
+                self.__username_label2 = tkinter.ttk.Label(master=self.__window, text=(array[i][1]), font=("Arial", 12),
+                                                           background="SystemButtonFace")
                 self.__username_label2.grid(column=1, row=(i + 3))
 
-                self.__password_label3 = tkinter.ttk.Label(master=self.__window, text=(array[i][2]), font=("Arial", 12))
+                self.__password_label3 = tkinter.ttk.Label(master=self.__window, text=(array[i][2]), font=("Arial", 12),
+                                                           background="SystemButtonFace")
                 self.__password_label3.grid(column=2, row=(i + 3))
 
                 delete_btn = tkinter.ttk.Button(master=self.__window, text="Delete",
