@@ -1,3 +1,4 @@
+import base64
 import json
 import tkinter.ttk
 
@@ -56,13 +57,15 @@ class AddPage:
                                                     "password": self.__password_entry.get()}
         vault_bytes = json.dumps(obj=self.__vault).encode(encoding="utf-8")
         cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.pw_helper.vault_key), mode=Crypto.Cipher.AES.MODE_CBC)
-        encrypted_vault = cipher.encrypt(
+        ciphertext_bytes = cipher.encrypt(
             Crypto.Util.Padding.pad(data_to_pad=vault_bytes, block_size=Crypto.Cipher.AES.block_size))
 
-        obj = {"data": str(encrypted_vault)}
+        initialization_vector = base64.b64encode(s=cipher.iv).decode(encoding="utf-8")
+        ciphertext = base64.b64encode(s=ciphertext_bytes).decode(encoding="utf-8")
+        result = json.dumps({"iv": initialization_vector, "ct": ciphertext})
 
         pw_tool.helper.firebase_helper.database.child("vault").child(
-            pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).push(obj)
+            pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).push(result)
 
         self.__notification_label.config(text="Successfully Added!")
         self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
