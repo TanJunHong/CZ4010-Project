@@ -22,7 +22,7 @@ class VaultPage:
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
-        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault",
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault", font=("Arial", 25),
                                                  background="SystemButtonFace")
         self.__welcome_label.pack()
 
@@ -48,13 +48,17 @@ class VaultPage:
             print(message)
             self.__vault = {}
 
-        print(self.__vault)
+        for website, value in self.__vault.items():
+            print(website, '->', value)
+            button = tkinter.ttk.Button(master=self.__window, text=website, style="TButton",
+                                        command=self.__show_pw_page)
+            button.pack()
 
-        self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add Vault", style="TButton",
+        self.__add_button = tkinter.ttk.Button(master=self.__window, text="+", style="TButton",
                                                command=self.__show_add_page)
         self.__add_button.pack()
 
-        self.__delete_button = tkinter.ttk.Button(master=self.__window, text="Delete Vault", style="TButton",
+        self.__delete_button = tkinter.ttk.Button(master=self.__window, text="-", style="TButton",
                                                   command=self.__show_delete_page)
         self.__delete_button.pack()
 
@@ -78,3 +82,8 @@ class VaultPage:
     def __show_gen_page(self):
         self.__window.withdraw()
         pw_tool.ui.vault.gen_page.GenPage(master=self.__window)
+
+    def __show_pw_page(self):
+        # self.__window.withdraw()
+        # pw_tool.ui.vault.pw_page.PWPage(master=self.__window)
+        pass
