@@ -27,19 +27,18 @@ class VaultPage:
         self.__welcome_label.pack()
 
         try:
-            encrypted_vault = pw_tool.helper.firebase_helper.database.child("vault").child(
+            data = pw_tool.helper.firebase_helper.database.child("vault").child(
                 pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get()
-            if encrypted_vault.val() is not None:
-                for vault in encrypted_vault.each():
-                    result = json.loads(s=vault.val())
-                    initialization_vector = base64.b64decode(s=result["iv"])
-                    ciphertext = base64.b64decode(s=result["ct"])
-                    cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.pw_helper.vault_key),
-                                                   mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
-                    vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
-                                                            block_size=Crypto.Cipher.AES.block_size)
+            if data.val() is not None:
+                result = json.loads(s=data.val())
+                initialization_vector = base64.b64decode(s=result["iv"])
+                ciphertext = base64.b64decode(s=result["ct"])
+                cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.pw_helper.vault_key),
+                                               mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
+                vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
+                                                        block_size=Crypto.Cipher.AES.block_size)
 
-                    self.__vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
+                self.__vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
             else:
                 self.__vault = {}
 
