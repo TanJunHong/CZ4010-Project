@@ -11,12 +11,16 @@ import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.add_page
 import pw_tool.ui.vault.gen_page
+import pw_tool.ui.vault.pw_page
 
 
 class VaultPage:
     def __init__(self, master):
         self.__master = master
         self.__master.withdraw()
+
+        self.__buttons = {}
+        self.__labels = {}
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
@@ -51,13 +55,14 @@ class VaultPage:
 
         counter = 0
         for website, value in self.__vault.items():
-            label = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
-                                      background="SystemButtonFace")
-            button = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
-                                        command=lambda: self.__show_pw_page(value))
+            self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
+                                                       background="SystemButtonFace")
+            self.__buttons[website] = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
+                                                         command=lambda web=website, val=value: self.__show_pw_page(
+                                                             website=web, value=val))
 
-            label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
-            button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")
+            self.__labels[website].grid(row=counter, column=0, padx=10, pady=5, sticky="W")
+            self.__buttons[website].grid(row=counter, column=1, padx=10, pady=5, sticky="E")
 
             counter += 1
 
@@ -84,8 +89,7 @@ class VaultPage:
         self.__window.withdraw()
         pw_tool.ui.vault.gen_page.GenPage(master=self.__window)
 
-    def __show_pw_page(self, value):
-        print(value)
-        # self.__window.withdraw()
-        # pw_tool.ui.vault.pw_page.PWPage(master=self.__window)
+    def __show_pw_page(self, website, value):
+        self.__window.withdraw()
+        pw_tool.ui.vault.pw_page.PWPage(master=self.__window, website=website, value=value)
         pass
