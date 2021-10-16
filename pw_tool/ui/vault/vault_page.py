@@ -10,7 +10,6 @@ import pw_tool.helper.firebase_helper
 import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.add_page
-import pw_tool.ui.vault.delete_page
 import pw_tool.ui.vault.gen_page
 
 
@@ -48,19 +47,25 @@ class VaultPage:
             print(message)
             self.__vault = {}
 
+        self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        counter = 0
         for website, value in self.__vault.items():
-            print(website, '->', value)
-            button = tkinter.ttk.Button(master=self.__window, text=website, style="TButton",
-                                        command=self.__show_pw_page)
-            button.pack()
+            label = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
+                                      background="SystemButtonFace")
+            button = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
+                                        command=lambda: self.__show_pw_page(value))
+
+            label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
+            button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")
+
+            counter += 1
+
+        self.__inner_frame.pack()
 
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="+", style="TButton",
                                                command=self.__show_add_page)
         self.__add_button.pack()
-
-        self.__delete_button = tkinter.ttk.Button(master=self.__window, text="-", style="TButton",
-                                                  command=self.__show_delete_page)
-        self.__delete_button.pack()
 
         self.__pgenerator_button = tkinter.ttk.Button(master=self.__window, text="Password Generator", style="TButton",
                                                       command=self.__show_gen_page)
@@ -71,10 +76,6 @@ class VaultPage:
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
-    def __show_delete_page(self):
-        self.__window.withdraw()
-        pw_tool.ui.vault.delete_page.DeletePage(master=self.__window)
-
     def __show_add_page(self):
         self.__window.withdraw()
         pw_tool.ui.vault.add_page.AddPage(master=self.__window, vault=self.__vault)
@@ -83,7 +84,8 @@ class VaultPage:
         self.__window.withdraw()
         pw_tool.ui.vault.gen_page.GenPage(master=self.__window)
 
-    def __show_pw_page(self):
+    def __show_pw_page(self, value):
+        print(value)
         # self.__window.withdraw()
         # pw_tool.ui.vault.pw_page.PWPage(master=self.__window)
         pass

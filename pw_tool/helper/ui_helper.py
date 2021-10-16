@@ -33,10 +33,14 @@ def back(root, me):
     root.deiconify()
 
 
-def create_style():
+def create_button_style():
     style = tkinter.ttk.Style()
     style.configure(style="TButton", font=("Arial", 25))
 
+
+def create_frame_style():
+    style = tkinter.ttk.Style()
+    style.configure(style="TFrame", background="SystemButtonFace")
 
 def clear_fields(window):
     for widget in window.winfo_children():

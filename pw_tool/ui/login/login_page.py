@@ -18,7 +18,8 @@ class LoginPage:
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
 
-        pw_tool.helper.ui_helper.create_style()
+        pw_tool.helper.ui_helper.create_button_style()
+        pw_tool.helper.ui_helper.create_frame_style()
 
         self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
                                                background="SystemButtonFace")
