@@ -16,7 +16,7 @@ class DeleteDialog:
         self.__website = website
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry="640x300")
+        self.__window.geometry(newGeometry="640x350")
         self.__window.title(string="Delete Confirmation")
 
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Delete Confirmation",

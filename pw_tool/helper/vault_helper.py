@@ -35,6 +35,20 @@ def delete_from_vault(website):
     upload_vault()
 
 
+def load_vault():
+    data = pw_tool.helper.firebase_helper.database.child("vault").child(
+        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get()
+    if data.val() is not None:
+        result = json.loads(s=data.val())
+        initialization_vector = base64.b64decode(s=result["iv"])
+        ciphertext = base64.b64decode(s=result["ct"])
+        cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.vault_helper.vault_key),
+                                       mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
+        vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
+                                                block_size=Crypto.Cipher.AES.block_size)
+        pw_tool.helper.vault_helper.vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
+
+
 def upload_vault():
     vault_bytes = json.dumps(obj=vault).encode(encoding="utf-8")
     cipher = Crypto.Cipher.AES.new(key=bytes(vault_key), mode=Crypto.Cipher.AES.MODE_CBC)
@@ -46,7 +60,7 @@ def upload_vault():
     result = json.dumps(obj={"iv": initialization_vector, "ct": ciphertext})
 
     pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split(separator="$")[-1].replace(oldvalue=".", newvalue="")).set(result)
+        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
 

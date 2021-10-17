@@ -82,8 +82,8 @@ class RegistrationPage:
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
-            formatted_message = message.replace(oldvalue="_", newvalue=" ").replace(oldvalue=" : ",
-                                                                                    newvalue="\n").capitalize()
+            formatted_message = message.replace("_", " ").replace(" : ",
+                                                                  "\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
 

@@ -1,10 +1,6 @@
 import base64
-import json
 import tkinter
 import tkinter.ttk
-
-import Crypto.Cipher.AES
-import requests
 
 import pw_tool.helper.firebase_helper
 import pw_tool.helper.ui_helper
@@ -29,24 +25,7 @@ class VaultPage:
                                                  font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
 
-        try:
-            data = pw_tool.helper.firebase_helper.database.child("vault").child(
-                pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get()
-            if data.val() is not None:  # TODO: move this
-                result = json.loads(s=data.val())
-                initialization_vector = base64.b64decode(s=result["iv"])
-                ciphertext = base64.b64decode(s=result["ct"])
-                cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.vault_helper.vault_key),
-                                               mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
-                vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
-                                                        block_size=Crypto.Cipher.AES.block_size)
-
-                pw_tool.helper.vault_helper.vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
-
-        except requests.HTTPError as error:
-            error_json = error.args[1]
-            message = json.loads(error_json)["error"]
-            print(message)
+        pw_tool.helper.vault_helper.load_vault()
 
         self.__website_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
