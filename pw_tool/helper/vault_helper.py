@@ -43,10 +43,10 @@ def upload_vault():
 
     initialization_vector = base64.b64encode(s=cipher.iv).decode(encoding="utf-8")
     ciphertext = base64.b64encode(s=ciphertext_bytes).decode(encoding="utf-8")
-    result = json.dumps({"iv": initialization_vector, "ct": ciphertext})
+    result = json.dumps(obj={"iv": initialization_vector, "ct": ciphertext})
 
     pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
+        pw_tool.helper.firebase_helper.auth_key.split(separator="$")[-1].replace(oldvalue=".", newvalue="")).set(result)
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
 

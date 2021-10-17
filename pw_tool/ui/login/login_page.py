@@ -14,7 +14,7 @@ import pw_tool.ui.vault.vault_page
 class LoginPage:
     def __init__(self):
         self.__window = ttkthemes.ThemedTk(theme="arc")
-        self.__window.geometry(newGeometry="640x480")
+        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Manager")
 
         pw_tool.helper.ui_helper.create_button_style()
@@ -23,7 +23,6 @@ class LoginPage:
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Password Tool",
                                                font=pw_tool.helper.ui_helper.font,
                                                background=pw_tool.helper.ui_helper.background_color)
-        self.__title_label.pack(pady=20)
 
         self.__entry_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -32,7 +31,6 @@ class LoginPage:
                                                background=pw_tool.helper.ui_helper.background_color)
 
         self.__email_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
-        self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
                                                   font=pw_tool.helper.ui_helper.font,
@@ -40,13 +38,6 @@ class LoginPage:
 
         self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
                                                   font=pw_tool.helper.ui_helper.font)
-
-        self.__email_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
-        self.__email_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
-        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
-        self.__password_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
-
-        self.__entry_frame.pack(pady=30)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -56,13 +47,22 @@ class LoginPage:
         self.__register_button = tkinter.ttk.Button(master=self.__button_frame, text="Register", style="TButton",
                                                     command=self.__show_register_page)
 
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
+                                                      background=pw_tool.helper.ui_helper.background_color)
+
+        self.__email_entry.focus()
+
+        self.__email_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__email_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__password_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
+
         self.__login_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__register_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
 
+        self.__title_label.pack(pady=20)
+        self.__entry_frame.pack(pady=30)
         self.__button_frame.pack(pady=10)
-
-        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
-                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack(pady=50)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
@@ -83,7 +83,8 @@ class LoginPage:
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(error_json)["error"]["message"]
-            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
+            formatted_message = message.replace(oldvalue="_", newvalue=" ").replace(oldvalue=" : ",
+                                                                                    newvalue="\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
 

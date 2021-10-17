@@ -10,13 +10,12 @@ class AddPage:
         self.__master = master
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry="640x480")
+        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Add Item")
 
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Add Item",
                                                font=pw_tool.helper.ui_helper.font,
                                                background=pw_tool.helper.ui_helper.background_color)
-        self.__title_label.pack(pady=20)
 
         self.__entry_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -25,7 +24,6 @@ class AddPage:
                                                  background=pw_tool.helper.ui_helper.background_color)
 
         self.__website_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
-        self.__website_entry.focus()
 
         self.__username_label = tkinter.ttk.Label(master=self.__entry_frame, text="Username",
                                                   font=pw_tool.helper.ui_helper.font,
@@ -40,6 +38,14 @@ class AddPage:
         self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
                                                   font=pw_tool.helper.ui_helper.font)
 
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
+                                                      background=pw_tool.helper.ui_helper.background_color)
+
+        self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="TButton",
+                                               command=self.__add_to_vault)
+
+        self.__website_entry.focus()
+
         self.__website_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__website_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
         self.__username_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
@@ -47,14 +53,9 @@ class AddPage:
         self.__password_label.grid(row=2, column=0, padx=20, pady=5, sticky="E")
         self.__password_entry.grid(row=2, column=1, padx=20, pady=5, sticky="W")
 
+        self.__title_label.pack(pady=20)
         self.__entry_frame.pack(pady=30)
-
-        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
-                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack(pady=5)
-
-        self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="TButton",
-                                               command=self.__add_to_vault)
         self.__add_button.pack(pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)

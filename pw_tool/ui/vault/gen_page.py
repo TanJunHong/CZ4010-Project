@@ -10,7 +10,7 @@ class GenPage:
         self.__master = master
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry="640x480")
+        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Generator")
 
         # Get length of password to generate

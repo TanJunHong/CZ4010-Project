@@ -13,13 +13,12 @@ class RegistrationPage:
     def __init__(self, master):
         self.__master = master
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry="640x480")
+        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Registration Page")
 
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Registration",
                                                font=pw_tool.helper.ui_helper.font,
                                                background=pw_tool.helper.ui_helper.background_color)
-        self.__title_label.pack(pady=20)
 
         self.__entry_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -28,7 +27,6 @@ class RegistrationPage:
                                                background=pw_tool.helper.ui_helper.background_color)
 
         self.__email_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
-        self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
                                                   font=pw_tool.helper.ui_helper.font,
@@ -44,6 +42,14 @@ class RegistrationPage:
         self.__confirm_password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
                                                           font=pw_tool.helper.ui_helper.font)
 
+        self.__create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account", style="TButton",
+                                                          command=self.__create_account)
+
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
+                                                      background=pw_tool.helper.ui_helper.background_color)
+
+        self.__email_entry.focus()
+
         self.__email_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__email_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
         self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
@@ -51,14 +57,9 @@ class RegistrationPage:
         self.__confirm_password_label.grid(row=2, column=0, padx=20, pady=5, sticky="E")
         self.__confirm_password_entry.grid(row=2, column=1, padx=20, pady=5, sticky="W")
 
+        self.__title_label.pack(pady=20)
         self.__entry_frame.pack(pady=30)
-
-        self.__create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account", style="TButton",
-                                                          command=self.__create_account)
         self.__create_account_button.pack(pady=5)
-
-        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
-                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack(pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
@@ -80,8 +81,9 @@ class RegistrationPage:
                                                     password=self.__password_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
-            message = json.loads(error_json)["error"]["message"]
-            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
+            message = json.loads(s=error_json)["error"]["message"]
+            formatted_message = message.replace(oldvalue="_", newvalue=" ").replace(oldvalue=" : ",
+                                                                                    newvalue="\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
 

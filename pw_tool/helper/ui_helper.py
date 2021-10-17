@@ -4,6 +4,7 @@ import tkinter.ttk
 vault_page = None
 background_color = "SystemButtonFace"
 font = ("Arial", 25)
+window_size = "640x480"
 
 
 def centre_window(window):
