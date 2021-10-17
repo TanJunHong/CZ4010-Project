@@ -6,8 +6,8 @@ import requests
 import ttkthemes
 
 import pw_tool.helper.firebase_helper
-import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
+import pw_tool.helper.vault_helper
 import pw_tool.ui.registration.registration_page
 import pw_tool.ui.vault.vault_page
 
@@ -73,17 +73,14 @@ class LoginPage:
             self.__notification_label.config(text=formatted_message)
             return
 
-        # pw_tool.helper.pw_helper.vault_key = pw_tool.helper.pw_helper.context.hash(
-        #     secret=self.__email_entry.get() + self.__password_entry.get(), salt=pw_tool.helper.pw_helper.vault_iv)
+        pw_tool.helper.vault_helper.vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256",
+                                                                                  secret=self.__email_entry.get() + self.__password_entry.get(),
+                                                                                  salt=pw_tool.helper.vault_helper.vault_iv,
+                                                                                  rounds=1000000, keylen=16)
 
-        pw_tool.helper.pw_helper.vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256",
-                                                                               secret=self.__email_entry.get() + self.__password_entry.get(),
-                                                                               salt=pw_tool.helper.pw_helper.vault_iv,
-                                                                               rounds=1000000, keylen=16)
-
-        pw_tool.helper.firebase_helper.auth_key = pw_tool.helper.pw_helper.context.hash(
-            secret=pw_tool.helper.pw_helper.vault_key + self.__password_entry.get().encode(encoding="utf-8"),
-            salt=pw_tool.helper.pw_helper.vault_iv)
+        pw_tool.helper.firebase_helper.auth_key = pw_tool.helper.vault_helper.context.hash(
+            secret=pw_tool.helper.vault_helper.vault_key + self.__password_entry.get().encode(encoding="utf-8"),
+            salt=pw_tool.helper.vault_helper.vault_iv)
 
         pw_tool.helper.ui_helper.clear_fields(self.__window)
 

@@ -5,8 +5,8 @@ import tkinter.ttk
 import requests
 
 import pw_tool.helper.firebase_helper
-import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
+import pw_tool.helper.vault_helper
 
 
 class RegistrationPage:

@@ -1,0 +1,51 @@
+import tkinter
+import tkinter.ttk
+
+import pw_tool.helper.firebase_helper
+import pw_tool.helper.ui_helper
+import pw_tool.helper.vault_helper
+import pw_tool.ui.vault.add_page
+import pw_tool.ui.vault.gen_page
+
+
+class DeleteDialog:
+    def __init__(self, master, website):
+        self.__master = master
+        self.__master.withdraw()
+
+        self.__website = website
+
+        self.__window = tkinter.Toplevel()
+        self.__window.geometry(newGeometry="640x480")
+        self.__window.title(string="Delete Confirmation")
+
+        self.__website_label = tkinter.ttk.Label(master=self.__window, text="Are you sure you want to delete?",
+                                                 font=("Arial", 25),
+                                                 background="SystemButtonFace")
+        self.__website_label.pack()
+
+        self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+        self.__ok_button = tkinter.ttk.Button(master=self.__inner_frame, text="OK", style="TButton",
+                                              command=self.__delete_from_vault)
+        self.__cancel_button = tkinter.ttk.Button(master=self.__inner_frame, text="Cancel", style="TButton",
+                                                  command=lambda: pw_tool.helper.ui_helper.back(root=self.__master,
+                                                                                                me=self.__window))
+
+        self.__ok_button.grid(row=0, column=0, padx=20, pady=5, sticky="W")
+        self.__cancel_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__inner_frame.pack()
+
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
+                                                      background="SystemButtonFace")
+        self.__notification_label.pack()
+
+        self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
+                               name="WM_DELETE_WINDOW")
+
+        pw_tool.helper.ui_helper.centre_window(window=self.__window)
+
+    def __delete_from_vault(self):
+        pw_tool.helper.vault_helper.delete_from_vault(website=self.__website)
+
+        self.__notification_label.config(text="Successfully Deleted!")
+        self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

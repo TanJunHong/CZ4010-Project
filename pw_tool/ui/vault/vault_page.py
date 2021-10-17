@@ -7,8 +7,8 @@ import Crypto.Cipher.AES
 import requests
 
 import pw_tool.helper.firebase_helper
-import pw_tool.helper.pw_helper
 import pw_tool.helper.ui_helper
+import pw_tool.helper.vault_helper
 import pw_tool.ui.vault.add_page
 import pw_tool.ui.vault.gen_page
 import pw_tool.ui.vault.pw_page
@@ -36,25 +36,22 @@ class VaultPage:
                 result = json.loads(s=data.val())
                 initialization_vector = base64.b64decode(s=result["iv"])
                 ciphertext = base64.b64decode(s=result["ct"])
-                cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.pw_helper.vault_key),
+                cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.vault_helper.vault_key),
                                                mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
                 vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
                                                         block_size=Crypto.Cipher.AES.block_size)
 
-                self.__vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
-            else:
-                self.__vault = {}
+                pw_tool.helper.vault_helper.vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
 
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(error_json)["error"]
             print(message)
-            self.__vault = {}
 
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         counter = 0
-        for website, value in self.__vault.items():
+        for website, value in pw_tool.helper.vault_helper.vault.items():
             self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
                                                        background="SystemButtonFace")
             self.__buttons[website] = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
@@ -83,7 +80,7 @@ class VaultPage:
 
     def __show_add_page(self):
         self.__window.withdraw()
-        pw_tool.ui.vault.add_page.AddPage(master=self.__window, vault=self.__vault)
+        pw_tool.ui.vault.add_page.AddPage(master=self.__window)
 
     def __show_gen_page(self):
         self.__window.withdraw()

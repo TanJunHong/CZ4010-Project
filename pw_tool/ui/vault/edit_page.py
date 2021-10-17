@@ -5,12 +5,10 @@ import pw_tool.helper.firebase_helper
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.vault.add_page
-import pw_tool.ui.vault.delete_dialog
-import pw_tool.ui.vault.edit_page
 import pw_tool.ui.vault.gen_page
 
 
-class PWPage:
+class EditPage:
     def __init__(self, master, website, value):
         self.__master = master
         self.__master.withdraw()
@@ -29,28 +27,22 @@ class PWPage:
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         self.__username = tkinter.ttk.Label(master=self.__inner_frame, text="Username:", font=("Arial", 25),
                                             background="SystemButtonFace")
-        self.__username_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["username"],
-                                                  font=("Arial", 25),
-                                                  background="SystemButtonFace")
+        self.__username_entry = tkinter.ttk.Entry(master=self.__inner_frame, font=("Arial", 25))
+        self.__username_entry.insert(index=0, string=self.__value["username"])
         self.__pw = tkinter.ttk.Label(master=self.__inner_frame, text="Password:", font=("Arial", 25),
                                       background="SystemButtonFace")
-        self.__pw_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["password"],
-                                            font=("Arial", 25),
-                                            background="SystemButtonFace")
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__inner_frame, font=("Arial", 25))
+        self.__pw_entry.insert(index=0, string=self.__value["password"])
 
         self.__username.grid(row=0, column=0, padx=20, pady=5, sticky="W")
-        self.__username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__username_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
         self.__pw.grid(row=1, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
+        self.__pw_entry.grid(row=1, column=1, padx=20, pady=5, sticky="E")
         self.__inner_frame.pack()
 
-        self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Edit", style="TButton",
+        self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="TButton",
                                                 command=self.__show_edit_page)
         self.__edit_button.pack()
-
-        self.__delete_button = tkinter.ttk.Button(master=self.__window, text="Delete", style="TButton",
-                                                  command=self.__show_delete_dialog)
-        self.__delete_button.pack()
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
                                name="WM_DELETE_WINDOW")
@@ -59,7 +51,3 @@ class PWPage:
 
     def __show_edit_page(self):
         self.__window.withdraw()
-        pw_tool.ui.vault.edit_page.EditPage(master=self.__window, website=self.__website, value=self.__value)
-
-    def __show_delete_dialog(self):
-        pw_tool.ui.vault.delete_dialog.DeleteDialog(master=self.__window, website=self.__website)
