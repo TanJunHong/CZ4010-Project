@@ -21,16 +21,16 @@ class EditPage:
         self.__window.title(string="Password Manager")
 
         self.__website_label = tkinter.ttk.Label(master=self.__window, text=self.__website, font=("Arial", 25),
-                                                 background="SystemButtonFace")
+                                                 background=pw_tool.helper.ui_helper.background_color)
         self.__website_label.pack()
 
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         self.__username_label = tkinter.ttk.Label(master=self.__inner_frame, text="Username:", font=("Arial", 25),
-                                                  background="SystemButtonFace")
+                                                  background=pw_tool.helper.ui_helper.background_color)
         self.__username_entry = tkinter.ttk.Entry(master=self.__inner_frame, font=("Arial", 25))
         self.__username_entry.insert(index=0, string=self.__value["username"])
         self.__password_label = tkinter.ttk.Label(master=self.__inner_frame, text="Password:", font=("Arial", 25),
-                                                  background="SystemButtonFace")
+                                                  background=pw_tool.helper.ui_helper.background_color)
         self.__password_entry = tkinter.ttk.Entry(master=self.__inner_frame, font=("Arial", 25))
         self.__password_entry.insert(index=0, string=self.__value["password"])
 
@@ -45,7 +45,7 @@ class EditPage:
         self.__edit_button.pack()
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
-                                                      background="SystemButtonFace")
+                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack()
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
@@ -59,4 +59,4 @@ class EditPage:
                                                  password=self.__password_entry.get())
 
         self.__notification_label.config(text="Successfully Updated!")
-        self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
+        self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

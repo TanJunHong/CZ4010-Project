@@ -19,7 +19,7 @@ This password manager tool securely encrypts your password but this security is 
   ensure that your vault is safe even if exposed:
 
 * Choose a unique password that is not used elsewhere
-* Use a highly-varied set of different characters (alpha-numeric, symbols, spaces)
+* Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
 * Use long password (the longer the better)
 * Do not include personal information or words in the password
 * Never share your password

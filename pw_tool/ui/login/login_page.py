@@ -21,7 +21,7 @@ class LoginPage:
         pw_tool.helper.ui_helper.create_frame_style()
 
         self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
-                                               background="SystemButtonFace")
+                                               background=pw_tool.helper.ui_helper.background_color)
         self.__email_label.pack()
 
         self.__email_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
@@ -29,15 +29,15 @@ class LoginPage:
         self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__window, text="Enter Master Password",
-                                                  font=("Arial", 25), background="SystemButtonFace")
+                                                  font=("Arial", 25),
+                                                  background=pw_tool.helper.ui_helper.background_color)
         self.__password_label.pack()
 
         self.__password_entry = tkinter.ttk.Entry(master=self.__window, show="*", font=("Arial", 25))
         self.__password_entry.pack()
-        self.__password_entry.focus()
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
-                                                      background="SystemButtonFace")
+                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack()
 
         self.__login_button = tkinter.ttk.Button(master=self.__window, text="Login", style="TButton",
@@ -73,5 +73,8 @@ class LoginPage:
         pw_tool.helper.ui_helper.clear_fields(self.__window)
 
         self.__notification_label.config(text="Login Successful! Redirecting you...")
-        self.__window.after(1000, lambda: self.__notification_label.config(text=""))
-        self.__window.after(1000, lambda: pw_tool.ui.vault.vault_page.VaultPage(master=self.__window))
+        self.__window.after(ms=1000, func=lambda: self.__notification_label.config(text=""))
+        self.__window.after(ms=1000, func=self.__create_vault_page)
+
+    def __create_vault_page(self):
+        pw_tool.helper.ui_helper.vault_page = pw_tool.ui.vault.vault_page.VaultPage(master=self.__window)

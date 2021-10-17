@@ -17,7 +17,7 @@ class RegistrationPage:
         self.__window.title(string="Registration Page")
 
         self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
-                                               background="SystemButtonFace")
+                                               background=pw_tool.helper.ui_helper.background_color)
         self.__email_label.pack()
 
         self.__email_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
@@ -25,23 +25,22 @@ class RegistrationPage:
         self.__email_entry.focus()
 
         self.__password_label = tkinter.ttk.Label(master=self.__window, text="Enter Password", font=("Arial", 25),
-                                                  background="SystemButtonFace")
+                                                  background=pw_tool.helper.ui_helper.background_color)
         self.__password_label.pack()
 
         self.__password_entry = tkinter.ttk.Entry(master=self.__window, show="*", font=("Arial", 25))
         self.__password_entry.pack()
-        self.__password_entry.focus()
 
         self.confirm_password_label = tkinter.ttk.Label(master=self.__window, text="Confirm password",
-                                                        font=("Arial", 25), background="SystemButtonFace")
+                                                        font=("Arial", 25),
+                                                        background=pw_tool.helper.ui_helper.background_color)
         self.confirm_password_label.pack()
 
         self.confirm_password_entry = tkinter.ttk.Entry(master=self.__window, show="*", font=("Arial", 25))
         self.confirm_password_entry.pack()
-        self.confirm_password_entry.focus()
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
-                                                      background="SystemButtonFace")
+                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack()
 
         self.create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account", style="TButton",
@@ -75,4 +74,4 @@ class RegistrationPage:
         pw_tool.helper.ui_helper.clear_fields(window=self.__window)
 
         self.__notification_label.config(text="Successfully Created!")
-        self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
+        self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

@@ -1,6 +1,9 @@
 import tkinter
 import tkinter.ttk
 
+vault_page = None
+background_color = "SystemButtonFace"
+
 
 def centre_window(window):
     """Centres main window given 'window'
@@ -40,10 +43,15 @@ def create_button_style():
 
 def create_frame_style():
     style = tkinter.ttk.Style()
-    style.configure(style="TFrame", background="SystemButtonFace")
+    style.configure(style="TFrame", background=background_color)
 
 
 def clear_fields(window):
     for widget in window.winfo_children():
         if type(widget) == tkinter.ttk.Entry:
             widget.delete(first=0, last=tkinter.END)
+
+
+def destroy_children(window):
+    for widgets in window.winfo_children():
+        widgets.destroy()

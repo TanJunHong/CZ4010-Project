@@ -21,7 +21,7 @@ class DeleteDialog:
 
         self.__website_label = tkinter.ttk.Label(master=self.__window, text="Are you sure you want to delete?",
                                                  font=("Arial", 25),
-                                                 background="SystemButtonFace")
+                                                 background=pw_tool.helper.ui_helper.background_color)
         self.__website_label.pack()
 
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
@@ -36,7 +36,7 @@ class DeleteDialog:
         self.__inner_frame.pack()
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
-                                                      background="SystemButtonFace")
+                                                      background=pw_tool.helper.ui_helper.background_color)
         self.__notification_label.pack()
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
@@ -48,4 +48,4 @@ class DeleteDialog:
         pw_tool.helper.vault_helper.delete_from_vault(website=self.__website)
 
         self.__notification_label.config(text="Successfully Deleted!")
-        self.__window.after(1000, lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
+        self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

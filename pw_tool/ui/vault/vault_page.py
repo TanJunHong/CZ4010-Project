@@ -26,7 +26,7 @@ class VaultPage:
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
         self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault", font=("Arial", 25),
-                                                 background="SystemButtonFace")
+                                                 background=pw_tool.helper.ui_helper.background_color)
         self.__welcome_label.pack()
 
         try:
@@ -50,18 +50,7 @@ class VaultPage:
 
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        counter = 0
-        for website, value in pw_tool.helper.vault_helper.vault.items():
-            self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
-                                                       background="SystemButtonFace")
-            self.__buttons[website] = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
-                                                         command=lambda web=website, val=value: self.__show_pw_page(
-                                                             website=web, value=val))
-
-            self.__labels[website].grid(row=counter, column=0, padx=10, pady=5, sticky="W")
-            self.__buttons[website].grid(row=counter, column=1, padx=10, pady=5, sticky="E")
-
-            counter += 1
+        self.refresh_page()
 
         self.__inner_frame.pack()
 
@@ -90,3 +79,19 @@ class VaultPage:
         self.__window.withdraw()
         pw_tool.ui.vault.pw_page.PWPage(master=self.__window, website=website, value=value)
         pass
+
+    def refresh_page(self):
+        pw_tool.helper.ui_helper.destroy_children(window=self.__inner_frame)
+
+        counter = 0
+        for website, value in pw_tool.helper.vault_helper.vault.items():
+            self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
+                                                       background=pw_tool.helper.ui_helper.background_color)
+            self.__buttons[website] = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
+                                                         command=lambda web=website, val=value: self.__show_pw_page(
+                                                             website=web, value=val))
+
+            self.__labels[website].grid(row=counter, column=0, padx=10, pady=5, sticky="W")
+            self.__buttons[website].grid(row=counter, column=1, padx=10, pady=5, sticky="E")
+
+            counter += 1

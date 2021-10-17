@@ -6,6 +6,7 @@ import passlib.context
 import passlib.crypto.digest
 
 import pw_tool.helper.firebase_helper
+import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
 vault_iv = bytes("zg4cPx@Tr^6U", "utf8")
@@ -46,3 +47,5 @@ def upload_vault():
 
     pw_tool.helper.firebase_helper.database.child("vault").child(
         pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
+
+    pw_tool.helper.ui_helper.vault_page.refresh_page()
