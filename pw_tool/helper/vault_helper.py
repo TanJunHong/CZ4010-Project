@@ -49,3 +49,12 @@ def upload_vault():
         pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
+
+
+def destroy_variables():
+    global vault_key
+    global vault
+    pw_tool.helper.firebase_helper.auth_key = None
+    pw_tool.helper.ui_helper.vault_page = None
+    vault_key = b""
+    vault = {}

@@ -55,11 +55,11 @@ class RegistrationPage:
 
         self.__create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account", style="TButton",
                                                           command=self.__create_account)
-        self.__create_account_button.pack(padx=5, pady=5)
+        self.__create_account_button.pack(pady=5)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
-        self.__notification_label.pack(padx=5, pady=5)
+        self.__notification_label.pack(pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
@@ -85,7 +85,7 @@ class RegistrationPage:
             self.__notification_label.config(text=formatted_message)
             return
 
-        pw_tool.helper.ui_helper.clear_fields(window=self.__window)
+        pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
         self.__notification_label.config(text="Successfully Created!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

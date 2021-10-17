@@ -22,10 +22,15 @@ class PWPage:
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
 
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Be careful of prying eyes",
+                                                 font=pw_tool.helper.ui_helper.font,
+                                                 background=pw_tool.helper.ui_helper.background_color)
+        self.__welcome_label.pack(pady=30)
+
         self.__website_label = tkinter.ttk.Label(master=self.__window, text=self.__website,
                                                  font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
-        self.__website_label.pack(padx=5, pady=5)
+        self.__website_label.pack(pady=5)
 
         self.__label_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         self.__username_label = tkinter.ttk.Label(master=self.__label_frame, text="Username:",
@@ -41,11 +46,11 @@ class PWPage:
                                                          font=pw_tool.helper.ui_helper.font,
                                                          background=pw_tool.helper.ui_helper.background_color)
 
-        self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
+        self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__actual_username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
+        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
         self.__actual_password_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
-        self.__label_frame.pack(padx=5, pady=5)
+        self.__label_frame.pack(pady=5)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -58,7 +63,7 @@ class PWPage:
         self.__edit_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__delete_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
 
-        self.__button_frame.pack(pady=10)
+        self.__button_frame.pack(pady=30)
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
                                name="WM_DELETE_WINDOW")

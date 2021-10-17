@@ -87,7 +87,7 @@ class LoginPage:
             self.__notification_label.config(text=formatted_message)
             return
 
-        pw_tool.helper.ui_helper.clear_fields(self.__entry_frame)
+        pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
         self.__notification_label.config(text="Login Successful! Redirecting you...")
         self.__window.after(ms=1000, func=lambda: self.__notification_label.config(text=""))
