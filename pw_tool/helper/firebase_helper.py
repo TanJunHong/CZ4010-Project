@@ -21,12 +21,16 @@ auth_key = None
 
 def register(email, password):
     auth.create_user_with_email_and_password(email=email, password=password)
+    del email
+    del password
 
 
 def login(email, password):
     auth.sign_in_with_email_and_password(email=email, password=password)
     pw_tool.helper.vault_helper.generate_vault_key(secret=email + password)
     generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
+    del email
+    del password
 
 
 def generate_auth_key(secret):

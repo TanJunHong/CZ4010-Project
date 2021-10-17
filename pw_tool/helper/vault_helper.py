@@ -48,6 +48,13 @@ def load_vault():
                                                 block_size=Crypto.Cipher.AES.block_size)
         pw_tool.helper.vault_helper.vault = json.loads(s=vault_bytes.decode(encoding="utf-8"))
 
+        del data
+        del result
+        del initialization_vector
+        del ciphertext
+        del cipher
+        del vault_bytes
+
 
 def upload_vault():
     vault_bytes = json.dumps(obj=vault).encode(encoding="utf-8")
@@ -63,6 +70,13 @@ def upload_vault():
         pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
+
+    del vault_bytes
+    del cipher
+    del ciphertext_bytes
+    del initialization_vector
+    del ciphertext
+    del result
 
 
 def destroy_variables():
