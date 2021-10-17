@@ -1,7 +1,6 @@
 import binascii
 import secrets
 import tkinter.ttk
-from tkinter import *
 
 import pw_tool.helper.ui_helper
 
@@ -23,10 +22,10 @@ class GenPage:
         self.__plength_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 12))
         self.__plength_entry.grid(row=0, column=1)
 
-        self.__var_upper = IntVar()
-        self.__var_lower = IntVar()
-        self.__var_numeric = IntVar()
-        self.__var_symbol = IntVar()
+        self.__var_upper = tkinter.IntVar()
+        self.__var_lower = tkinter.IntVar()
+        self.__var_numeric = tkinter.IntVar()
+        self.__var_symbol = tkinter.IntVar()
 
         # Get type of characters to include in password
         self.__ptype_label = tkinter.ttk.Label(master=self.__window, text="Type of characters:", font=("Arial", 12),
@@ -61,13 +60,13 @@ class GenPage:
         # Display Generated Password
         self.__gpassword_label = tkinter.ttk.Label(master=self.__window, text="Generated Password:", font=("Arial", 12),
                                                    background=pw_tool.helper.ui_helper.background_color)
-        self.__gpassword_label["state"] = DISABLED
+        self.__gpassword_label["state"] = tkinter.DISABLED
         self.__gpassword_label.grid(row=5, column=0, padx=10)
 
         # copy generated password to clipboard
         self.__copy_button = tkinter.ttk.Button(master=self.__window, text="Copy Password", style="TButton",
                                                 command=self.__pcopy)
-        self.__copy_button["state"] = DISABLED
+        self.__copy_button["state"] = tkinter.DISABLED
         self.__copy_button.grid(row=7, column=1)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
@@ -110,21 +109,21 @@ class GenPage:
         while i == 0:
             if not length or int(length) <= 11:
                 self.__error_label.config(text="Please ensure password length is filled/valid!")
-                self.__gpassword_label["state"] = DISABLED
+                self.__gpassword_label["state"] = tkinter.DISABLED
                 self.__window.after(0, lambda: self.__password_label.config(text=""))
-                self.__copy_button["state"] = DISABLED
+                self.__copy_button["state"] = tkinter.DISABLED
                 return
             else:
                 if not upper and not lower and not num and not sym:
                     self.__error_label.config(text="Please choose the type of characters!")
-                    self.__gpassword_label["state"] = DISABLED
+                    self.__gpassword_label["state"] = tkinter.DISABLED
                     self.__window.after(0, lambda: self.__password_label.config(text=""))
-                    self.__copy_button["state"] = DISABLED
+                    self.__copy_button["state"] = tkinter.DISABLED
                     return
                 else:
                     self.__window.after(0, lambda: self.__error_label.config(text=""))
-                    self.__gpassword_label["state"] = NORMAL
-                    self.__copy_button["state"] = NORMAL
+                    self.__gpassword_label["state"] = tkinter.NORMAL
+                    self.__copy_button["state"] = tkinter.NORMAL
                     break
 
         # adding list of selected characters to combined list
