@@ -3,6 +3,7 @@ import tkinter.ttk
 
 vault_page = None
 background_color = "SystemButtonFace"
+font = ("Arial", 25)
 
 
 def centre_window(window):
@@ -38,7 +39,7 @@ def back(root, me):
 
 def create_button_style():
     style = tkinter.ttk.Style()
-    style.configure(style="TButton", font=("Arial", 25))
+    style.configure(style="TButton", font=font)
 
 
 def create_frame_style():

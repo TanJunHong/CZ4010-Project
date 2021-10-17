@@ -20,39 +20,56 @@ class LoginPage:
         pw_tool.helper.ui_helper.create_button_style()
         pw_tool.helper.ui_helper.create_frame_style()
 
-        self.__email_label = tkinter.ttk.Label(master=self.__window, text="Email", font=("Arial", 25),
+        self.__title_label = tkinter.ttk.Label(master=self.__window, text="Password Tool",
+                                               font=pw_tool.helper.ui_helper.font,
                                                background=pw_tool.helper.ui_helper.background_color)
-        self.__email_label.pack()
+        self.__title_label.pack(pady=20)
 
-        self.__email_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
-        self.__email_entry.pack()
+        self.__entry_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        self.__email_label = tkinter.ttk.Label(master=self.__entry_frame, text="Email",
+                                               font=pw_tool.helper.ui_helper.font,
+                                               background=pw_tool.helper.ui_helper.background_color)
+
+        self.__email_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
         self.__email_entry.focus()
 
-        self.__password_label = tkinter.ttk.Label(master=self.__window, text="Enter Master Password",
-                                                  font=("Arial", 25),
+        self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
+                                                  font=pw_tool.helper.ui_helper.font,
                                                   background=pw_tool.helper.ui_helper.background_color)
-        self.__password_label.pack()
 
-        self.__password_entry = tkinter.ttk.Entry(master=self.__window, show="*", font=("Arial", 25))
-        self.__password_entry.pack()
+        self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
+                                                  font=pw_tool.helper.ui_helper.font)
 
-        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
-                                                      background=pw_tool.helper.ui_helper.background_color)
-        self.__notification_label.pack()
+        self.__email_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__email_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__password_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
 
-        self.__login_button = tkinter.ttk.Button(master=self.__window, text="Login", style="TButton",
+        self.__entry_frame.pack(pady=30)
+
+        self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        self.__login_button = tkinter.ttk.Button(master=self.__button_frame, text="Login", style="TButton",
                                                  command=self.__verify_login)
-        self.__login_button.pack()
 
-        self.__register_button = tkinter.ttk.Button(master=self.__window, text="Register", style="TButton",
+        self.__register_button = tkinter.ttk.Button(master=self.__button_frame, text="Register", style="TButton",
                                                     command=self.__show_register_page)
-        self.__register_button.pack()
+
+        self.__login_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__register_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+
+        self.__button_frame.pack(pady=10)
+
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
+                                                      background=pw_tool.helper.ui_helper.background_color)
+        self.__notification_label.pack(pady=50)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
         self.__window.mainloop()
 
     def __show_register_page(self):
-        pw_tool.helper.ui_helper.clear_fields(window=self.__window)
+        pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
         self.__window.withdraw()
         pw_tool.ui.registration.registration_page.RegistrationPage(master=self.__window)
 
@@ -70,7 +87,7 @@ class LoginPage:
             self.__notification_label.config(text=formatted_message)
             return
 
-        pw_tool.helper.ui_helper.clear_fields(self.__window)
+        pw_tool.helper.ui_helper.clear_fields(self.__entry_frame)
 
         self.__notification_label.config(text="Login Successful! Redirecting you...")
         self.__window.after(ms=1000, func=lambda: self.__notification_label.config(text=""))

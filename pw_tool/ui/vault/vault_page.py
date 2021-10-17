@@ -25,9 +25,10 @@ class VaultPage:
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Password Manager")
-        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault", font=("Arial", 25),
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault",
+                                                 font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
-        self.__welcome_label.pack()
+        self.__welcome_label.pack(padx=5, pady=5)
 
         try:
             data = pw_tool.helper.firebase_helper.database.child("vault").child(
@@ -52,15 +53,15 @@ class VaultPage:
 
         self.refresh_page()
 
-        self.__inner_frame.pack()
+        self.__inner_frame.pack(padx=5, pady=5)
 
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="+", style="TButton",
                                                command=self.__show_add_page)
-        self.__add_button.pack()
+        self.__add_button.pack(padx=5, pady=5)
 
         self.__pgenerator_button = tkinter.ttk.Button(master=self.__window, text="Password Generator", style="TButton",
                                                       command=self.__show_gen_page)
-        self.__pgenerator_button.pack()
+        self.__pgenerator_button.pack(padx=5, pady=5)
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
                                name="WM_DELETE_WINDOW")
@@ -85,7 +86,8 @@ class VaultPage:
 
         counter = 0
         for website, value in pw_tool.helper.vault_helper.vault.items():
-            self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website, font=("Arial", 25),
+            self.__labels[website] = tkinter.ttk.Label(master=self.__inner_frame, text=website,
+                                                       font=pw_tool.helper.ui_helper.font,
                                                        background=pw_tool.helper.ui_helper.background_color)
             self.__buttons[website] = tkinter.ttk.Button(master=self.__inner_frame, text="Show", style="TButton",
                                                          command=lambda web=website, val=value: self.__show_pw_page(

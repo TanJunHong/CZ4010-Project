@@ -12,35 +12,50 @@ class AddPage:
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x480")
         self.__window.title(string="Add Item")
-        self.__website_label = tkinter.ttk.Label(master=self.__window, text="Website", font=("Arial", 25),
-                                                 background=pw_tool.helper.ui_helper.background_color)
-        self.__website_label.pack()
 
-        self.__website_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
-        self.__website_entry.pack()
+        self.__title_label = tkinter.ttk.Label(master=self.__window, text="Add Item",
+                                               font=pw_tool.helper.ui_helper.font,
+                                               background=pw_tool.helper.ui_helper.background_color)
+        self.__title_label.pack(pady=20)
+
+        self.__entry_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        self.__website_label = tkinter.ttk.Label(master=self.__entry_frame, text="Website",
+                                                 font=pw_tool.helper.ui_helper.font,
+                                                 background=pw_tool.helper.ui_helper.background_color)
+
+        self.__website_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
         self.__website_entry.focus()
 
-        self.__username_label = tkinter.ttk.Label(master=self.__window, text="Login Username", font=("Arial", 25),
+        self.__username_label = tkinter.ttk.Label(master=self.__entry_frame, text="Username",
+                                                  font=pw_tool.helper.ui_helper.font,
                                                   background=pw_tool.helper.ui_helper.background_color)
-        self.__username_label.pack()
 
-        self.__username_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 25))
-        self.__username_entry.pack()
+        self.__username_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
 
-        self.__password_label = tkinter.ttk.Label(master=self.__window, text="Password", font=("Arial", 25),
+        self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
+                                                  font=pw_tool.helper.ui_helper.font,
                                                   background=pw_tool.helper.ui_helper.background_color)
-        self.__password_label.pack()
 
-        self.__password_entry = tkinter.ttk.Entry(master=self.__window, show="*", font=("Arial", 25))
-        self.__password_entry.pack()
+        self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
+                                                  font=pw_tool.helper.ui_helper.font)
 
-        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 25),
+        self.__website_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__website_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__username_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__username_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
+        self.__password_label.grid(row=2, column=0, padx=20, pady=5, sticky="E")
+        self.__password_entry.grid(row=2, column=1, padx=20, pady=5, sticky="W")
+
+        self.__entry_frame.pack(pady=30)
+
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
-        self.__notification_label.pack()
+        self.__notification_label.pack(padx=5, pady=5)
 
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="TButton",
                                                command=self.__add_to_vault)
-        self.__add_button.pack()
+        self.__add_button.pack(padx=5, pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
