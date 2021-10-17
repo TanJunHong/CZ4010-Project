@@ -1,5 +1,7 @@
 import pyrebase
 
+import pw_tool.helper.vault_helper
+
 firebaseConfig = {
     "apiKey":            "AIzaSyBq943MX4OSMQoEG9WOEdATSlvxU5daxwQ",
     "authDomain":        "cz4010-project.firebaseapp.com",
@@ -15,3 +17,18 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
 auth_key = None
+
+
+def register(email, password):
+    auth.create_user_with_email_and_password(email=email, password=password)
+
+
+def login(email, password):
+    auth.sign_in_with_email_and_password(email=email, password=password)
+    pw_tool.helper.vault_helper.generate_vault_key(secret=email + password)
+    generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
+
+
+def generate_auth_key(secret):
+    global auth_key
+    auth_key = pw_tool.helper.vault_helper.context.hash(secret=secret, salt=pw_tool.helper.vault_helper.vault_iv)

@@ -27,21 +27,21 @@ class PWPage:
         self.__website_label.pack()
 
         self.__inner_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
-        self.__username = tkinter.ttk.Label(master=self.__inner_frame, text="Username:", font=("Arial", 25),
-                                            background="SystemButtonFace")
-        self.__username_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["username"],
-                                                  font=("Arial", 25),
+        self.__username_label = tkinter.ttk.Label(master=self.__inner_frame, text="Username:", font=("Arial", 25),
                                                   background="SystemButtonFace")
-        self.__pw = tkinter.ttk.Label(master=self.__inner_frame, text="Password:", font=("Arial", 25),
-                                      background="SystemButtonFace")
-        self.__pw_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["password"],
-                                            font=("Arial", 25),
-                                            background="SystemButtonFace")
+        self.__actual_username_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["username"],
+                                                         font=("Arial", 25),
+                                                         background="SystemButtonFace")
+        self.__password_label = tkinter.ttk.Label(master=self.__inner_frame, text="Password:", font=("Arial", 25),
+                                                  background="SystemButtonFace")
+        self.__actual_password_label = tkinter.ttk.Label(master=self.__inner_frame, text=self.__value["password"],
+                                                         font=("Arial", 25),
+                                                         background="SystemButtonFace")
 
-        self.__username.grid(row=0, column=0, padx=20, pady=5, sticky="W")
-        self.__username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__pw.grid(row=1, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
+        self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
+        self.__actual_username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
+        self.__actual_password_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
         self.__inner_frame.pack()
 
         self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Edit", style="TButton",
@@ -58,7 +58,6 @@ class PWPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __show_edit_page(self):
-        self.__window.withdraw()
         pw_tool.ui.vault.edit_page.EditPage(master=self.__window, website=self.__website, value=self.__value)
 
     def __show_delete_dialog(self):

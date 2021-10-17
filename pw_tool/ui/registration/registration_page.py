@@ -63,9 +63,8 @@ class RegistrationPage:
             return
 
         try:
-            pw_tool.helper.firebase_helper.auth.create_user_with_email_and_password(email=self.__email_entry.get(),
-                                                                                    password=self.__password_entry
-                                                                                    .get())
+            pw_tool.helper.firebase_helper.register(email=self.__email_entry.get(),
+                                                    password=self.__password_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(error_json)["error"]["message"]

@@ -1,7 +1,6 @@
 import json
 import tkinter.ttk
 
-import passlib.crypto.digest
 import requests
 import ttkthemes
 
@@ -63,24 +62,13 @@ class LoginPage:
             return
 
         try:
-            user = pw_tool.helper.firebase_helper.auth.sign_in_with_email_and_password(email=self.__email_entry.get(),
-                                                                                       password=self.__password_entry
-                                                                                       .get())
+            pw_tool.helper.firebase_helper.login(email=self.__email_entry.get(), password=self.__password_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(error_json)["error"]["message"]
             formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
-
-        pw_tool.helper.vault_helper.vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256",
-                                                                                  secret=self.__email_entry.get() + self.__password_entry.get(),
-                                                                                  salt=pw_tool.helper.vault_helper.vault_iv,
-                                                                                  rounds=1000000, keylen=16)
-
-        pw_tool.helper.firebase_helper.auth_key = pw_tool.helper.vault_helper.context.hash(
-            secret=pw_tool.helper.vault_helper.vault_key + self.__password_entry.get().encode(encoding="utf-8"),
-            salt=pw_tool.helper.vault_helper.vault_iv)
 
         pw_tool.helper.ui_helper.clear_fields(self.__window)
 

@@ -155,7 +155,7 @@ class GenPage:
 
         # generate initial password by selecting random characters
         for x in range(int(length) - character_counter):
-            value = secrets_generator.randint(0, len(characters)-1)
+            value = secrets_generator.randint(0, len(characters) - 1)
             self.__password += characters[value]
 
         print(self.__password)
@@ -166,7 +166,7 @@ class GenPage:
             key1 = ""
             p = int(p)
             for j in range(p):
-                temp = secrets_generator.randint(0,1)
+                temp = secrets_generator.randint(0, 1)
                 temp = str(temp)
                 key1 += temp
             return key1
@@ -191,11 +191,11 @@ class GenPage:
         print(pw_ASCII)
 
         # convert ASCII to 8 bit binary
-        pw_Bin = [format(y,'08b') for y in pw_ASCII]
+        pw_Bin = [format(y, '08b') for y in pw_ASCII]
         pw_Bin = "".join(pw_Bin)
         print(pw_Bin)
 
-        n = int(len(pw_Bin)//2)
+        n = int(len(pw_Bin) // 2)
         L1 = pw_Bin[0:n]
         R1 = pw_Bin[n::]
         m = len(R1)
@@ -226,7 +226,7 @@ class GenPage:
         bin_data = L3 + R3
         str_data = ' '
         for i in range(0, len(bin_data), 7):
-            temp_data = bin_data[i:i+7]
+            temp_data = bin_data[i:i + 7]
             decimal_data = BinToDec(temp_data)
             str_data = str_data + chr(decimal_data)
 

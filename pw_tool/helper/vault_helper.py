@@ -3,9 +3,11 @@ import json
 
 import Crypto
 import passlib.context
+import passlib.crypto.digest
 
 import pw_tool.helper.firebase_helper
 
+# Randomly generated using BitWarden's Password Generator
 vault_iv = bytes("zg4cPx@Tr^6U", "utf8")
 auth_iv = bytes("lP5Vm*EyorW6", "utf8")
 
@@ -14,6 +16,12 @@ context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256_
 vault_key = b""
 
 vault = {}
+
+
+def generate_vault_key(secret):
+    global vault_key
+    vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=vault_iv, rounds=1000000,
+                                                  keylen=16)
 
 
 def update_vault(website, username, password):
