@@ -4,6 +4,7 @@ import json
 import Crypto
 import passlib.context
 import passlib.crypto.digest
+import passlib.hash
 
 import pw_tool.helper.firebase_helper
 import pw_tool.helper.ui_helper
@@ -25,9 +26,22 @@ def generate_vault_key(secret):
                                                   keylen=16)
 
 
-def update_vault(website, username, password):
-    vault[website] = {"username": username, "password": password}
+def update_vault(website, username, password, old_value=None):
+    old_passwords = []
+    if old_value is not None:
+        old_passwords = vault[website]["old_passwords"]
+
+        for old_password in old_passwords:
+            if passlib.hash.pbkdf2_sha256.verify(password, old_password):
+                return False
+
+        if password != old_value["password"]:
+            old_passwords.append(passlib.hash.pbkdf2_sha256.hash(secret=old_value["password"]))
+
+    vault[website] = {"username": username, "password": password, "old_passwords": old_passwords}
     upload_vault()
+
+    return True
 
 
 def delete_from_vault(website):
@@ -37,7 +51,8 @@ def delete_from_vault(website):
 
 def load_vault():
     data = pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get()
+        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get(
+        token=pw_tool.helper.firebase_helper.user["idToken"])
     if data.val() is not None:
         result = json.loads(s=data.val())
         initialization_vector = base64.b64decode(s=result["iv"])
@@ -67,7 +82,8 @@ def upload_vault():
     result = json.dumps(obj={"iv": initialization_vector, "ct": ciphertext})
 
     pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(result)
+        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(data=result, token=
+    pw_tool.helper.firebase_helper.user["idToken"])
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
 

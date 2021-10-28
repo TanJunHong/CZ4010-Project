@@ -69,9 +69,15 @@ class EditPage:
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
-        pw_tool.helper.vault_helper.update_vault(website=self.__website,
-                                                 username=self.__username_entry.get(),
-                                                 password=self.__password_entry.get())
+        if self.__username_entry.get() == self.__value["username"] and self.__password_entry.get() == self.__value[
+            "password"]:
+            self.__notification_label.config(text="Please change the fields!")
+            return
+
+        if not pw_tool.helper.vault_helper.update_vault(website=self.__website, username=self.__username_entry.get(),
+                                                        password=self.__password_entry.get(), old_value=self.__value):
+            self.__notification_label.config(text="Old password not allowed!")
+            return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 

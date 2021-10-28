@@ -17,6 +17,7 @@ firebase = pyrebase.initialize_app(firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
 auth_key = None
+user = None
 
 
 def register(email, password):
@@ -26,7 +27,8 @@ def register(email, password):
 
 
 def login(email, password):
-    auth.sign_in_with_email_and_password(email=email, password=password)
+    global user
+    user = auth.sign_in_with_email_and_password(email=email, password=password)
     pw_tool.helper.vault_helper.generate_vault_key(secret=email + password)
     generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
     del email
