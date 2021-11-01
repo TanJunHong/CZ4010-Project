@@ -1,12 +1,10 @@
 import json
-import tkinter
 import tkinter.ttk
 
 import requests
 
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
-import pw_tool.helper.vault_helper
 
 
 class RegPage:

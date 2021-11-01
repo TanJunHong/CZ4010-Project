@@ -82,8 +82,9 @@ def upload_vault():
     result = json.dumps(obj={"iv": initialization_vector, "ct": ciphertext})
 
     pw_tool.helper.fb_helper.database.child("vault").child(
-        pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).set(data=result, token=
-    pw_tool.helper.fb_helper.user["idToken"])
+        pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).set(data=result,
+                                                                               token=pw_tool.helper.fb_helper.user[
+                                                                                   "idToken"])
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
 

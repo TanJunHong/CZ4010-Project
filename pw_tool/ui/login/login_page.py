@@ -6,7 +6,6 @@ import ttkthemes
 
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
-import pw_tool.helper.vault_helper
 import pw_tool.ui.reg.reg_page
 import pw_tool.ui.vault.vault_page
 

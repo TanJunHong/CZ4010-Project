@@ -1,4 +1,3 @@
-import tkinter
 import tkinter.ttk
 
 vault_page = None

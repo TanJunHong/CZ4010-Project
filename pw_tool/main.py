@@ -1,8 +1,8 @@
-from pw_tool.ui.login import login_page
+import pw_tool.ui.login.login_page
 
 
 def main():
-    login_page.LoginPage()
+    pw_tool.ui.login.login_page.LoginPage()
 
 
 if __name__ == "__main__":
