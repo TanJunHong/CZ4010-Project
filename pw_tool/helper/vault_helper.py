@@ -96,6 +96,10 @@ def upload_vault():
     del result
 
 
+def delete_vault(auth_key):
+    pw_tool.helper.fb_helper.database.child("vault").child(auth_key.split("$")[-1].replace(".", "")).remove()
+
+
 def destroy_variables():
     global vault_key
     global vault

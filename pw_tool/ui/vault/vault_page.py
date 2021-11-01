@@ -35,10 +35,15 @@ class VaultPage:
         self.__pgenerator_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator",
                                                       style="TButton", command=self.__show_gen_page)
 
+        self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame,
+                                                            text="Change Master Password", style="TButton",
+                                                            command=self.__change_master_password)
+
         self.refresh_page()
 
         self.__add_button.grid(row=0, column=0, padx=10, pady=5, sticky="W")
         self.__pgenerator_button.grid(row=0, column=1, padx=10, pady=5, sticky="E")
+        self.__change_master_pw_button.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
 
         self.__welcome_label.pack(pady=30)
         self.__website_frame.pack(pady=20)
@@ -59,7 +64,10 @@ class VaultPage:
     def __show_pw_page(self, website, value):
         self.__window.withdraw()
         pw_tool.ui.vault.pw_page.PWPage(master=self.__window, website=website, value=value)
-        pass
+
+    def __change_master_password(self):
+        self.__window.withdraw()
+        pw_tool.ui.vault.change_pw_page.ChangePWPage(master=self.__window)
 
     def refresh_page(self):
         pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
