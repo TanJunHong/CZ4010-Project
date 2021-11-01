@@ -29,7 +29,7 @@ def centre_window(window):
 
 
 def back(root, me):
-    """Goes Back to main page, given 'root' and 'me'.
+    """Goes Back to main page, given 'root' and 'me'
     Function back(root,me) takes in 'root' and 'me', destroys 'me' and shows 'root'
     """
 
@@ -38,21 +38,30 @@ def back(root, me):
 
 
 def create_button_style():
+    """Creates button style
+    """
     style = tkinter.ttk.Style()
     style.configure(style="TButton", font=font)
 
 
 def create_frame_style():
+    """Creates frame style
+    """
     style = tkinter.ttk.Style()
     style.configure(style="TFrame", background=background_color)
 
 
 def clear_fields(window):
+    """Clear fields of window
+    Finds all entry fields of window and clear it of values.
+    """
     for widget in window.winfo_children():
         if type(widget) == tkinter.ttk.Entry:
             widget.delete(first=0, last=tkinter.END)
 
 
 def destroy_children(window):
+    """Destroys children of window
+    """
     for widgets in window.winfo_children():
         widgets.destroy()

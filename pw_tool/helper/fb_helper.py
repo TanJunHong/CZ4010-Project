@@ -21,12 +21,18 @@ user = None
 
 
 def register(email, password):
+    """Registers account on firebase with email and password
+    It will also delete email and password variables after registering.
+    """
     auth.create_user_with_email_and_password(email=email, password=password)
     del email
     del password
 
 
 def login(email, password):
+    """Login with email and password
+    It will also delete email and password variables after login.
+    """
     global user
     user = auth.sign_in_with_email_and_password(email=email, password=password)
     pw_tool.helper.vault_helper.generate_vault_key(secret=email + password)
@@ -36,5 +42,8 @@ def login(email, password):
 
 
 def generate_auth_key(secret):
+    """Generates authentication key with secret
+    It will also save the authentication key.
+    """
     global auth_key
     auth_key = pw_tool.helper.vault_helper.context.hash(secret=secret, salt=pw_tool.helper.vault_helper.vault_iv)
