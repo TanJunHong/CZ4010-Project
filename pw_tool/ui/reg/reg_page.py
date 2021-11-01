@@ -4,7 +4,7 @@ import tkinter.ttk
 
 import requests
 
-import pw_tool.helper.firebase_helper
+import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 
@@ -77,8 +77,8 @@ class RegPage:
             return
 
         try:
-            pw_tool.helper.firebase_helper.register(email=self.__email_entry.get(),
-                                                    password=self.__password_entry.get())
+            pw_tool.helper.fb_helper.register(email=self.__email_entry.get(),
+                                              password=self.__password_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]

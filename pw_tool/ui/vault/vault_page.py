@@ -2,10 +2,11 @@ import base64
 import tkinter
 import tkinter.ttk
 
-import pw_tool.helper.firebase_helper
+import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.vault.add_page
+import pw_tool.ui.vault.change_pw_page
 import pw_tool.ui.vault.gen_page
 import pw_tool.ui.vault.pw_page
 

@@ -6,7 +6,7 @@ import passlib.context
 import passlib.crypto.digest
 import passlib.hash
 
-import pw_tool.helper.firebase_helper
+import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
@@ -50,9 +50,9 @@ def delete_from_vault(website):
 
 
 def load_vault():
-    data = pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).get(
-        token=pw_tool.helper.firebase_helper.user["idToken"])
+    data = pw_tool.helper.fb_helper.database.child("vault").child(
+        pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).get(
+        token=pw_tool.helper.fb_helper.user["idToken"])
     if data.val() is not None:
         result = json.loads(s=data.val())
         initialization_vector = base64.b64decode(s=result["iv"])
@@ -81,9 +81,9 @@ def upload_vault():
     ciphertext = base64.b64encode(s=ciphertext_bytes).decode(encoding="utf-8")
     result = json.dumps(obj={"iv": initialization_vector, "ct": ciphertext})
 
-    pw_tool.helper.firebase_helper.database.child("vault").child(
-        pw_tool.helper.firebase_helper.auth_key.split("$")[-1].replace(".", "")).set(data=result, token=
-    pw_tool.helper.firebase_helper.user["idToken"])
+    pw_tool.helper.fb_helper.database.child("vault").child(
+        pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).set(data=result, token=
+    pw_tool.helper.fb_helper.user["idToken"])
 
     pw_tool.helper.ui_helper.vault_page.refresh_page()
 
@@ -98,7 +98,7 @@ def upload_vault():
 def destroy_variables():
     global vault_key
     global vault
-    pw_tool.helper.firebase_helper.auth_key = None
+    pw_tool.helper.fb_helper.auth_key = None
     pw_tool.helper.ui_helper.vault_page = None
     vault_key = b""
     vault = {}
