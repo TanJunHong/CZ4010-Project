@@ -57,7 +57,7 @@ class PWPage:
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        self.__toggle_button = tkinter.ttk.Button(master=self.__button_frame, text="Toggle", style="TButton",
+        self.__toggle_button = tkinter.ttk.Button(master=self.__button_frame, text="Show/Hide", style="TButton",
                                                   command=self.__toggle_password)
 
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy", style="TButton",
