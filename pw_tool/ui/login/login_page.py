@@ -7,7 +7,7 @@ import ttkthemes
 import pw_tool.helper.firebase_helper
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
-import pw_tool.ui.registration.registration_page
+import pw_tool.ui.reg.reg_page
 import pw_tool.ui.vault.vault_page
 
 
@@ -71,7 +71,7 @@ class LoginPage:
     def __show_register_page(self):
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
         self.__window.withdraw()
-        pw_tool.ui.registration.registration_page.RegistrationPage(master=self.__window)
+        pw_tool.ui.reg.reg_page.RegPage(master=self.__window)
 
     def __verify_login(self):
         if not self.__email_entry.get() or not self.__password_entry.get():

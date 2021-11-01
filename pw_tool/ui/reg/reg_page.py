@@ -9,7 +9,7 @@ import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 
 
-class RegistrationPage:
+class RegPage:
     def __init__(self, master):
         self.__master = master
         self.__window = tkinter.Toplevel()
