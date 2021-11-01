@@ -75,8 +75,7 @@ class RegPage:
             return
 
         try:
-            pw_tool.helper.fb_helper.register(email=self.__email_entry.get(),
-                                              password=self.__pw_entry.get())
+            pw_tool.helper.fb_helper.register(email=self.__email_entry.get(), password=self.__pw_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
