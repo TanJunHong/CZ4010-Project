@@ -31,12 +31,12 @@ class LoginPage:
 
         self.__email_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
 
-        self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
-                                                  font=pw_tool.helper.ui_helper.font,
-                                                  background=pw_tool.helper.ui_helper.background_color)
+        self.__pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password",
+                                            font=pw_tool.helper.ui_helper.font,
+                                            background=pw_tool.helper.ui_helper.background_color)
 
-        self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
-                                                  font=pw_tool.helper.ui_helper.font)
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
+                                            font=pw_tool.helper.ui_helper.font)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -53,8 +53,8 @@ class LoginPage:
 
         self.__email_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__email_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
-        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
-        self.__password_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
+        self.__pw_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__pw_entry.grid(row=1, column=1, padx=20, pady=5, sticky="W")
 
         self.__login_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__register_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
@@ -73,12 +73,12 @@ class LoginPage:
         pw_tool.ui.reg.reg_page.RegPage(master=self.__window)
 
     def __verify_login(self):
-        if not self.__email_entry.get() or not self.__password_entry.get():
+        if not self.__email_entry.get() or not self.__pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
         try:
-            pw_tool.helper.fb_helper.login(email=self.__email_entry.get(), password=self.__password_entry.get())
+            pw_tool.helper.fb_helper.login(email=self.__email_entry.get(), password=self.__pw_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(error_json)["error"]["message"]

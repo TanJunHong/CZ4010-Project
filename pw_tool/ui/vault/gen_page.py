@@ -110,14 +110,14 @@ class GenPage:
             if not length or int(length) <= 11:
                 self.__error_label.config(text="Please ensure password length is filled/valid!")
                 self.__gpassword_label["state"] = tkinter.DISABLED
-                self.__window.after(0, lambda: self.__password_label.config(text=""))
+                self.__window.after(0, lambda: self.__pw_label.config(text=""))
                 self.__copy_button["state"] = tkinter.DISABLED
                 return
             else:
                 if not upper and not lower and not num and not sym:
                     self.__error_label.config(text="Please choose the type of characters!")
                     self.__gpassword_label["state"] = tkinter.DISABLED
-                    self.__window.after(0, lambda: self.__password_label.config(text=""))
+                    self.__window.after(0, lambda: self.__pw_label.config(text=""))
                     self.__copy_button["state"] = tkinter.DISABLED
                     return
                 else:
@@ -252,9 +252,9 @@ class GenPage:
         print("Retrieved Plain Text is: ", self.__decrypt)
 
         # display generated password
-        self.__password_label = tkinter.ttk.Label(master=self.__window, text=self.__password, font=("Arial", 12),
-                                                  background=pw_tool.helper.ui_helper.background_color)
-        self.__password_label.grid(row=5, column=1, padx=10)
+        self.__pw_label = tkinter.ttk.Label(master=self.__window, text=self.__password, font=("Arial", 12),
+                                            background=pw_tool.helper.ui_helper.background_color)
+        self.__pw_label.grid(row=5, column=1, padx=10)
 
         # password = "".join(password_list[])
 

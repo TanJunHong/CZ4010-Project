@@ -29,13 +29,13 @@ class EditPage:
         self.__username_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font)
         self.__username_entry.insert(index=0, string=self.__value["username"])
 
-        self.__password_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password:",
-                                                  font=pw_tool.helper.ui_helper.font,
-                                                  background=pw_tool.helper.ui_helper.background_color)
+        self.__pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Password:",
+                                            font=pw_tool.helper.ui_helper.font,
+                                            background=pw_tool.helper.ui_helper.background_color)
 
-        self.__password_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font,
-                                                  show="*")
-        self.__password_entry.insert(index=0, string=self.__value["password"])
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font,
+                                            show="*")
+        self.__pw_entry.insert(index=0, string=self.__value["password"])
 
         self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="TButton",
                                                 command=self.__update_vault)
@@ -47,8 +47,8 @@ class EditPage:
 
         self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
         self.__username_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
-        self.__password_entry.grid(row=1, column=1, padx=20, pady=5, sticky="E")
+        self.__pw_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
+        self.__pw_entry.grid(row=1, column=1, padx=20, pady=5, sticky="E")
 
         self.__website_label.pack(pady=50)
         self.__entry_frame.pack(pady=5)
@@ -61,17 +61,17 @@ class EditPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __update_vault(self):
-        if not self.__username_entry.get() or not self.__password_entry.get():
+        if not self.__username_entry.get() or not self.__pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
-        if self.__username_entry.get() == self.__value["username"] and self.__password_entry.get() == self.__value[
+        if self.__username_entry.get() == self.__value["username"] and self.__pw_entry.get() == self.__value[
             "password"]:
             self.__notification_label.config(text="Please change the fields!")
             return
 
         if not pw_tool.helper.vault_helper.update_vault(website=self.__website, username=self.__username_entry.get(),
-                                                        password=self.__password_entry.get(), old_value=self.__value):
+                                                        password=self.__pw_entry.get(), old_value=self.__value):
             self.__notification_label.config(text="Old password not allowed!")
             return
 

@@ -42,13 +42,13 @@ class PWPage:
         self.__actual_username_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__value["username"],
                                                          font=pw_tool.helper.ui_helper.font,
                                                          background=pw_tool.helper.ui_helper.background_color)
-        self.__password_label = tkinter.ttk.Label(master=self.__label_frame, text="Password:",
-                                                  font=pw_tool.helper.ui_helper.font,
-                                                  background=pw_tool.helper.ui_helper.background_color)
+        self.__pw_label = tkinter.ttk.Label(master=self.__label_frame, text="Password:",
+                                            font=pw_tool.helper.ui_helper.font,
+                                            background=pw_tool.helper.ui_helper.background_color)
 
-        self.__actual_password_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__default_password,
-                                                         font=pw_tool.helper.ui_helper.font,
-                                                         background=pw_tool.helper.ui_helper.background_color)
+        self.__actual_pw_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__default_password,
+                                                   font=pw_tool.helper.ui_helper.font,
+                                                   background=pw_tool.helper.ui_helper.background_color)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -66,8 +66,8 @@ class PWPage:
 
         self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__actual_username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
-        self.__actual_password_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
+        self.__pw_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__actual_pw_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
 
         self.__toggle_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__copy_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
@@ -85,10 +85,10 @@ class PWPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __toggle_password(self):
-        if self.__actual_password_label.cget(key="text") == self.__default_password:
-            self.__actual_password_label.configure(text=self.__value["password"])
+        if self.__actual_pw_label.cget(key="text") == self.__default_password:
+            self.__actual_pw_label.configure(text=self.__value["password"])
         else:
-            self.__actual_password_label.configure(text=self.__default_password)
+            self.__actual_pw_label.configure(text=self.__default_password)
 
     def __copy_to_clipboard(self):
         tk = tkinter.Tk()
