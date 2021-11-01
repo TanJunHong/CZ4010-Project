@@ -10,8 +10,16 @@ import pw_tool.ui.vault.edit_page
 import pw_tool.ui.vault.gen_page
 
 
+def _change_clipboard(string, tk):
+    tk.clipboard_clear()
+    tk.clipboard_append(string=string)
+    tk.update()
+
+
 class PWPage:
     def __init__(self, master, website, value):
+        self.__default_password = "***"
+
         self.__master = master
         self.__master.withdraw()
 
@@ -43,11 +51,17 @@ class PWPage:
                                                   font=pw_tool.helper.ui_helper.font,
                                                   background=pw_tool.helper.ui_helper.background_color)
 
-        self.__actual_password_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__value["password"],
+        self.__actual_password_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__default_password,
                                                          font=pw_tool.helper.ui_helper.font,
                                                          background=pw_tool.helper.ui_helper.background_color)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        self.__toggle_button = tkinter.ttk.Button(master=self.__button_frame, text="Toggle", style="TButton",
+                                                  command=self.__toggle_password)
+
+        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy", style="TButton",
+                                                command=self.__copy_to_clipboard)
 
         self.__edit_button = tkinter.ttk.Button(master=self.__button_frame, text="Edit", style="TButton",
                                                 command=self.__show_edit_page)
@@ -60,8 +74,10 @@ class PWPage:
         self.__password_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
         self.__actual_password_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
 
-        self.__edit_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
-        self.__delete_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__toggle_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__copy_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__edit_button.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__delete_button.grid(row=1, column=1, padx=20, pady=5, sticky="W")
 
         self.__welcome_label.pack(pady=30)
         self.__website_label.pack(pady=5)
@@ -72,6 +88,19 @@ class PWPage:
                                name="WM_DELETE_WINDOW")
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
+
+    def __toggle_password(self):
+        if self.__actual_password_label.cget(key="text") == self.__default_password:
+            self.__actual_password_label.configure(text=self.__value["password"])
+        else:
+            self.__actual_password_label.configure(text=self.__default_password)
+
+    def __copy_to_clipboard(self):
+        tk = tkinter.Tk()
+        tk.withdraw()
+        _change_clipboard(string=self.__value["password"], tk=tk)
+        tk.after(ms=10000, func=lambda: _change_clipboard(string="", tk=tk))
+        tk.after(ms=10500, func=tk.destroy)
 
     def __show_edit_page(self):
         self.__window.destroy()
