@@ -10,6 +10,8 @@ import pw_tool.ui.vault.pw_page
 
 class VaultPage:
     def __init__(self, master):
+        """Initialises vault page
+        """
         self.__master = master
         self.__master.withdraw()
 
@@ -35,9 +37,8 @@ class VaultPage:
         self.__pgenerator_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator",
                                                       style="TButton", command=self.__show_gen_page)
 
-        self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame,
-                                                            text="Change Master Password", style="TButton",
-                                                            command=self.__change_master_password)
+        self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame, text="Change Master Password",
+                                                            style="TButton", command=self.__change_master_password)
 
         self.refresh_page()
 
@@ -54,22 +55,32 @@ class VaultPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __show_add_page(self):
+        """Redirects to add page
+        """
         self.__window.withdraw()
         pw_tool.ui.vault.add_page.AddPage(master=self.__window)
 
     def __show_gen_page(self):
+        """Redirects to generator page
+        """
         self.__window.withdraw()
         pw_tool.ui.vault.gen_page.GenPage(master=self.__window)
 
     def __show_pw_page(self, website, value):
+        """Redirects to password page
+        """
         self.__window.withdraw()
         pw_tool.ui.vault.pw_page.PWPage(master=self.__window, website=website, value=value)
 
     def __change_master_password(self):
+        """Redirects to change master password page
+        """
         self.__window.withdraw()
         pw_tool.ui.vault.change_pw_page.ChangePWPage(master=self.__window)
 
     def refresh_page(self):
+        """Refreshes page
+        """
         pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
 
         self.__labels = {}
@@ -91,5 +102,8 @@ class VaultPage:
             counter += 1
 
     def __logout(self):
+        """Logs out
+        It will purge client's variables.
+        """
         pw_tool.helper.vault_helper.destroy_variables()
         pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window)

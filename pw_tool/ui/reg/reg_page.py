@@ -9,6 +9,8 @@ import pw_tool.helper.ui_helper
 
 class RegPage:
     def __init__(self, master):
+        """Initialises registration page
+        """
         self.__master = master
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
@@ -30,8 +32,7 @@ class RegPage:
                                             font=pw_tool.helper.ui_helper.font,
                                             background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
-                                            font=pw_tool.helper.ui_helper.font)
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*", font=pw_tool.helper.ui_helper.font)
 
         self.__confirm_pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Confirm PW",
                                                     font=pw_tool.helper.ui_helper.font,
@@ -66,6 +67,9 @@ class RegPage:
                                name="WM_DELETE_WINDOW")
 
     def __create_account(self):
+        """Creates account
+        If successful, redirects back to login page.
+        """
         if not self.__email_entry.get() or not self.__pw_entry.get() or not self.__confirm_pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return

@@ -6,6 +6,8 @@ import pw_tool.helper.vault_helper
 
 class DeleteDialog:
     def __init__(self, master, website):
+        """Initialises delete dialog
+        """
         self.__master = master
         self.__master.withdraw()
 
@@ -51,6 +53,9 @@ class DeleteDialog:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __delete_from_vault(self):
+        """Deletes from vault
+        Redirects to vault page afterwards.
+        """
         pw_tool.helper.vault_helper.delete_from_vault(website=self.__website)
 
         self.__notification_label.config(text="Successfully Deleted!")

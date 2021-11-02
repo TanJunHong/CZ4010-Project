@@ -6,6 +6,8 @@ import pw_tool.helper.vault_helper
 
 class EditPage:
     def __init__(self, master, website, value):
+        """Initialises edit page
+        """
         self.__master = master
         self.__master.withdraw()
 
@@ -33,8 +35,7 @@ class EditPage:
                                             font=pw_tool.helper.ui_helper.font,
                                             background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font,
-                                            show="*")
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font, show="*")
         self.__pw_entry.insert(index=0, string=self.__value["password"])
 
         self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="TButton",
@@ -61,6 +62,9 @@ class EditPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __update_vault(self):
+        """Updates vault
+        Redirects back to vault page when successful.
+        """
         if not self.__username_entry.get() or not self.__pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return

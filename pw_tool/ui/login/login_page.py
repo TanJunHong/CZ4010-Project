@@ -12,6 +12,8 @@ import pw_tool.ui.vault.vault_page
 
 class LoginPage:
     def __init__(self):
+        """Initialises login page
+        """
         self.__window = ttkthemes.ThemedTk(theme="arc")
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Manager")
@@ -35,8 +37,7 @@ class LoginPage:
                                             font=pw_tool.helper.ui_helper.font,
                                             background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
-                                            font=pw_tool.helper.ui_helper.font)
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*", font=pw_tool.helper.ui_helper.font)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -68,11 +69,16 @@ class LoginPage:
         self.__window.mainloop()
 
     def __show_register_page(self):
+        """Shows register page
+        """
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
         self.__window.withdraw()
         pw_tool.ui.reg.reg_page.RegPage(master=self.__window)
 
     def __verify_login(self):
+        """Verifies login
+        Moves to vault page when validated.
+        """
         if not self.__email_entry.get() or not self.__pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
@@ -81,9 +87,8 @@ class LoginPage:
             pw_tool.helper.fb_helper.login(email=self.__email_entry.get(), password=self.__pw_entry.get())
         except requests.HTTPError as error:
             error_json = error.args[1]
-            message = json.loads(error_json)["error"]["message"]
-            formatted_message = message.replace("_", " ").replace(" : ",
-                                                                  "\n").capitalize()
+            message = json.loads(s=error_json)["error"]["message"]
+            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
 
@@ -94,4 +99,6 @@ class LoginPage:
         self.__window.after(ms=1000, func=self.__create_vault_page)
 
     def __create_vault_page(self):
+        """Moves to vault page
+        """
         pw_tool.helper.ui_helper.vault_page = pw_tool.ui.vault.vault_page.VaultPage(master=self.__window)

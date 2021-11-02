@@ -9,6 +9,8 @@ import pw_tool.helper.ui_helper
 
 class ChangePWPage:
     def __init__(self, master):
+        """Initialises change password page
+        """
         self.__master = master
         self.__master.withdraw()
 
@@ -32,8 +34,7 @@ class ChangePWPage:
                                                 font=pw_tool.helper.ui_helper.font,
                                                 background=pw_tool.helper.ui_helper.background_color)
 
-        self.__new_pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font,
-                                                show="*")
+        self.__new_pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font, show="*")
 
         self.__confirm_pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Confirm Password:",
                                                     font=pw_tool.helper.ui_helper.font,
@@ -68,6 +69,10 @@ class ChangePWPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __change_password(self):
+        """Changes password
+        Does validation check on passwords and changes password on firebase.
+        Redirects back when successful.
+        """
         if not self.__old_pw_entry.get() or not self.__new_pw_entry.get() or not self.__confirm_pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
@@ -85,8 +90,7 @@ class ChangePWPage:
         except requests.HTTPError as error:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
-            formatted_message = message.replace("_", " ").replace(" : ",
-                                                                  "\n").capitalize()
+            formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
             self.__notification_label.config(text=formatted_message)
             return
 

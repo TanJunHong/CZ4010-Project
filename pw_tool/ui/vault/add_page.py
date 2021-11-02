@@ -6,6 +6,8 @@ import pw_tool.helper.vault_helper
 
 class AddPage:
     def __init__(self, master):
+        """Initialises add page
+        """
         self.__master = master
 
         self.__window = tkinter.Toplevel()
@@ -34,8 +36,7 @@ class AddPage:
                                             font=pw_tool.helper.ui_helper.font,
                                             background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
-                                            font=pw_tool.helper.ui_helper.font)
+        self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*", font=pw_tool.helper.ui_helper.font)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
@@ -64,13 +65,15 @@ class AddPage:
             name="WM_DELETE_WINDOW")
 
     def __add_to_vault(self):
+        """Adds entry to vault
+        It will upload to firebase afterwards.
+        """
         if not self.__website_entry.get() or not self.__username_entry.get() or not self.__pw_entry.get():
             self.__notification_label.config(text="Please ensure all fields are filled!")
             return
 
         pw_tool.helper.vault_helper.update_vault(website=self.__website_entry.get(),
-                                                 username=self.__username_entry.get(),
-                                                 password=self.__pw_entry.get())
+                                                 username=self.__username_entry.get(), password=self.__pw_entry.get())
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 

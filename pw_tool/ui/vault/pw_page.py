@@ -6,6 +6,8 @@ import pw_tool.ui.vault.edit_page
 
 
 def _change_clipboard(string, tk):
+    """Changes clipboard given string
+    """
     tk.clipboard_clear()
     tk.clipboard_append(string=string)
     tk.update()
@@ -13,6 +15,8 @@ def _change_clipboard(string, tk):
 
 class PWPage:
     def __init__(self, master, website, value):
+        """Initialises password page
+        """
         self.__default_password = "***"
 
         self.__master = master
@@ -85,12 +89,17 @@ class PWPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __toggle_password(self):
+        """Toggles to show/hide password
+        """
         if self.__actual_pw_label.cget(key="text") == self.__default_password:
             self.__actual_pw_label.configure(text=self.__value["password"])
         else:
             self.__actual_pw_label.configure(text=self.__default_password)
 
     def __copy_to_clipboard(self):
+        """Copies password to clipboard
+        It will replace the clipboard with an empty string after 10 seconds, for security reasons.
+        """
         tk = tkinter.Tk()
         tk.withdraw()
         _change_clipboard(string=self.__value["password"], tk=tk)
@@ -98,9 +107,13 @@ class PWPage:
         tk.after(ms=10500, func=tk.destroy)
 
     def __show_edit_page(self):
+        """Redirects to edit page
+        """
         self.__window.destroy()
         pw_tool.ui.vault.edit_page.EditPage(master=self.__master, website=self.__website, value=self.__value)
 
     def __show_delete_dialog(self):
+        """Redirects to delete page
+        """
         self.__window.destroy()
         pw_tool.ui.vault.delete_dialog.DeleteDialog(master=self.__master, website=self.__website)
