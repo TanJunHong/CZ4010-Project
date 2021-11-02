@@ -21,12 +21,18 @@ vault = {}
 
 
 def generate_vault_key(secret):
+    """Generates vault key with secret
+    Generates vault key to lock the vault. This value never leaves the client.
+    """
     global vault_key
     vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=vault_iv, rounds=1000000,
                                                   keylen=16)
+    del secret
 
 
 def update_vault(website, username, password, old_value=None):
+    """Updates vault with new entry
+    """
     old_passwords = []
     if old_value is not None:
         old_passwords = vault[website]["old_passwords"]
@@ -41,15 +47,25 @@ def update_vault(website, username, password, old_value=None):
     vault[website] = {"username": username, "password": password, "old_passwords": old_passwords}
     upload_vault()
 
+    del old_passwords
+    del website
+    del username
+    del password
+    del old_value
+
     return True
 
 
 def delete_from_vault(website):
+    """Deletes entry from vault
+    """
     del vault[website]
     upload_vault()
 
 
 def load_vault():
+    """Retrieves vault from firebase and store it in client
+    """
     data = pw_tool.helper.fb_helper.database.child("vault").child(
         pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).get(
         token=pw_tool.helper.fb_helper.user["idToken"])
@@ -72,6 +88,8 @@ def load_vault():
 
 
 def upload_vault():
+    """Uploads vault to firebase
+    """
     vault_bytes = json.dumps(obj=vault).encode(encoding="utf-8")
     cipher = Crypto.Cipher.AES.new(key=bytes(vault_key), mode=Crypto.Cipher.AES.MODE_CBC)
     ciphertext_bytes = cipher.encrypt(
@@ -97,11 +115,16 @@ def upload_vault():
 
 
 def delete_vault(auth_key):
+    """Deletes entry from vault
+    """
     pw_tool.helper.fb_helper.database.child("vault").child(auth_key.split("$")[-1].replace(".", "")).remove(
         token=pw_tool.helper.fb_helper.user["idToken"])
 
 
 def destroy_variables():
+    """Destroys variables from client side
+    Called when logging out.
+    """
     global vault_key
     global vault
     pw_tool.helper.fb_helper.auth_key = None

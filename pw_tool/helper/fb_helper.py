@@ -1,7 +1,7 @@
 import json
 
 import pyrebase
-import requests.exceptions
+import requests
 
 import pw_tool.helper.vault_helper
 
@@ -16,7 +16,7 @@ firebaseConfig = {
     "measurementId":     "G-JSG28W1D2G"
 }
 
-firebase = pyrebase.initialize_app(firebaseConfig)
+firebase = pyrebase.initialize_app(config=firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
 auth_key = None
@@ -33,7 +33,7 @@ def register(email, password):
 
 
 def login(email, password):
-    """Login with email and password
+    """Logins with email and password
     It will also delete email and password variables after login.
     """
     global user
@@ -53,7 +53,7 @@ def generate_auth_key(secret):
 
 
 def validate_old_password(old_password):
-    """Validate old password
+    """Validates old password
     It will generate authentication key and compare to see if the old password is correct.
     """
     return generate_auth_key(
@@ -61,19 +61,22 @@ def validate_old_password(old_password):
 
 
 def change_password_helper(password):
-    """Change password helper function
+    """Changes password helper function
     Since pyrebase does not provide the function natively, we have to create the function from scratch.
     """
     request_ref = "https://identitytoolkit.googleapis.com/v1/accounts:update?key={0}".format(firebaseConfig["apiKey"])
     headers = {"content-type": "application/json; charset=UTF-8"}
-    data = json.dumps({"idToken": user["idToken"], "password": password, "returnSecureToken": True})
-    request_object = requests.post(request_ref, headers=headers, data=data)
+    data = json.dumps(obj={"idToken": user["idToken"], "password": password, "returnSecureToken": True})
+
+    del password
+
+    request_object = requests.post(url=request_ref, headers=headers, data=data)
     pyrebase.pyrebase.raise_detailed_error(request_object=request_object)
     return request_object.json()
 
 
 def change_password(password):
-    """Change password with given password
+    """Changes password with given password
     It will send a request to change password, and return update the vault and authentication key accordingly.
     """
     global auth_key
