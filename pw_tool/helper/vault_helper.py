@@ -97,7 +97,8 @@ def upload_vault():
 
 
 def delete_vault(auth_key):
-    pw_tool.helper.fb_helper.database.child("vault").child(auth_key.split("$")[-1].replace(".", "")).remove()
+    pw_tool.helper.fb_helper.database.child("vault").child(auth_key.split("$")[-1].replace(".", "")).remove(
+        token=pw_tool.helper.fb_helper.user["idToken"])
 
 
 def destroy_variables():

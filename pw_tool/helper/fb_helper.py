@@ -60,27 +60,32 @@ def validate_old_password(old_password):
         secret=pw_tool.helper.vault_helper.vault_key + old_password.encode(encoding="utf-8")) == auth_key
 
 
-def change_password(password):
-    global auth_key
-    global user
-
+def change_password_helper(password):
+    """Change password helper function
+    Since pyrebase does not provide the function natively, we have to create the function from scratch.
+    """
     request_ref = "https://identitytoolkit.googleapis.com/v1/accounts:update?key={0}".format(firebaseConfig["apiKey"])
     headers = {"content-type": "application/json; charset=UTF-8"}
     data = json.dumps({"idToken": user["idToken"], "password": password, "returnSecureToken": True})
     request_object = requests.post(request_ref, headers=headers, data=data)
-    try:
-        request_object.raise_for_status()
-    except requests.exceptions.HTTPError as e:
-        raise requests.exceptions.HTTPError(e, request_object.text)
+    pyrebase.pyrebase.raise_detailed_error(request_object=request_object)
+    return request_object.json()
 
-    result = request_object.json()
+
+def change_password(password):
+    """Change password with given password
+    It will send a request to change password, and return update the vault and authentication key accordingly.
+    """
+    global auth_key
+    global user
+
+    result = change_password_helper(password=password)
+
     for key in auth.current_user.keys() & result.keys():
-        # if key in result:
         auth.current_user[key] = result[key]
     user = auth.current_user
 
-    pw_tool.helper.vault_helper.generate_vault_key(secret=user["email"] + password)
     pw_tool.helper.vault_helper.delete_vault(auth_key=auth_key)
+    pw_tool.helper.vault_helper.generate_vault_key(secret=user["email"] + password)
     auth_key = generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
     pw_tool.helper.vault_helper.upload_vault()
-    return request_object.json()

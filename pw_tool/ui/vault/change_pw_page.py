@@ -1,8 +1,10 @@
+import json
 import tkinter.ttk
+
+import requests
 
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
-import pw_tool.helper.vault_helper
 
 
 class ChangePWPage:
@@ -78,7 +80,15 @@ class ChangePWPage:
             self.__notification_label.config(text="Passwords don't match!")
             return
 
-        pw_tool.helper.fb_helper.change_password(password=self.__new_pw_entry.get())
+        try:
+            pw_tool.helper.fb_helper.change_password(password=self.__new_pw_entry.get())
+        except requests.HTTPError as error:
+            error_json = error.args[1]
+            message = json.loads(s=error_json)["error"]["message"]
+            formatted_message = message.replace("_", " ").replace(" : ",
+                                                                  "\n").capitalize()
+            self.__notification_label.config(text=formatted_message)
+            return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
