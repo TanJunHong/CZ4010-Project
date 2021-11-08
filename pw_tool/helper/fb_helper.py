@@ -55,9 +55,10 @@ def generate_auth_key(secret):
 def validate_old_password(old_password):
     """Validates old password
     It will generate authentication key and compare to see if the old password is correct.
+    It uses the built-in verify function, which uses “constant time” equality check to prevent timing attacks.
     """
-    return generate_auth_key(
-        secret=pw_tool.helper.vault_helper.vault_key + old_password.encode(encoding="utf-8")) == auth_key
+    return pw_tool.helper.vault_helper.context.verify(
+        secret=pw_tool.helper.vault_helper.vault_key + old_password.encode(encoding="utf-8"), hash=auth_key)
 
 
 def change_password_helper(password):
