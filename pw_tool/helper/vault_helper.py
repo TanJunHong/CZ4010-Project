@@ -11,7 +11,7 @@ import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
 # TODO: Set minimum password strength
-# TODO: Check if salt can be fixed, if not generate salt using uuid + password
+# TODO: Check if salt can be fixed, if not generate salt using uuid + password (Remember to delete variable)
 # https://crypto.stackexchange.com/questions/34642/security-implication-of-deriving-key-with-fixed-salt-for-files-authentication
 # https://crypto.stackexchange.com/questions/50174/can-pbkdf2-be-used-with-a-fixed-salt-to-give-a-deterministic-slow-hash
 # Note that the good practice would be either to derive the salt in a deterministic way (from the username, for example)
@@ -98,7 +98,7 @@ def upload_vault():
     vault_bytes = json.dumps(obj=vault).encode(encoding="utf-8")
     cipher = Crypto.Cipher.AES.new(key=bytes(vault_key), mode=Crypto.Cipher.AES.MODE_CBC)
     ciphertext_bytes = cipher.encrypt(
-        Crypto.Util.Padding.pad(data_to_pad=vault_bytes, block_size=Crypto.Cipher.AES.block_size))
+        plaintext=Crypto.Util.Padding.pad(data_to_pad=vault_bytes, block_size=Crypto.Cipher.AES.block_size))
 
     initialization_vector = base64.b64encode(s=cipher.iv).decode(encoding="utf-8")
     ciphertext = base64.b64encode(s=ciphertext_bytes).decode(encoding="utf-8")
