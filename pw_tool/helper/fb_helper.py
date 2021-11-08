@@ -49,7 +49,7 @@ def generate_auth_key(secret):
     """Generates authentication key with secret
     It will also save the authentication key.
     """
-    return pw_tool.helper.vault_helper.context.hash(secret=secret, salt=pw_tool.helper.vault_helper.auth_iv)
+    return pw_tool.helper.vault_helper.context.hash(secret=secret, salt=pw_tool.helper.vault_helper.auth_salt)
 
 
 def validate_old_password(old_password):

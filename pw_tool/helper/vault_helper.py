@@ -10,8 +10,9 @@ import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
-vault_iv = bytes("zg4cPx@Tr^6U", "utf8")
-auth_iv = bytes("lP5Vm*EyorW6", "utf8")
+# TODO: Check if IV can be fixed
+vault_salt = bytes("zg4cPx@Tr^6U", "utf8")
+auth_salt = bytes("lP5Vm*EyorW6", "utf8")
 
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
 
@@ -25,7 +26,7 @@ def generate_vault_key(secret):
     Generates vault key to lock the vault. This value never leaves the client.
     """
     global vault_key
-    vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=vault_iv, rounds=1000000,
+    vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=vault_salt, rounds=1000000,
                                                   keylen=16)
     del secret
 
