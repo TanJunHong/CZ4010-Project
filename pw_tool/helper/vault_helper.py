@@ -10,8 +10,10 @@ import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
-# TODO: Check if IV can be fixed
+# TODO: Check if salt can be fixed, if not generate salt using uuid + password
 # https://crypto.stackexchange.com/questions/34642/security-implication-of-deriving-key-with-fixed-salt-for-files-authentication
+# https://crypto.stackexchange.com/questions/50174/can-pbkdf2-be-used-with-a-fixed-salt-to-give-a-deterministic-slow-hash
+# Note that the good practice would be either to derive the salt in a deterministic way (from the username, for example)
 vault_salt = bytes("zg4cPx@Tr^6U", "utf8")
 auth_salt = bytes("lP5Vm*EyorW6", "utf8")
 
