@@ -11,6 +11,7 @@ import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
 # TODO: Check if IV can be fixed
+# https://crypto.stackexchange.com/questions/34642/security-implication-of-deriving-key-with-fixed-salt-for-files-authentication
 vault_salt = bytes("zg4cPx@Tr^6U", "utf8")
 auth_salt = bytes("lP5Vm*EyorW6", "utf8")
 
