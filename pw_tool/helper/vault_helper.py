@@ -10,6 +10,7 @@ import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
 # Randomly generated using BitWarden's Password Generator
+# TODO: Set minimum password strength
 # TODO: Check if salt can be fixed, if not generate salt using uuid + password
 # https://crypto.stackexchange.com/questions/34642/security-implication-of-deriving-key-with-fixed-salt-for-files-authentication
 # https://crypto.stackexchange.com/questions/50174/can-pbkdf2-be-used-with-a-fixed-salt-to-give-a-deterministic-slow-hash
@@ -42,7 +43,7 @@ def update_vault(website, username, password, old_value=None):
         old_passwords = vault[website]["old_passwords"]
 
         for old_password in old_passwords:
-            if passlib.hash.pbkdf2_sha256.verify(password, old_password):
+            if passlib.hash.pbkdf2_sha256.verify(secret=password, hash=old_password):
                 return False
 
         if password != old_value["password"]:
