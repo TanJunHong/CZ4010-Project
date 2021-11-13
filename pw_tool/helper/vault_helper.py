@@ -9,30 +9,21 @@ import passlib.hash
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
-# Randomly generated using BitWarden's Password Generator
 # TODO: Set minimum password strength
-# TODO: Check if salt can be fixed, if not generate salt using uuid + password (Remember to delete variable)
-# https://crypto.stackexchange.com/questions/34642/security-implication-of-deriving-key-with-fixed-salt-for-files-authentication
-# https://crypto.stackexchange.com/questions/50174/can-pbkdf2-be-used-with-a-fixed-salt-to-give-a-deterministic-slow-hash
-# Note that the good practice would be either to derive the salt in a deterministic way (from the username, for example)
-vault_salt = bytes("zg4cPx@Tr^6U", "utf8")
-auth_salt = bytes("lP5Vm*EyorW6", "utf8")
 
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
-
 vault_key = b""
-
 vault = {}
 
 
-def generate_vault_key(secret):
-    """Generates vault key with secret
+def generate_vault_key(secret, salt):
+    """Generates vault key with secret and salt
     Generates vault key to lock the vault. This value never leaves the client.
     """
     global vault_key
-    vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=vault_salt, rounds=1000000,
-                                                  keylen=16)
+    vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=salt, rounds=1000000, keylen=16)
     del secret
+    del salt
 
 
 def update_vault(website, username, password, old_value=None):

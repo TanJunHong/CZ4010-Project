@@ -15,7 +15,6 @@ firebaseConfig = {
     "appId":             "1:619927596323:web:8058b593610fe37624b096",
     "measurementId":     "G-JSG28W1D2G"
 }
-
 firebase = pyrebase.initialize_app(config=firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
@@ -28,6 +27,7 @@ def register(email, password):
     It will also delete email and password variables after registering.
     """
     auth.create_user_with_email_and_password(email=email, password=password)
+
     del email
     del password
 
@@ -39,17 +39,32 @@ def login(email, password):
     global user
     global auth_key
     user = auth.sign_in_with_email_and_password(email=email, password=password)
-    pw_tool.helper.vault_helper.generate_vault_key(secret=email + password)
-    auth_key = generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
+    generate_keys(email=email, password=password)
+
     del email
     del password
 
 
-def generate_auth_key(secret):
-    """Generates authentication key with secret
+def generate_keys(email, password):
+    """Generates both vault and auth keys.
+    """
+    pw_tool.helper.vault_helper.generate_vault_key(secret=email + password, salt=password + user["localId"])
+    generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"),
+                      salt=(user["localId"] + email).encode(encoding="utf-8"))
+
+    del email
+    del password
+
+
+def generate_auth_key(secret, salt):
+    """Generates authentication key with secret and salt
     It will also save the authentication key.
     """
-    return pw_tool.helper.vault_helper.context.hash(secret=secret, salt=pw_tool.helper.vault_helper.auth_salt)
+    global auth_key
+    auth_key = pw_tool.helper.vault_helper.context.hash(secret=secret, salt=salt)
+
+    del secret
+    del salt
 
 
 def validate_old_password(old_password):
@@ -90,6 +105,8 @@ def change_password(password):
     user = auth.current_user
 
     pw_tool.helper.vault_helper.delete_vault(auth_key=auth_key)
-    pw_tool.helper.vault_helper.generate_vault_key(secret=user["email"] + password)
-    auth_key = generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"))
+    generate_keys(email=user["email"], password=password)
+
+    del password
+
     pw_tool.helper.vault_helper.upload_vault()
