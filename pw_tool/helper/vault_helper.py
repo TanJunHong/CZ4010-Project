@@ -22,6 +22,7 @@ def generate_vault_key(secret, salt):
     """
     global vault_key
     vault_key = passlib.crypto.digest.pbkdf2_hmac(digest="sha256", secret=secret, salt=salt, rounds=1000000, keylen=16)
+
     del secret
     del salt
 

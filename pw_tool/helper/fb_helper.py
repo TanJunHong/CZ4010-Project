@@ -87,6 +87,11 @@ def change_password_helper(password):
     del password
 
     request_object = requests.post(url=request_ref, headers=headers, data=data)
+
+    del request_ref
+    del headers
+    del data
+
     pyrebase.pyrebase.raise_detailed_error(request_object=request_object)
     return request_object.json()
 
@@ -103,6 +108,8 @@ def change_password(password):
     for key in auth.current_user.keys() & result.keys():
         auth.current_user[key] = result[key]
     user = auth.current_user
+
+    del result
 
     pw_tool.helper.vault_helper.delete_vault(auth_key=auth_key)
     generate_keys(email=user["email"], password=password)
