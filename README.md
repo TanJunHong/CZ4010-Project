@@ -165,8 +165,9 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 - Do not include personal information or words in the password
 - Never share your password, not even with your most trusted friends!
 
-TODO:
+## TODO
 
+- Talk about how vault key, authentication key is generated
 - requirements.txt
 - Set minimum password strength
 - Generation of random passwords
