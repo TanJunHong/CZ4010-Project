@@ -9,8 +9,6 @@ import passlib.hash
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
-# TODO: Set minimum password strength
-
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
 vault_key = b""
 vault = {}

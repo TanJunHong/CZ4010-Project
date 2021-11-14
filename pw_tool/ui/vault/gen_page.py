@@ -260,7 +260,3 @@ class GenPage:
 
     def __pcopy(self):
         print(self.__password + " uwu")
-
-# TODO: Generate password - auto copy password to fill in, with timer expiry
-# TODO: Generate password - save generated passwords and show history
-# TODO: Change password page - change master password?

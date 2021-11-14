@@ -101,22 +101,47 @@ users to disable clipboard history.
 ### Security
 
 Security is our utmost priority. We have to ensure that even if the database is leaked, the attackers have no way of
-knowing decrypting the vaults and knowing the owner of the vaults.
-<br>To ensure this, we use AES-CBC 256-bit encryption for vault data, and PBKDF2 SHA-256 to derive the vault key and
-authentication key. The database only stores encrypted data.
-<br>The vault key never leaves the client, and as such it is impossible to sniff and intercept the vault key. The
-authentication key is sent to the server to retrieve the corresponding vault. Since the authentication key is generated
-using a strong hash function, anyone who has access to the vault data in the database has no idea who the vault belongs
-to. The attacker will also not know how to decrypt the vault, since the key is kept in the client. **MORE**
+knowing decrypting the vaults and knowing the owner of the vaults. Here are some ways to ensure this:
+
+- We use AES-CBC 256-bit encryption for vault data, and PBKDF2 SHA-256 to derive the vault key and authentication key.
+  The database only stores encrypted data.
+- The vault key never leaves the client, and as such it is impossible to sniff and intercept the vault key.
+- The authentication key is sent to the server to retrieve the corresponding vault. Since the authentication key is
+  generated using a strong hash function, anyone who has access to the vault data in the database has no idea who the
+  vault belongs to.
+- When displaying a website's login information, the password is masked out initially, to prevent people nearby from
+  seeing it.
+- When comparing passwords (i.e. check if old passwords are being used), we use the built-in `verify()` function
+  provided by the libraries instead of `==`. This ensures a "constant time" equality check, which mitigates timing
+  attacks.
+- Variables that contains sensitive information are immediately deleted with `del` after usage.
+- We make use of cryptographic libraries instead of writing our own, as they are maintained by cryptography experts and
+  are likely to be more reliable.
 
 ## Development
 
+We use Python 3 to develop the app, and
+<br>
 Use of salt, plaintext, aes
 https://www.youtube.com/watch?v=w68BBPDAWr8
 
 ## Use of the code
 
-Screenshot of code How to run the program
+Please ensure you have Python 3 installed.
+
+1. Clone this repository
+2. Navigate to the `pw_tool` folder
+3. Run `main.py`. You should see the following screen ![Login Screen](Login Screen.png)
+4. Register for an account, and you are ready to go!
+
+---
+
+## Limitations
+
+Strings in python are immutable, so there is a chance the password is still in memory even after calling `del`. There is
+the possibility the operating system will swap the whole memory page ut to disk, where it could sit for months. However,
+since this requires an attack on the client, we consider the risk of this attack minimal. If the attacker has access to
+the client, there are more serious things to worry about.
 
 ## Glossary
 
@@ -128,28 +153,22 @@ Screenshot of code How to run the program
 - **AES** - Advanced Encryption Standard
 - **CBC** - Cipher-Block Chaining
 
----
-
-## Encryption
-
-XX
-
-## Hash Verification
-
-To authenticate the user, they are prompted to create a master password which is then stored using a SHA256 Hash
-Function and is verified at login.
-
 ## Precautions
 
-This password manager tool securely encrypts your password but this security is only as strong as the weakest component
+This password management tool securely encrypts your passwords but this security is only as strong as the weakest
+component. Follow these basic guidelines to ensure that your vault is safe even if your passwords are exposed:
 
-- and this is very often the primary password used to lock and unlock your vault. Follow these basic guidelines to
-  ensure that your vault is safe even if exposed:
+- Choose a unique password that is not used anywhere else
+- Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
+  * Best if it is generated through a reputable password management tool
+- Use sufficiently long password
+- Do not include personal information or words in the password
+- Never share your password, not even with your most trusted friends!
 
-* Choose a unique password that is not used elsewhere
-* Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
-* Use long password (the longer the better)
-* Do not include personal information or words in the password
-* Never share your password
+TODO:
 
-
+- requirements.txt
+- Set minimum password strength
+- Generation of random passwords
+  * Auto copy password to fill in, with timer expiry
+  * Generate password - save generated passwords and show history
