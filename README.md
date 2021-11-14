@@ -28,15 +28,18 @@ We began searching for a password hashing library that meets the following crite
 - Frequently updated, in order to keep up with the latest best security practices
 - Compatible with Python 3, since that is the language we are using
 
-[**Passlib**](https://passlib.readthedocs.io/en/stable/index.html) is eventually chosen as it fulfills the
+[**Passlib**](https://passlib.readthedocs.io/en/stable/index.html) is eventually chosen for the as it fulfills the
 considerations mentioned above.
+
+[**PyCryptodome**](https://pycryptodome.readthedocs.io/en/latest/index.html) is also used as Passlib does not support
+AES.
 
 ### Choosing the hash function
 
 After choosing the password hashing library, we need to choose the hash functions. These are the criteria we are looking
 for:
 
-- Secure, which means it uses a cryptographically secure pseudo-random number generator
+- Secure and deterministic, which means it uses a CSPRF
 - Widely used and tested
 - No known major vulnerabilities as of the time of writing
 
@@ -51,17 +54,60 @@ meet the requirements of AES.
 #### [**pbkdf2_sha256**](https://passlib.readthedocs.io/en/stable/lib/passlib.hash.pbkdf2_digest.html)
 
 This class implements a generic PBKDF2-HMAC-SHA256-based password hash. It will run through the pbkdf2_hmac function
-mentioned above. It is used to generate the authentication key, which is used to retrieve the vault from the database.
+mentioned above, as well as a PRF build from HMAC and the respective message digest. It is used to generate the
+authentication key, which is used to retrieve the vault from the database.
 
 ### Choosing the encryption function
 
-AES
+These are the criteria we are looking for:
+
+- Secure and deterministic, which means it uses a CSPRF
+- Widely used and tested
+- No known major vulnerabilities as of the time of writing
+
+[**AES**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/aes.html) is eventually chosen as it fulfills the
+considerations mentioned above. Specifically, we are using CBC mode of operation.
+
+### Choosing the database
+
+These are the criteria we are looking for:
+
+- High uptime and ran by reputable company
+- Automatically handles authentication, so we do not need to handle it (Leave it to experts)
+- Good documentation
+- Widely used and tested
+
+[**Google Firebase**](https://firebase.google.com/) is eventually chosen as it fulfills the considerations mentioned
+above. The documentations state that scrypt algorithm is used for the password hashing. scrypt is a PBKDF specifically
+designed to make it costly to perform large-scale custom hardware attacks by requiring large amounts of memory.
 
 ## Design
 
-Talk about convenience vs security
+There are two things in mind when it comes to our design - convenience and security Since we are storing passwords, it
+is important to make our system as secure as possible, while ensuring ease of use. If the password management tool is
+not easy to use, it defeats the purpose and the users may resort to weak methods to store their passwords.
 
-Remote storage on firebase realtime database
+### Convenience
+
+To ensure ease of use, we decided to store the vaults on a remote server, as compared to a local storage. This way, the
+user can run the program on a different machine and is still able to retrieve their passwords easily. For this function,
+we used Google Firebase's Realtime Database to store our passwords.
+<br>Also, since passwords are often complex, we allow users to copy the stored password into a clipboard to use it on
+the website. This reduces the chance of incorrect input, and is much faster, so the user does not need to keep the vault
+open as long. The clipboard will automatically expire in 10s, and it will be replaced by an empty string. This allows
+for more security, in case the user forgets to clear the password from the clipboard. For maximum security, we recommend
+users to disable clipboard history.
+
+### Security
+
+Security is our utmost priority. We have to ensure that even if the database is leaked, the attackers have no way of
+knowing decrypting the vaults and knowing the owner of the vaults.
+<br>To ensure this, we use AES-CBC 256-bit encryption for vault data, and PBKDF2 SHA-256 to derive the vault key and
+authentication key. The database only stores encrypted data.
+<br>The vault key never leaves the client, and as such it is impossible to sniff and intercept the vault key. The
+authentication key is sent to the server to retrieve the corresponding vault. Since the authentication key is generated
+using a strong hash function, anyone who has access to the vault data in the database has no idea who the vault belongs
+to. The attacker will also not know how to decrypt the vault, since the key is kept in the client. **MORE**
 
 ## Development
 
@@ -74,10 +120,13 @@ Screenshot of code How to run the program
 
 ## Glossary
 
+- **CS** - Cryptographically Secure
+- **PRF** - Pseudo-Random Function
 - **PBKDF** - Password-Based Key Derivation
 - **HMAC** - Hash-Based Message Authentication Code
 - **SHA** - Secure Hash Algorithms
 - **AES** - Advanced Encryption Standard
+- **CBC** - Cipher-Block Chaining
 
 ---
 
