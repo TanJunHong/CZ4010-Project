@@ -89,10 +89,14 @@ not easy to use, it defeats the purpose and the users may resort to weak methods
 
 ### Convenience
 
+#### Remote storage
+
 To ensure ease of use, we decided to store the vaults on a remote server, as compared to a local storage. This way, the
 user can run the program on a different machine and is still able to retrieve their passwords easily. For this function,
 we used Google Firebase's Realtime Database to store our passwords.
-<br>Also, since passwords are often complex, we allow users to copy the stored password into a clipboard to use it on
+
+#### Clipboard
+Since passwords are often complex, we allow users to copy the stored password into a clipboard to use it on
 the website. This reduces the chance of incorrect input, and is much faster, so the user does not need to keep the vault
 open as long. The clipboard will automatically expire in 10s, and it will be replaced by an empty string. This allows
 for more security, in case the user forgets to clear the password from the clipboard. For maximum security, we recommend
