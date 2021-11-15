@@ -26,7 +26,7 @@ We began searching for a password hashing library that meets the following crite
 - Well documented and transparent, so we can understand the mechanics behind and verify that it is secure
 - Widely used and open source, which makes it more reliable and likely to be tested by security experts
 - Frequently updated, in order to keep up with the latest best security practices
-- Compatible with Python 3, since that is the language we are using
+- Compatible with Python, since that is the language we are using
 
 [**Passlib**](https://passlib.readthedocs.io/en/stable/index.html) is eventually chosen for the as it fulfills the
 considerations mentioned above.
@@ -124,7 +124,8 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
 
 ## Development
 
-We use Python 3 to develop the app, and
+Because of the abundance of libraries and developments, Python was chosen to develop the application.
+
 <br>
 Use of salt, plaintext, aes
 https://www.youtube.com/watch?v=w68BBPDAWr8
@@ -177,3 +178,5 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 - Generation of random passwords
   * Auto copy password to fill in, with timer expiry
   * Generate password - save generated passwords and show history
+- Development and use of code
+  * Development tools and stack used in your project. Especially libraries used for Cryptography should be mentioned. Use of code means how to use your GitHub repo in case we want to try out your application or demo. Like a standard readme.
