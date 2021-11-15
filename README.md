@@ -81,6 +81,20 @@ These are the criteria we are looking for:
 above. The documentations state that scrypt algorithm is used for the password hashing. scrypt is a PBKDF specifically
 designed to make it costly to perform large-scale custom hardware attacks by requiring large amounts of memory.
 
+### Usage of parameters
+
+After choosing the functions, we need to figure out how to effectively use them.
+We researched on how other existing password managers worked, and borrowed their concepts.
+One of the videos we referenced from is [**How Password Managers Work - Computerphile**](https://www.youtube.com/watch?v=w68BBPDAWr8)
+
+#### Generating vault key
+
+(TODO) Use of salt, plaintext, aes, uuid
+
+#### Generating authentication key
+
+(TODO)
+
 ## Design
 
 There are two things in mind when it comes to our design - convenience and security Since we are storing passwords, it
@@ -124,11 +138,15 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
 
 ## Development
 
-Because of the abundance of libraries and developments, Python was chosen to develop the application.
+### Python
+- **passlib** -> For hashing/comparisons of old passwords, as well as generating vault key and authentication key, using PBKDF2 SHA-256
+- **pycryptodome** -> For encryption using AES-CBC 256-bit
+- **Pyrebase4** -> Pyrebase with updated dependencies, to connect to Google Firebase (Uses pycryptodome as well)
+- **ttkthemes** -> Themes for Tkinter
+- **Pycharm** -> Integrated Development Environment, for development of this application
 
-<br>
-Use of salt, plaintext, aes
-https://www.youtube.com/watch?v=w68BBPDAWr8
+### Google Firebase
+- **Realtime Database** -> Cloud-hosted NoSQL database, for access to vault anywhere
 
 ## Use of the code
 
@@ -173,10 +191,7 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 
 ## TODO
 
-- Talk about how vault key, authentication key is generated
 - Set minimum password strength
 - Generation of random passwords
   * Auto copy password to fill in, with timer expiry
   * Generate password - save generated passwords and show history
-- Development and use of code
-  * Development tools and stack used in your project. Especially libraries used for Cryptography should be mentioned. Use of code means how to use your GitHub repo in case we want to try out your application or demo. Like a standard readme.
