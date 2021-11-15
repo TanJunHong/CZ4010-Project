@@ -131,12 +131,13 @@ https://www.youtube.com/watch?v=w68BBPDAWr8
 
 ## Use of the code
 
-Please ensure you have Python 3 installed.
+Please ensure you have Python 3.10 installed. (Only tested in Python 3.10, may work in other versions)
 
 1. Clone this repository
-2. Navigate to the `pw_tool` folder
-3. Run `main.py`. You should see the following screen ![Login Screen](Login Screen.png)
-4. Register for an account, and you are ready to go!
+2. From the root folder, run `pip install -r requirements.txt`
+3. Navigate to the `pw_tool` folder
+4. Run `main.py`. You should see the following screen ![Login Screen](Login Screen.png)
+5. Register for an account, and you are ready to go!
 
 ---
 
@@ -172,7 +173,6 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 ## TODO
 
 - Talk about how vault key, authentication key is generated
-- requirements.txt
 - Set minimum password strength
 - Generation of random passwords
   * Auto copy password to fill in, with timer expiry
