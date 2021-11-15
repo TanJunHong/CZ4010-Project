@@ -162,10 +162,20 @@ Please ensure you have Python 3.10 installed. (Only tested in Python 3.10, may w
 
 ## Limitations
 
+### Immutable String in Python
+
 Strings in python are immutable, so there is a chance the password is still in memory even after calling `del`. There is
 the possibility the operating system will swap the whole memory page ut to disk, where it could sit for months. However,
 since this requires an attack on the client, we consider the risk of this attack minimal. If the attacker has access to
 the client, there are more serious things to worry about.
+
+### Speed
+
+Due to the fact that the entire vault is being encrypted/decrypted as a whole, it may not be the most efficient method.
+However, it hides way more information as compared to encrypting per website, since it is not that obvious how many websites are in the entire vault.
+Also, it is easy to "step on minefields" when it comes to encrypting each account by website, since we must be very careful in handling the keys and initialization vectors for each encryption.
+It is much easier to get it wrong, and any wrong usage will make the vault vulnerable.
+As such, we decided to go with the entire vault being encrypted/decrypted as a whole.
 
 ## Glossary
 
