@@ -1,7 +1,8 @@
 import base64
 import json
 
-import Crypto
+import Crypto.Cipher.AES
+import Crypto.Util.Padding
 import passlib.context
 import passlib.crypto.digest
 import passlib.hash
