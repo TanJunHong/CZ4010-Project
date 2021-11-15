@@ -195,3 +195,4 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 - Generation of random passwords
   * Auto copy password to fill in, with timer expiry
   * Generate password - save generated passwords and show history
+- Talk about integrity of passwords
