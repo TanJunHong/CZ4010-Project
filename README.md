@@ -122,7 +122,7 @@ Security is our utmost priority. We have to ensure that even if the database is 
 knowing decrypting the vaults and knowing the owner of the vaults. Here are some ways to ensure this:
 
 - We use AES-CBC 256-bit encryption for vault data, and PBKDF2 SHA-256 to derive the vault key and authentication key.
-  The database only stores encrypted data.
+  Only encrypted data is transmitted, and the database only stores encrypted data.
 - The vault key never leaves the client, and as such it is impossible to sniff and intercept the vault key.
 - The authentication key is sent to the server to retrieve the corresponding vault. Since the authentication key is
   generated using a strong hash function, anyone who has access to the vault data in the database has no idea who the
@@ -135,6 +135,21 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
 - Variables that contains sensitive information are immediately deleted with `del` after usage.
 - We make use of cryptographic libraries instead of writing our own, as they are maintained by cryptography experts and
   are likely to be more reliable.
+
+### Speed
+
+#### Entire vault encrypted as a whole
+
+Due to the fact that the entire vault is being encrypted/decrypted as a whole, it may not be the most efficient method.
+We have thought of encrypting each website as its own, and make use of CBC to encrypt the next block.
+However, it hides way more information as compared to encrypting per website, since it is not that obvious how many websites are in the entire vault.
+<br>Furthermore, we may have to encrypt the website link itself, in order to hide from attacker which website the login information belongs to.
+This means that we have to decrypt all website links when we want to use the vault, and then decrypt the login information when the user uses it.
+Not only that, once we modify the vault, we have to re-encrypt the whole vault, since a change in a block cascades the changes throughout.
+As a result, we found that the performance gain is minimal, and it is way more complex to implement.
+<br>Also, it is easy to "step on minefields" when it comes to encrypting each account by website, since we must be very careful in handling the keys and initialization vectors for each encryption.
+It is much easier to get it wrong, and any wrong usage will make the vault vulnerable.
+As such, we decided to go with the entire vault being encrypted/decrypted as a whole.
 
 ## Development
 
@@ -168,14 +183,6 @@ Strings in python are immutable, so there is a chance the password is still in m
 the possibility the operating system will swap the whole memory page ut to disk, where it could sit for months. However,
 since this requires an attack on the client, we consider the risk of this attack minimal. If the attacker has access to
 the client, there are more serious things to worry about.
-
-### Speed
-
-Due to the fact that the entire vault is being encrypted/decrypted as a whole, it may not be the most efficient method.
-However, it hides way more information as compared to encrypting per website, since it is not that obvious how many websites are in the entire vault.
-Also, it is easy to "step on minefields" when it comes to encrypting each account by website, since we must be very careful in handling the keys and initialization vectors for each encryption.
-It is much easier to get it wrong, and any wrong usage will make the vault vulnerable.
-As such, we decided to go with the entire vault being encrypted/decrypted as a whole.
 
 ## Glossary
 
