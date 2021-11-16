@@ -47,17 +47,29 @@ We decided on the following hash functions:
 
 #### [**passlib.crypto.digest.pbkdf2_hmac()**](https://passlib.readthedocs.io/en/stable/lib/passlib.crypto.digest.html)
 
-It is a PBKDF v2.0 using HMAC. It is used to generate the vault key, which is used to decrypt the vault.
-<br> This function is used for vault key instead of pbkdf2_sha256 is because we are able to set the vault key length to
+It is a PBKDF v2.0 using HMAC. It is used to generate the vault key, which is used to decrypt the vault. 
+This function is used for vault key instead of pbkdf2_sha256 is because we are able to set the vault key length to
 meet the requirements of AES.
 
 #### [**pbkdf2_sha256**](https://passlib.readthedocs.io/en/stable/lib/passlib.hash.pbkdf2_digest.html)
 
-This class implements a generic PBKDF2-HMAC-SHA256-based password hash. It will run through the pbkdf2_hmac function
-mentioned above, as well as a PRF build from HMAC and the respective message digest. It is used to generate the
-authentication key, which is used to retrieve the vault from the database.
+This class implements a generic PBKDF2-HMAC-SHA256-based password hash.
+It will run through the pbkdf2_hmac function mentioned above, as well as a PRF build from HMAC and the respective message digest.
+It is used to generate the authentication key, which is used to retrieve the vault from the database.
 
-### Choosing the encryption function
+#### [**scrypt**](https://pycryptodome.readthedocs.io/en/latest/src/protocol/kdf.html)
+
+scrypt is a password-based key derivation function created by Colin Percival.
+In addition to being computationally expensive, it is also memory intensive and therefore more secure against the risk of custom ASICs.
+It is used to generate the MAC key.
+
+#### [**Poly1305**](https://pycryptodome.readthedocs.io/en/latest/src/hash/poly1305.html)
+
+Poly1305 is a fast Carter-Wegman MAC algorithm created by Daniel J. Bernstein.
+It requires a 32-byte secret key, a 16-byte nonce, and a symmetric cipher. The MAC tag is always 16 bytes long.
+It is used to generate the MAC tag to verify the vault's integrity.
+
+### Choosing the ciphers
 
 These are the criteria we are looking for:
 
@@ -65,8 +77,16 @@ These are the criteria we are looking for:
 - Widely used and tested
 - No known major vulnerabilities as of the time of writing
 
-[**AES**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/aes.html) is eventually chosen as it fulfills the
-considerations mentioned above. Specifically, we are using CBC mode of operation.
+#### [**AES**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/aes.html)
+
+AES is chosen as it fulfills the considerations mentioned above.
+Specifically, we are using CBC mode of operation.
+It is used to encrypt the whole vault.
+
+#### [**ChaCha20**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/chacha20.html) 
+ChaCha20 is chosen to use with Poly1305.
+ChaCha20 with Poly1305 is now standardized in RFC 7905.
+It is used to generate the MAC tag.
 
 ### Choosing the database
 
@@ -121,6 +141,8 @@ users to disable clipboard history.
 Security is our utmost priority. We have to ensure that even if the database is leaked, the attackers have no way of
 knowing decrypting the vaults and knowing the owner of the vaults. Here are some ways to ensure this:
 
+#### Confidentially
+
 - We use AES-CBC 256-bit encryption for vault data, and PBKDF2 SHA-256 to derive the vault key and authentication key.
   Only encrypted data is transmitted, and the database only stores encrypted data.
 - The vault key never leaves the client, and as such it is impossible to sniff and intercept the vault key.
@@ -135,6 +157,10 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
 - Variables that contains sensitive information are immediately deleted with `del` after usage.
 - We make use of cryptographic libraries instead of writing our own, as they are maintained by cryptography experts and
   are likely to be more reliable.
+
+#### Integrity
+- We generate a MAC tag which can be used to check if the vault has been tampered with. If it is tampered, the user will be notified and logged out.
+- scrypt is used to generate the secret key for MAC, and Poly1305 is used to generate the MAC tag itself.
 
 ### Speed
 
@@ -191,6 +217,7 @@ the client, there are more serious things to worry about.
 - **PBKDF** - Password-Based Key Derivation
 - **HMAC** - Hash-Based Message Authentication Code
 - **SHA** - Secure Hash Algorithms
+- **MAC** - Message Authentication Code
 - **AES** - Advanced Encryption Standard
 - **CBC** - Cipher-Block Chaining
 
@@ -212,7 +239,5 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 - Generation of random passwords
   * Auto copy password to fill in, with timer expiry
   * Generate password - save generated passwords and show history
-- Talk about integrity of passwords
-- Add checksum?
 - Slides
 - Video

@@ -2,6 +2,7 @@ import base64
 import json
 
 import Crypto.Cipher.AES
+import Crypto.Cipher.ChaCha20
 import Crypto.Hash.Poly1305
 import Crypto.Util.Padding
 import passlib.context
@@ -104,7 +105,7 @@ def decrypt_vault(data):
     del result
 
     try:
-        Crypto.Hash.Poly1305.new(key=pw_tool.helper.fb_helper.mac_key, nonce=nonce, cipher=Crypto.Cipher.AES,
+        Crypto.Hash.Poly1305.new(key=pw_tool.helper.fb_helper.mac_key, nonce=nonce, cipher=Crypto.Cipher.ChaCha20,
                                  data=ciphertext).verify(mac_tag=tag)
     except ValueError:
         return False
@@ -138,7 +139,7 @@ def encrypt_vault():
     del vault_bytes
     del cipher
 
-    mac = Crypto.Hash.Poly1305.new(key=pw_tool.helper.fb_helper.mac_key, cipher=Crypto.Cipher.AES,
+    mac = Crypto.Hash.Poly1305.new(key=pw_tool.helper.fb_helper.mac_key, cipher=Crypto.Cipher.ChaCha20,
                                    data=ciphertext_bytes)
     nonce = base64.b64encode(s=mac.nonce).decode(encoding="utf-8")
     tag = base64.b64encode(s=mac.digest()).decode(encoding="utf-8")
