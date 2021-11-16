@@ -86,7 +86,7 @@ class VaultPage:
     def refresh_page(self):
         """Refreshes page
         """
-        if not pw_tool.helper.vault_helper.vault:
+        if pw_tool.helper.vault_helper.vault is False:
             self.__notification_label.config(text="TAMPERED VAULT! LOGGING OUT...")
             self.__window.after(ms=5000, func=self.__logout)
             return
