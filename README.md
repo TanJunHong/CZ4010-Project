@@ -251,12 +251,13 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 - Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
     * Best if it is generated through a reputable password management tool
 - Use sufficiently long password
+    * We did not set a minimum password strength for easier testing of this project. In real-life cases, it is important
+      to set a sufficiently long password that takes long to brute-force.
 - Do not include personal information or words in the password
 - Never share your password, not even with your most trusted friends!
 
 ## TODO
 
-- Set minimum password strength
 - Generation of random passwords
     * Auto copy password to fill in, with timer expiry
     * Generate password - save generated passwords and show history
