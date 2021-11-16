@@ -55,7 +55,8 @@ def generate_keys(email, password):
     pw_tool.helper.vault_helper.generate_vault_key(secret=email + password, salt=password + user["localId"])
     generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"),
                       salt=(user["localId"] + email).encode(encoding="utf-8"))
-    generate_mac_key(secret=user["localId"], salt=password + auth_key)
+    generate_mac_key(secret=user["localId"].encode(encoding="utf-8") + pw_tool.helper.vault_helper.vault_key,
+                     salt=password + auth_key)
 
     del email
     del password

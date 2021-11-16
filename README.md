@@ -47,27 +47,27 @@ We decided on the following hash functions:
 
 #### [**passlib.crypto.digest.pbkdf2_hmac()**](https://passlib.readthedocs.io/en/stable/lib/passlib.crypto.digest.html)
 
-It is a PBKDF v2.0 using HMAC. It is used to generate the vault key, which is used to decrypt the vault. 
-This function is used for vault key instead of pbkdf2_sha256 is because we are able to set the vault key length to
-meet the requirements of AES.
+It is a PBKDF v2.0 using HMAC. It is used to generate the vault key, which is used to decrypt the vault. This function
+is used for vault key instead of pbkdf2_sha256 is because we are able to set the vault key length to meet the
+requirements of AES.
 
 #### [**pbkdf2_sha256**](https://passlib.readthedocs.io/en/stable/lib/passlib.hash.pbkdf2_digest.html)
 
-This class implements a generic PBKDF2-HMAC-SHA256-based password hash.
-It will run through the pbkdf2_hmac function mentioned above, as well as a PRF build from HMAC and the respective message digest.
-It is used to generate the authentication key, which is used to retrieve the vault from the database.
+This class implements a generic PBKDF2-HMAC-SHA256-based password hash. It will run through the pbkdf2_hmac function
+mentioned above, as well as a PRF build from HMAC and the respective message digest. It is used to generate the
+authentication key, which is used to retrieve the vault from the database.
 
 #### [**scrypt**](https://pycryptodome.readthedocs.io/en/latest/src/protocol/kdf.html)
 
-scrypt is a password-based key derivation function created by Colin Percival.
-In addition to being computationally expensive, it is also memory intensive and therefore more secure against the risk of custom ASICs.
-It is used to generate the MAC key.
+scrypt is a password-based key derivation function created by Colin Percival. In addition to being computationally
+expensive, it is also memory intensive and therefore more secure against the risk of custom ASICs. It is used to
+generate the MAC key.
 
 #### [**Poly1305**](https://pycryptodome.readthedocs.io/en/latest/src/hash/poly1305.html)
 
-Poly1305 is a fast Carter-Wegman MAC algorithm created by Daniel J. Bernstein.
-It requires a 32-byte secret key, a 16-byte nonce, and a symmetric cipher. The MAC tag is always 16 bytes long.
-It is used to generate the MAC tag to verify the vault's integrity.
+Poly1305 is a fast Carter-Wegman MAC algorithm created by Daniel J. Bernstein. It requires a 32-byte secret key, a
+16-byte nonce, and a symmetric cipher. The MAC tag is always 16 bytes long. It is used to generate the MAC tag to verify
+the vault's integrity.
 
 ### Choosing the ciphers
 
@@ -79,14 +79,13 @@ These are the criteria we are looking for:
 
 #### [**AES**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/aes.html)
 
-AES is chosen as it fulfills the considerations mentioned above.
-Specifically, we are using CBC mode of operation.
-It is used to encrypt the whole vault.
+AES is chosen as it fulfills the considerations mentioned above. Specifically, we are using CBC mode of operation. It is
+used to encrypt the whole vault.
 
-#### [**ChaCha20**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/chacha20.html) 
-ChaCha20 is chosen to use with Poly1305.
-ChaCha20 with Poly1305 is now standardized in RFC 7905.
-It is used to generate the MAC tag.
+#### [**ChaCha20**](https://pycryptodome.readthedocs.io/en/latest/src/cipher/chacha20.html)
+
+ChaCha20 is chosen to use with Poly1305. ChaCha20 with Poly1305 is now standardized in RFC 7905. It is used to generate
+the MAC tag.
 
 ### Choosing the database
 
@@ -103,17 +102,29 @@ designed to make it costly to perform large-scale custom hardware attacks by req
 
 ### Usage of parameters
 
-After choosing the functions, we need to figure out how to effectively use them.
-We researched on how other existing password managers worked, and borrowed their concepts.
-One of the videos we referenced from is [**How Password Managers Work - Computerphile**](https://www.youtube.com/watch?v=w68BBPDAWr8)
+After choosing the functions, we need to figure out how to effectively use them. We researched on how other existing
+password managers worked, and borrowed their concepts. One of the videos we referenced from is [**How Password Managers
+Work - Computerphile**](https://www.youtube.com/watch?v=w68BBPDAWr8)
 
 #### Generating vault key
 
-(TODO) Use of salt, plaintext, aes, uuid
+To generate the vault key, we used (email | password) as the plaintext, and (password | UUID) as salt. We referenced the
+above video for the plaintext. As for the salt, we need something *unique* so that nobody has computed the resulting
+hash value before. UUIDs have to be generated uniquely for each user, and it is different each time it is generated for
+the same user. As such, they are unique enough to be used as salt. We concatenate password in front of it, so it has a
+higher chance of avoiding collisions.
 
 #### Generating authentication key
 
-(TODO)
+To generate the authentication key, we used (vault key | password) as the plaintext, and (UUID | email) as salt. The
+explanation is similar to that of generating the vault key. We have to make sure we are not reusing the key or the salt,
+which is why we made use of the vault key.
+
+#### Generating MAC key
+
+To generate the MAC key, we used (UUID | vault key) as the plaintext, and (password | authentication key) as salt. The
+explanation is similar to that of generating the vault key. We have to make sure we are not reusing the key or the salt,
+which is why we made use of the vault key and the authentication key.
 
 ## Design
 
@@ -130,11 +141,12 @@ user can run the program on a different machine and is still able to retrieve th
 we used Google Firebase's Realtime Database to store our passwords.
 
 #### Clipboard
-Since passwords are often complex, we allow users to copy the stored password into a clipboard to use it on
-the website. This reduces the chance of incorrect input, and is much faster, so the user does not need to keep the vault
-open as long. The clipboard will automatically expire in 10s, and it will be replaced by an empty string. This allows
-for more security, in case the user forgets to clear the password from the clipboard. For maximum security, we recommend
-users to disable clipboard history.
+
+Since passwords are often complex, we allow users to copy the stored password into a clipboard to use it on the website.
+This reduces the chance of incorrect input, and is much faster, so the user does not need to keep the vault open as
+long. The clipboard will automatically expire in 10s, and it will be replaced by an empty string. This allows for more
+security, in case the user forgets to clear the password from the clipboard. For maximum security, we recommend users to
+disable clipboard history.
 
 ### Security
 
@@ -159,7 +171,9 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
   are likely to be more reliable.
 
 #### Integrity
-- We generate a MAC tag which can be used to check if the vault has been tampered with. If it is tampered, the user will be notified and logged out.
+
+- We generate a MAC tag which can be used to check if the vault has been tampered with. If it is tampered, the user will
+  be notified and logged out.
 - scrypt is used to generate the secret key for MAC, and Poly1305 is used to generate the MAC tag itself.
 
 ### Speed
@@ -167,26 +181,32 @@ knowing decrypting the vaults and knowing the owner of the vaults. Here are some
 #### Entire vault encrypted as a whole
 
 Due to the fact that the entire vault is being encrypted/decrypted as a whole, it may not be the most efficient method.
-We have thought of encrypting each website as its own, and make use of CBC to encrypt the next block.
-However, it hides way more information as compared to encrypting per website, since it is not that obvious how many websites are in the entire vault.
-<br>Furthermore, we may have to encrypt the website link itself, in order to hide from attacker which website the login information belongs to.
-This means that we have to decrypt all website links when we want to use the vault, and then decrypt the login information when the user uses it.
-Not only that, once we modify the vault, we have to re-encrypt the whole vault, since a change in a block cascades the changes throughout.
-As a result, we found that the performance gain is minimal, and it is way more complex to implement.
-<br>Also, it is easy to "step on minefields" when it comes to encrypting each account by website, since we must be very careful in handling the keys and initialization vectors for each encryption.
-It is much easier to get it wrong, and any wrong usage will make the vault vulnerable.
-As such, we decided to go with the entire vault being encrypted/decrypted as a whole.
+We have thought of encrypting each website as its own, and make use of CBC to encrypt the next block. However, it hides
+way more information as compared to encrypting per website, since it is not that obvious how many websites are in the
+entire vault.
+<br>Furthermore, we may have to encrypt the website link itself, in order to hide from attacker which website the login
+information belongs to. This means that we have to decrypt all website links when we want to use the vault, and then
+decrypt the login information when the user uses it. Not only that, once we modify the vault, we have to re-encrypt the
+whole vault, since a change in a block cascades the changes throughout. As a result, we found that the performance gain
+is minimal, and it is way more complex to implement.
+<br>Also, it is easy to "step on minefields" when it comes to encrypting each account by website, since we must be very
+careful in handling the keys and initialization vectors for each encryption. It is much easier to get it wrong, and any
+wrong usage will make the vault vulnerable. As such, we decided to go with the entire vault being encrypted/decrypted as
+a whole.
 
 ## Development
 
 ### Python
-- **passlib** -> For hashing/comparisons of old passwords, as well as generating vault key and authentication key, using PBKDF2 SHA-256
+
+- **passlib** -> For hashing/comparisons of old passwords, as well as generating vault key and authentication key, using
+  PBKDF2 SHA-256
 - **pycryptodome** -> For encryption using AES-CBC 256-bit
 - **Pyrebase4** -> Pyrebase with updated dependencies, to connect to Google Firebase (Uses pycryptodome as well)
 - **ttkthemes** -> Themes for Tkinter
 - **Pycharm** -> Integrated Development Environment, for development of this application
 
 ### Google Firebase
+
 - **Realtime Database** -> Cloud-hosted NoSQL database, for access to vault anywhere
 
 ## Use of the code
@@ -220,6 +240,7 @@ the client, there are more serious things to worry about.
 - **MAC** - Message Authentication Code
 - **AES** - Advanced Encryption Standard
 - **CBC** - Cipher-Block Chaining
+- **UUID** - User Universally Unique Identifier
 
 ## Precautions
 
@@ -228,7 +249,7 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 
 - Choose a unique password that is not used anywhere else
 - Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
-  * Best if it is generated through a reputable password management tool
+    * Best if it is generated through a reputable password management tool
 - Use sufficiently long password
 - Do not include personal information or words in the password
 - Never share your password, not even with your most trusted friends!
@@ -237,7 +258,7 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 
 - Set minimum password strength
 - Generation of random passwords
-  * Auto copy password to fill in, with timer expiry
-  * Generate password - save generated passwords and show history
+    * Auto copy password to fill in, with timer expiry
+    * Generate password - save generated passwords and show history
 - Slides
 - Video
