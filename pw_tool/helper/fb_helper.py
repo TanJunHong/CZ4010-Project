@@ -1,5 +1,7 @@
 import json
 
+import Crypto.Protocol.KDF
+import Crypto.Random
 import pyrebase
 import requests
 
@@ -19,6 +21,7 @@ firebase = pyrebase.initialize_app(config=firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
 auth_key = None
+mac_key = None
 user = {}
 
 
@@ -38,6 +41,7 @@ def login(email, password):
     """
     global user
     global auth_key
+
     user = auth.sign_in_with_email_and_password(email=email, password=password)
     generate_keys(email=email, password=password)
 
@@ -51,6 +55,7 @@ def generate_keys(email, password):
     pw_tool.helper.vault_helper.generate_vault_key(secret=email + password, salt=password + user["localId"])
     generate_auth_key(secret=pw_tool.helper.vault_helper.vault_key + password.encode(encoding="utf-8"),
                       salt=(user["localId"] + email).encode(encoding="utf-8"))
+    generate_mac_key(secret=user["localId"], salt=password + auth_key)
 
     del email
     del password
@@ -61,7 +66,20 @@ def generate_auth_key(secret, salt):
     It will also save the authentication key.
     """
     global auth_key
+
     auth_key = pw_tool.helper.vault_helper.context.hash(secret=secret, salt=salt)
+
+    del secret
+    del salt
+
+
+def generate_mac_key(secret, salt):
+    """Generates mac key for integrity check
+    It will also save the mac key.
+    """
+    global mac_key
+
+    mac_key = Crypto.Protocol.KDF.scrypt(password=secret, salt=salt, key_len=32, N=2 ** 14, r=8, p=1)
 
     del secret
     del salt

@@ -25,7 +25,7 @@ class VaultPage:
                                                  font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
 
-        pw_tool.helper.vault_helper.load_vault()
+        pw_tool.helper.vault_helper.download_vault()
 
         self.__website_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -40,6 +40,10 @@ class VaultPage:
         self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame, text="Change Master Password",
                                                             style="TButton", command=self.__change_master_password)
 
+        self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
+                                                      background=pw_tool.helper.ui_helper.background_color,
+                                                      foreground="red")
+
         self.refresh_page()
 
         self.__add_button.grid(row=0, column=0, padx=10, pady=5, sticky="W")
@@ -49,6 +53,7 @@ class VaultPage:
         self.__welcome_label.pack(pady=30)
         self.__website_frame.pack(pady=20)
         self.__button_frame.pack(pady=40)
+        self.__notification_label.pack(pady=50)
 
         self.__window.protocol(func=self.__logout, name="WM_DELETE_WINDOW")
 
@@ -81,6 +86,11 @@ class VaultPage:
     def refresh_page(self):
         """Refreshes page
         """
+        if not pw_tool.helper.vault_helper.vault:
+            self.__notification_label.config(text="TAMPERED VAULT! LOGGING OUT...")
+            self.__window.after(ms=5000, func=self.__logout)
+            return
+
         pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
 
         self.__labels = {}
