@@ -5,10 +5,17 @@ import tkinter.ttk
 import pw_tool.helper.ui_helper
 
 
+def _change_clipboard(string, tk):
+    """Changes clipboard given string
+    """
+    tk.clipboard_clear()
+    tk.clipboard_append(string=string)
+    tk.update()
+
+
 class GenPage:
     def __init__(self, master):
         self.__master = master
-
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Generator")
@@ -259,4 +266,9 @@ class GenPage:
         # password = "".join(password_list[])
 
     def __pcopy(self):
+        tk = tkinter.Tk()
+        tk.withdraw()
+        _change_clipboard(string=self.__password, tk=tk)
+        tk.after(ms=10000, func=lambda: _change_clipboard(string="", tk=tk))
+        tk.after(ms=10500, func=tk.destroy)
         print(self.__password + " uwu")

@@ -40,6 +40,8 @@ class VaultPage:
         self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame, text="Change Master Password",
                                                             style="TButton", command=self.__change_master_password)
 
+        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button_frame, text="Previously Generated Password",
+                                                       style="TButton", command=self.__show_genhist_page)
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color,
                                                       foreground="red")
@@ -82,6 +84,10 @@ class VaultPage:
         """
         self.__window.withdraw()
         pw_tool.ui.vault.change_pw_page.ChangePWPage(master=self.__window)
+
+    def __show_genhist_page(self):
+        self.__window.withdraw()
+        pw_tool.ui.vault.gen_history.GenHistPage(master=self.__window)
 
     def refresh_page(self):
         """Refreshes page
