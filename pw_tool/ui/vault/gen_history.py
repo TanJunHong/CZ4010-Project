@@ -22,7 +22,7 @@ class GenHistPage:
 
         # to delete the passwords
         self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="TButton",
-                                                  command=self.__show_clear_dialog)
+                                                 command=self.__show_clear_dialog)
         self.__welcome_label.pack(pady=30)
         self.__clear_button.pack(pady=40)
 

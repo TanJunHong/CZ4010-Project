@@ -17,18 +17,25 @@ def _change_clipboard(string, tk):
 class GenPage:
     def __init__(self, master):
         self.__master = master
+        self.__master.withdraw()
+
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Generator")
 
-        # Get length of password to generate
-        self.__plength_label = tkinter.ttk.Label(master=self.__window,
-                                                 text="Length of password:\n(Minimum length = 12)", font=("Arial", 12),
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Generator",
+                                                 font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
-        self.__plength_label.grid(row=0, column=0, padx=10)
 
-        self.__plength_entry = tkinter.ttk.Entry(master=self.__window, font=("Arial", 12))
-        self.__plength_entry.grid(row=0, column=1)
+        self.__gen_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        # Get length of password to generate
+        self.__plength_label = tkinter.ttk.Label(master=self.__gen_frame,
+                                                 text="Length of password:\n(Minimum length = 12)",
+                                                 font=("Arial", 12),
+                                                 background=pw_tool.helper.ui_helper.background_color)
+
+        self.__plength_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=("Arial", 12))
 
         self.__var_upper = tkinter.IntVar()
         self.__var_lower = tkinter.IntVar()
@@ -36,59 +43,84 @@ class GenPage:
         self.__var_symbol = tkinter.IntVar()
 
         # Get type of characters to include in password
-        self.__ptype_label = tkinter.ttk.Label(master=self.__window, text="Type of characters:", font=("Arial", 12),
+        self.__ptype_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:", font=("Arial", 12),
                                                background=pw_tool.helper.ui_helper.background_color)
-        self.__ptype_label.grid(row=1, column=0, padx=10)
 
-        self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Upper Case A-Z",
+        self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z",
                                                      variable=self.__var_upper)
-        self.__ptype1_cbox.grid(row=1, column=1)
 
-        self.__ptype2_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Lower Case a-z",
+        self.__ptype2_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Lower Case a-z",
                                                      variable=self.__var_lower)
-        self.__ptype2_cbox.grid(row=1, column=2)
 
-        self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="Numeric 0-9",
+        self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9",
                                                      variable=self.__var_numeric)
-        self.__ptype3_cbox.grid(row=2, column=1)
 
-        self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__window, text="!@#$%^&*", variable=self.__var_symbol)
-        self.__ptype4_cbox.grid(row=2, column=2)
-
-        # Error message if no input
-        self.__error_label = tkinter.ttk.Label(master=self.__window, font=("Arial", 12),
-                                               background=pw_tool.helper.ui_helper.background_color)
-        self.__error_label.grid(row=3, column=1)
-
-        # Generate password
-        self.__generate_button = tkinter.ttk.Button(master=self.__window, text="Generate", style="TButton",
-                                                    command=self.__pgenerator)
-        self.__generate_button.grid(row=4, column=1)
+        self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", variable=self.__var_symbol)
 
         # Display Generated Password
-        self.__gpassword_label = tkinter.ttk.Label(master=self.__window, text="Generated Password:", font=("Arial", 12),
+        self.__gpassword_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:", font=("Arial", 12),
                                                    background=pw_tool.helper.ui_helper.background_color)
         self.__gpassword_label["state"] = tkinter.DISABLED
-        self.__gpassword_label.grid(row=5, column=0, padx=10)
+
+        self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=("Arial", 12),
+                                            background=pw_tool.helper.ui_helper.background_color)
+
+        self.__error_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        # Error message if no input
+        self.__error_label = tkinter.ttk.Label(master=self.__error_frame, font=("Arial", 12),
+                                               background=pw_tool.helper.ui_helper.background_color)
+
+        self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
+        # Generate password
+        self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate", style="TButton",
+                                                    command=self.__pgenerator)
 
         # copy generated password to clipboard
-        self.__copy_button = tkinter.ttk.Button(master=self.__window, text="Copy Password", style="TButton",
+        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password", style="TButton",
                                                 command=self.__pcopy)
         self.__copy_button["state"] = tkinter.DISABLED
-        self.__copy_button.grid(row=7, column=1)
 
+        self.__button2_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         # view previously generated password
-        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__window, text="Previously Generated Password",
+        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button2_frame, text="Previously Generated Password",
                                                        style="TButton", command=self.__show_genhist_page)
-        self.__pgenhistory_button.grid(row=8, column=0, columnspan=2, padx=10, pady=5)
 
-        pw_tool.helper.ui_helper.centre_window(window=self.__window)
+        self.__plength_label.focus()
+
+        self.__plength_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
+        self.__plength_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__ptype_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
+        self.__ptype1_cbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
+        self.__ptype2_cbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
+        self.__ptype3_cbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
+        self.__ptype4_cbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
+        self.__gpassword_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
+        self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
+
+        self.__error_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+
+        self.__generate_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
+        self.__copy_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+
+        self.__pgenhistory_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+
+        self.__welcome_label.pack(pady=25)
+        self.__gen_frame.pack(pady=5)
+        self.__error_frame.pack(pady=5)
+        self.__button_frame.pack(pady=5)
+        self.__button2_frame.pack(pady=5)
 
         self.__window.protocol(
             func=lambda root=master, window=self.__window: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
             name="WM_DELETE_WINDOW")
+        pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __pgenerator(self):
+        # destroy previously displayed password
+        self.__pw_label.after(1000, self.__pw_label.destroy())
+
         # define all possible characters
         uppercase_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
                           'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -265,9 +297,10 @@ class GenPage:
         print("Retrieved Plain Text is: ", self.__decrypt)
 
         # display generated password
-        self.__pw_label = tkinter.ttk.Label(master=self.__window, text=self.__password, font=("Arial", 12),
+        self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=("Arial", 12),
                                             background=pw_tool.helper.ui_helper.background_color)
-        self.__pw_label.grid(row=5, column=1, padx=10)
+        self.__pw_label.configure(text=self.__password)
+        self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
 
         # password = "".join(password_list[])
 
