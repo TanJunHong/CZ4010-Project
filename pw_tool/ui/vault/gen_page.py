@@ -3,6 +3,7 @@ import secrets
 import tkinter.ttk
 
 import pw_tool.helper.ui_helper
+import pw_tool.ui.vault.gen_history
 
 
 def _change_clipboard(string, tk):
@@ -75,6 +76,11 @@ class GenPage:
                                                 command=self.__pcopy)
         self.__copy_button["state"] = tkinter.DISABLED
         self.__copy_button.grid(row=7, column=1)
+
+        # view previously generated password
+        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__window, text="Previously Generated Password",
+                                                       style="TButton", command=self.__show_genhist_page)
+        self.__pgenhistory_button.grid(row=8, column=0, columnspan=2, padx=10, pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
@@ -272,3 +278,7 @@ class GenPage:
         tk.after(ms=10000, func=lambda: _change_clipboard(string="", tk=tk))
         tk.after(ms=10500, func=tk.destroy)
         print(self.__password + " uwu")
+
+    def __show_genhist_page(self):
+        self.__window.withdraw()
+        pw_tool.ui.vault.gen_history.GenHistPage(master=self.__window)

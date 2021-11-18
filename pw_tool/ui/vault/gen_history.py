@@ -19,11 +19,13 @@ class GenHistPage:
 
         pw_tool.helper.vault_helper.download_vault()
 
-        # to display passwords
-        self.__password_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         # to delete the passwords
-        self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
-
+        self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="TButton",
+                                                  command=self.__show_clear_dialog)
         self.__welcome_label.pack(pady=30)
-        self.__password_frame.pack(pady=20)
-        self.__button_frame.pack(pady=40)
+        self.__clear_button.pack(pady=40)
+
+    def __show_clear_dialog(self):
+        self.__window.destroy()
+        pw_tool.ui.vault.clear_dialog.ClearDialog(master=self.__master, website=self.__website)
+
