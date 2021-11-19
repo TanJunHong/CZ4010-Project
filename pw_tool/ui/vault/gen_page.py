@@ -128,7 +128,7 @@ class GenPage:
                           't', 'u', 'v', 'w', 'x', 'y', 'z']
         numeric_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
         symbol_list = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=',
-                       '>', '?', '@', '[', '\\' ']', '^', '_', '`', '{', '|', '}', '~']
+                       '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~']
 
         # character list used to combine all the selected characters
         characters = []
@@ -194,9 +194,11 @@ class GenPage:
             rand_sym = secrets_generator.choice(symbol_list)
             character_counter += 1
 
+        # to ensure that there is at least 1 of the selected type of variable
         self.__password = rand_upper + rand_lower + rand_num + rand_sym
         print(self.__password)
         print(character_counter)
+        print(characters)
 
         # generate initial password by selecting random characters
         for x in range(int(length) - character_counter):
@@ -231,12 +233,24 @@ class GenPage:
             string = int(binary, 2)
             return string
 
-        # convert self.__password to ASCII
-        pw_ascii = [ord(x) for x in self.__password]
-        print(pw_ascii)
+        # # convert self.__password to ASCII
+        # pw_ascii = [ord(x) for x in self.__password]
+        # print(pw_ascii)
+        #
+        # # convert ASCII to 8 bit binary
+        # pw_bin = [format(y, '08b') for y in pw_ascii]
+        # pw_bin = "".join(pw_bin)
+        # print(pw_bin)
 
-        # convert ASCII to 8 bit binary
-        pw_bin = [format(y, '08b') for y in pw_ascii]
+        # get the index of each character
+        pw_index = []
+        for x in self.__password:
+            index = characters.index(x)
+            pw_index.append(index)
+        print(pw_index)
+
+        # convert decimal index to 8 bit binary
+        pw_bin = [format(y, '08b') for y in pw_index]
         pw_bin = "".join(pw_bin)
         print(pw_bin)
 
@@ -273,28 +287,33 @@ class GenPage:
         for i in range(0, len(bin_data), 7):
             temp_data = bin_data[i:i + 7]
             decimal_data = bin_to_dec(temp_data)
-            str_data = str_data + chr(decimal_data)
+            decimal_data %= len(characters)
+            print(decimal_data)
+            str_data = str_data + characters[decimal_data]
 
-        self.__password = str_data
+        print(str_data)
+
+        self.__password = str_data[0:int(length)+1]
+        #self.__password = str_data
         print(self.__password)
 
-        # Decryption
-        l4 = l3
-        r4 = r3
-
-        f3 = xor(l4, k2)
-        l5 = xor(r4, f3)
-        r5 = l4
-
-        f4 = xor(l5, k1)
-        l6 = xor(r5, f4)
-        r6 = l5
-        pt1 = l6 + r6
-
-        pt1 = int(pt1, 2)
-        rpt = binascii.unhexlify('%x' % pt1)
-        self.__decrypt = rpt
-        print("Retrieved Plain Text is: ", self.__decrypt)
+        # # Decryption
+        # l4 = l3
+        # r4 = r3
+        #
+        # f3 = xor(l4, k2)
+        # l5 = xor(r4, f3)
+        # r5 = l4
+        #
+        # f4 = xor(l5, k1)
+        # l6 = xor(r5, f4)
+        # r6 = l5
+        # pt1 = l6 + r6
+        #
+        # pt1 = int(pt1, 2)
+        # rpt = binascii.unhexlify('%x' % pt1)
+        # self.__decrypt = rpt
+        # print("Retrieved Plain Text is: ", self.__decrypt)
 
         # display generated password
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=("Arial", 12),
