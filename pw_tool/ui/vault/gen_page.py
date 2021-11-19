@@ -233,15 +233,6 @@ class GenPage:
             string = int(binary, 2)
             return string
 
-        # # convert self.__password to ASCII
-        # pw_ascii = [ord(x) for x in self.__password]
-        # print(pw_ascii)
-        #
-        # # convert ASCII to 8 bit binary
-        # pw_bin = [format(y, '08b') for y in pw_ascii]
-        # pw_bin = "".join(pw_bin)
-        # print(pw_bin)
-
         # get the index of each character
         pw_index = []
         for x in self.__password:
@@ -264,6 +255,10 @@ class GenPage:
         # generate key k1, k2 for the first and second round
         k1 = random_key(m)
         k2 = random_key(m)
+        k3 = random_key(m)
+        k4 = random_key(m)
+        k5 = random_key(m)
+
         print(k1)
         print(k2)
 
@@ -281,8 +276,29 @@ class GenPage:
         print(l3)
         print(r3)
 
+        # third round of feistel
+        f3 = xor(r3, k3)
+        r4 = xor(f3, l3)
+        l4 = r3
+        print(l4)
+        print(r4)
+
+        # fourth round of feistel
+        f4 = xor(r4, k4)
+        r5 = xor(f4, l4)
+        l5 = r4
+        print(l5)
+        print(r5)
+
+        # fifth round of feistel
+        f5 = xor(r5, k5)
+        r6 = xor(f5, l5)
+        l6 = r5
+        print(l6)
+        print(r6)
+
         # "cipher"text
-        bin_data = l3 + r3
+        bin_data = l6 + r6
         str_data = ' '
         for i in range(0, len(bin_data), 7):
             temp_data = bin_data[i:i + 7]
@@ -296,24 +312,6 @@ class GenPage:
         self.__password = str_data[0:int(length)+1]
         #self.__password = str_data
         print(self.__password)
-
-        # # Decryption
-        # l4 = l3
-        # r4 = r3
-        #
-        # f3 = xor(l4, k2)
-        # l5 = xor(r4, f3)
-        # r5 = l4
-        #
-        # f4 = xor(l5, k1)
-        # l6 = xor(r5, f4)
-        # r6 = l5
-        # pt1 = l6 + r6
-        #
-        # pt1 = int(pt1, 2)
-        # rpt = binascii.unhexlify('%x' % pt1)
-        # self.__decrypt = rpt
-        # print("Retrieved Plain Text is: ", self.__decrypt)
 
         # display generated password
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=("Arial", 12),
