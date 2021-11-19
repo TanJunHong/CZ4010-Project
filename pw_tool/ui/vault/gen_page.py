@@ -83,9 +83,15 @@ class GenPage:
         self.__copy_button["state"] = tkinter.DISABLED
 
         self.__button2_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+
         # view previously generated password
         self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button2_frame, text="Previously Generated Password",
                                                        style="TButton", command=self.__show_genhist_page)
+
+        # copied notification
+        self.__noti_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+        self.__copynoti_label = tkinter.ttk.Label(master=self.__noti_frame, font=("Arial", 12),
+                                                  background=pw_tool.helper.ui_helper.background_color)
 
         self.__plength_label.focus()
 
@@ -106,11 +112,14 @@ class GenPage:
 
         self.__pgenhistory_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
+        self.__copynoti_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+
         self.__welcome_label.pack(pady=25)
         self.__gen_frame.pack(pady=5)
         self.__error_frame.pack(pady=5)
         self.__button_frame.pack(pady=5)
         self.__button2_frame.pack(pady=5)
+        self.__noti_frame.pack(pady=5)
 
         self.__window.protocol(
             func=lambda root=master, window=self.__window: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
@@ -327,6 +336,8 @@ class GenPage:
         _change_clipboard(string=self.__password, tk=tk)
         tk.after(ms=10000, func=lambda: _change_clipboard(string="", tk=tk))
         tk.after(ms=10500, func=tk.destroy)
+        self.__copynoti_label.config(text="Copied to clipboard!")
+        self.__window.after(10000, lambda: self.__copynoti_label.config(text=""))
         print(self.__password + " uwu")
 
     def __show_genhist_page(self):
