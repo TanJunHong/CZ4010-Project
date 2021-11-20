@@ -1,6 +1,10 @@
 import binascii
 import secrets
 import tkinter.ttk
+import math
+import statistics
+from statsmodels.sandbox.stats.runs import runstest_1samp
+
 
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.gen_history
@@ -309,14 +313,17 @@ class GenPage:
         # "cipher"text
         bin_data = l6 + r6
         str_data = ' '
+        decimal_list = []
         for i in range(0, len(bin_data), 7):
             temp_data = bin_data[i:i + 7]
             decimal_data = bin_to_dec(temp_data)
             decimal_data %= len(characters)
+            decimal_list.append(decimal_data)
             print(decimal_data)
             str_data = str_data + characters[decimal_data]
 
         print(str_data)
+        print(decimal_list)
 
         self.__password = str_data[0:int(length)+1]
         #self.__password = str_data
@@ -329,6 +336,42 @@ class GenPage:
         self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
 
         # password = "".join(password_list[])
+
+        def runsTest(l, l_median):
+
+            runs, n1, n2 = 0, 0, 0
+
+            # Checking for start of new run
+            for i in range(len(l)):
+
+                # no. of runs
+                if (l[i] >= l_median and l[i - 1] < l_median) or \
+                        (l[i] < l_median and l[i - 1] >= l_median):
+                    runs += 1
+
+                    # no. of positive values
+                if (l[i]) >= l_median:
+                    n1 += 1
+
+                    # no. of negative values
+                else:
+                    n2 += 1
+
+            runs_exp = ((2 * n1 * n2) / (n1 + n2)) + 1
+            stan_dev = math.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / \
+                                 (((n1 + n2) ** 2) * (n1 + n2 - 1)))
+
+            z = (runs - runs_exp) / stan_dev
+
+            return z
+
+        l_median = statistics.median(decimal_list)
+        Z = abs(runsTest(decimal_list, l_median))
+
+        print('Z-statistic= ', Z)
+
+        x= runstest_1samp(decimal_list, correction=False)
+        print(x)
 
     def __pcopy(self):
         tk = tkinter.Tk()
