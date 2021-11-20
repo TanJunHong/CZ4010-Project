@@ -204,6 +204,11 @@ a whole.
 - **Pyrebase4** -> Pyrebase with updated dependencies, to connect to Google Firebase (Uses pycryptodome as well)
 - **ttkthemes** -> Themes for Tkinter
 - **Pycharm** -> Integrated Development Environment, for development of this application
+- **secrets** -> For generating cryptographically strong random numbers in selecting characters in password, as well as 
+round key for Feistel rounds 
+- **maths** -> For testing of randomness (sqrt function)
+- **statistics** -> For testing of randomness (median)
+- **statsmodels.sandbox.stats.runs.runstest_1samp** -> For conducting Z-test 
 
 ### Google Firebase
 
