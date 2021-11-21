@@ -113,7 +113,7 @@ class PWPage:
         pw_tool.ui.vault.edit_page.EditPage(master=self.__master, website=self.__website, value=self.__value)
 
     def __show_delete_dialog(self):
-        """Redirects to delete page
+        """Redirects to delete dialog
         """
         self.__window.destroy()
         pw_tool.ui.vault.delete_dialog.DeleteDialog(master=self.__master, website=self.__website)

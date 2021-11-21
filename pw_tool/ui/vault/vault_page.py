@@ -4,7 +4,7 @@ import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.vault.add_page
 import pw_tool.ui.vault.change_pw_page
-import pw_tool.ui.vault.gen_page
+import pw_tool.ui.gen.gen_page
 import pw_tool.ui.vault.pw_page
 
 
@@ -68,7 +68,7 @@ class VaultPage:
         """Redirects to generator page
         """
         self.__window.withdraw()
-        pw_tool.ui.vault.gen_page.GenPage(master=self.__window)
+        pw_tool.ui.gen.gen_page.GenPage(master=self.__window)
 
     def __show_pw_page(self, website, value):
         """Redirects to password page

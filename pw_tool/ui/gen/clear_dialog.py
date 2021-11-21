@@ -6,7 +6,10 @@ import pw_tool.helper.vault_helper
 
 class ClearDialog:
     def __init__(self, master):
+        """Initialises clear dialog
+        """
         self.__master = master
+
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="640x350")
         self.__window.title(string="Clear History Confirmation")
@@ -15,7 +18,7 @@ class ClearDialog:
                                                font=pw_tool.helper.ui_helper.font,
                                                background=pw_tool.helper.ui_helper.background_color)
 
-        self.__prompt_label = tkinter.ttk.Label(master=self.__window, text="Are you sure you want to delete?",
+        self.__prompt_label = tkinter.ttk.Label(master=self.__window, text="Are you sure you want to clear?",
                                                 font=pw_tool.helper.ui_helper.font,
                                                 background=pw_tool.helper.ui_helper.background_color)
 
@@ -47,6 +50,10 @@ class ClearDialog:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __clear_from_vault(self):
-        # pw_tool.helper.vault_helper.delete_from_vault(website=self.__website)
-        self.__notification_label.config(text="Successfully Deleted!")
+        """Clears from vault
+        Redirects to generator page afterwards.
+        """
+        pw_tool.helper.vault_helper.clear_gen_history()
+
+        self.__notification_label.config(text="Successfully Cleared!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

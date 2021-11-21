@@ -13,8 +13,8 @@ import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
 
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
-vault_key = None
-vault = default_vault = {"vault": {}, "password_generator_history": {}}
+vault_key = default_vault_key = b""
+vault = default_vault = {"vault": {}, "pw_gen_hist": []}
 
 
 def generate_vault_key(secret, salt):
@@ -27,6 +27,21 @@ def generate_vault_key(secret, salt):
 
     del secret
     del salt
+
+
+def add_gen_pw(password):
+    """Adds generated password to history
+    This is done in case user forgets to save their generated passwords.
+    """
+    vault["pw_gen_hist"].append(password)
+    upload_vault()
+
+
+def clear_gen_history():
+    """Clears generated password from history
+    """
+    vault["pw_gen_hist"] = []
+    upload_vault()
 
 
 def update_vault(website, username, password, old_value=None):
@@ -167,5 +182,6 @@ def destroy_variables():
     global vault_key
     global vault
 
-    pw_tool.helper.fb_helper.auth_key = pw_tool.helper.fb_helper.mac_key = pw_tool.helper.ui_helper.vault_page = vault_key = None
+    pw_tool.helper.fb_helper.auth_key = pw_tool.helper.fb_helper.mac_key = pw_tool.helper.ui_helper.vault_page = None
+    vault_key = default_vault_key
     vault = default_vault

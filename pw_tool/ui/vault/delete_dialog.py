@@ -9,7 +9,6 @@ class DeleteDialog:
         """Initialises delete dialog
         """
         self.__master = master
-        self.__master.withdraw()
 
         self.__website = website
 

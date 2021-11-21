@@ -7,7 +7,8 @@ import tkinter.ttk
 import statsmodels.sandbox.stats.runs
 
 import pw_tool.helper.ui_helper
-import pw_tool.ui.vault.gen_history
+import pw_tool.helper.vault_helper
+import pw_tool.ui.gen.gen_history
 
 
 def _change_clipboard(string, tk):
@@ -217,6 +218,8 @@ class GenPage:
 
         print(self.__password)
 
+        pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
+
         # permute password using feistel rounds
         # generate key using random bits
         def random_key(p):
@@ -364,4 +367,4 @@ class GenPage:
 
     def __show_genhist_page(self):
         self.__window.withdraw()
-        pw_tool.ui.vault.gen_history.GenHistPage(master=self.__window)
+        pw_tool.ui.gen.gen_history.GenHistPage(master=self.__window)

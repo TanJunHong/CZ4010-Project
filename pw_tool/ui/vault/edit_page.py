@@ -9,7 +9,6 @@ class EditPage:
         """Initialises edit page
         """
         self.__master = master
-        self.__master.withdraw()
 
         self.__website = website
         self.__value = value
@@ -70,7 +69,7 @@ class EditPage:
             return
 
         if self.__username_entry.get() == self.__value["username"] and self.__pw_entry.get() == self.__value[
-            "password"]:
+                "password"]:
             self.__notification_label.config(text="Please change the fields!")
             return
 
