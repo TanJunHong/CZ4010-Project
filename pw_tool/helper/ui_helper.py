@@ -31,20 +31,14 @@ def back(root, me):
     root.deiconify()
 
 
-def create_button_style():
-    """Creates button style
-    """
-    style = tkinter.ttk.Style()
-    style.configure(style="LargeFont.TButton", font=font)
-    style.configure(style="SmallFont.TButton", font=small_font)
-    style.configure(style="TCheckbutton", font=small_font, background=background_color)
-
-
-def create_frame_style():
-    """Creates frame style
+def create_style():
+    """Creates style
     """
     style = tkinter.ttk.Style()
     style.configure(style="TFrame", background=background_color)
+    style.configure(style="LargeFont.TButton", font=font)
+    style.configure(style="SmallFont.TButton", font=small_font)
+    style.configure(style="TCheckbutton", font=small_font, background=background_color)
 
 
 def clear_fields(window):

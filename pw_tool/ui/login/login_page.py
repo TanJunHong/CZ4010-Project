@@ -18,8 +18,7 @@ class LoginPage:
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Manager")
 
-        pw_tool.helper.ui_helper.create_button_style()
-        pw_tool.helper.ui_helper.create_frame_style()
+        pw_tool.helper.ui_helper.create_style()
 
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Password Tool",
                                                font=pw_tool.helper.ui_helper.font,

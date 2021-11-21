@@ -39,9 +39,9 @@ class GenPage:
                                                 validate="key", validatecommand=(
                                                     self.__gen_frame.register(func=self.digit_validation), "%S"))
 
-        self.__ptype_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
-                                               font=pw_tool.helper.ui_helper.small_font,
-                                               background=pw_tool.helper.ui_helper.background_color)
+        self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
+                                              font=pw_tool.helper.ui_helper.small_font,
+                                              background=pw_tool.helper.ui_helper.background_color)
 
         self.__upper_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z", style="TCheckbutton")
 
@@ -52,10 +52,10 @@ class GenPage:
         self.__symbol_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", style="TCheckbutton")
 
         # Display Generated Password
-        self.__gpassword_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
-                                                   font=pw_tool.helper.ui_helper.small_font,
-                                                   background=pw_tool.helper.ui_helper.background_color)
-        self.__gpassword_label["state"] = tkinter.DISABLED
+        self.__gen_pw_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
+                                                font=pw_tool.helper.ui_helper.small_font,
+                                                background=pw_tool.helper.ui_helper.background_color)
+        self.__gen_pw_label["state"] = tkinter.DISABLED
 
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                             background=pw_tool.helper.ui_helper.background_color)
@@ -71,7 +71,7 @@ class GenPage:
         # Generate password
         self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate",
                                                     style="LargeFont.TButton",
-                                                    command=self.__pgenerator)
+                                                    command=self.__pw_generator)
 
         # copy generated password to clipboard
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
@@ -79,72 +79,67 @@ class GenPage:
                                                 command=self.__pcopy)
         self.__copy_button["state"] = tkinter.DISABLED
 
-        self.__button2_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+        self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # view previously generated password
-        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button2_frame,
-                                                       text="Previously Generated Password",
-                                                       style="LargeFont.TButton", command=self.__show_genhist_page)
+        self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password", style="LargeFont.TButton", command=self.__show_genhist_page)
 
         # copied notification
-        self.__noti_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
-        self.__copynoti_label = tkinter.ttk.Label(master=self.__noti_frame, font=pw_tool.helper.ui_helper.small_font,
-                                                  background=pw_tool.helper.ui_helper.background_color)
+        self.__notif_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+        self.__copy_notif_label = tkinter.ttk.Label(master=self.__notif_frame, font=pw_tool.helper.ui_helper.small_font,
+                                                    background=pw_tool.helper.ui_helper.background_color)
 
         self.__pw_len_label.focus()
 
         self.__pw_len_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_len_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__ptype_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
+        self.__pw_len_entry.grid(row=0, column=1, columnspan=2, padx=20, pady=5)
+        self.__type_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
         self.__upper_checkbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
         self.__lower_checkbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
         self.__numeric_checkbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
         self.__symbol_checkbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
-        self.__gpassword_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
+        self.__gen_pw_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
+        self.__pw_label.grid(row=3, column=1, columnspan=2, padx=20, pady=5)
 
         self.__error_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
         self.__generate_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__copy_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
 
-        self.__pgenhistory_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__history_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
-        self.__copynoti_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__copy_notif_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
         self.__welcome_label.pack(pady=25)
         self.__gen_frame.pack(pady=5)
         self.__error_frame.pack(pady=5)
         self.__button_frame.pack(pady=5)
-        self.__button2_frame.pack(pady=5)
-        self.__noti_frame.pack(pady=5)
+        self.__history_frame.pack(pady=5)
+        self.__notif_frame.pack(pady=5)
 
-        self.__window.protocol(
-            func=lambda root=master, window=self.__window: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
-            name="WM_DELETE_WINDOW")
+        self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
+                               name="WM_DELETE_WINDOW")
+
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
-    def __pgenerator(self):
+    def __pw_generator(self):
         # destroy previously displayed password
         self.__pw_label.after(1000, self.__pw_label.destroy())
 
         # define all possible characters
-        uppercase_list = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S',
-                          'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-        lowercase_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-                          't', 'u', 'v', 'w', 'x', 'y', 'z']
-        numeric_list = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-        symbol_list = ['!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=',
-                       '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~']
+        uppercase_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
+                          "T", "U", "V", "W", "X", "Y", "Z"]
+        lowercase_list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
+                          "t", "u", "v", "w", "x", "y", "z"]
+        numeric_list = self.__valid_digits
+        symbol_list = ["!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=",
+                       ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~"]
 
         # character list used to combine all the selected characters
         characters = []
 
         # used to select one character from each list to fulfill selected character requirement
-        rand_upper = ""
-        rand_lower = ""
-        rand_num = ""
-        rand_sym = ""
+        rand_upper = rand_lower = rand_num = rand_sym = ""
         character_counter = 0
 
         # used to combine all random characters to create password
@@ -161,20 +156,20 @@ class GenPage:
         while i == 0:
             if not length or int(length) <= 11:
                 self.__error_label.config(text="Please ensure password length is filled/valid!")
-                self.__gpassword_label["state"] = tkinter.DISABLED
+                self.__gen_pw_label["state"] = tkinter.DISABLED
                 self.__window.after(0, lambda: self.__pw_label.config(text=""))
                 self.__copy_button["state"] = tkinter.DISABLED
                 return
             else:
                 if not upper and not lower and not num and not sym:
                     self.__error_label.config(text="Please choose the type of characters!")
-                    self.__gpassword_label["state"] = tkinter.DISABLED
+                    self.__gen_pw_label["state"] = tkinter.DISABLED
                     self.__window.after(0, lambda: self.__pw_label.config(text=""))
                     self.__copy_button["state"] = tkinter.DISABLED
                     return
                 else:
                     self.__window.after(0, lambda: self.__error_label.config(text=""))
-                    self.__gpassword_label["state"] = tkinter.NORMAL
+                    self.__gen_pw_label["state"] = tkinter.NORMAL
                     self.__copy_button["state"] = tkinter.NORMAL
                     break
 
