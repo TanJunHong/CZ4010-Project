@@ -88,7 +88,7 @@ def download_vault():
         pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).get(
         token=pw_tool.helper.fb_helper.user["idToken"])
 
-    vault = decrypt_vault(data)
+    vault = decrypt_vault(data=data)
 
     del data
 
