@@ -34,8 +34,7 @@ class VaultPage:
         self.__add_button = tkinter.ttk.Button(master=self.__button_frame, text="+", style="TButton",
                                                command=self.__show_add_page)
 
-        self.__pgenerator_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator",
-                                                      style="TButton", command=self.__show_gen_page)
+        self.__pw_gen_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator", style="TButton", command=self.__show_gen_page)
 
         self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame, text="Change Master Password",
                                                             style="TButton", command=self.__change_master_password)
@@ -47,7 +46,7 @@ class VaultPage:
         self.refresh_page()
 
         self.__add_button.grid(row=0, column=0, padx=10, pady=5, sticky="W")
-        self.__pgenerator_button.grid(row=0, column=1, padx=10, pady=5, sticky="E")
+        self.__pw_gen_button.grid(row=0, column=1, padx=10, pady=5, sticky="E")
         self.__change_master_pw_button.grid(row=1, column=0, columnspan=2, padx=10, pady=5)
 
         self.__welcome_label.pack(pady=30)
