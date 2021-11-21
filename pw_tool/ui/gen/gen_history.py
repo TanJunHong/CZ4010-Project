@@ -22,6 +22,9 @@ class GenHistPage:
                                                  font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
 
+        self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="LargeFont.TButton",
+                                                 command=self.__show_clear_dialog)
+
         self.__pw_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         counter = 0
@@ -40,12 +43,9 @@ class GenHistPage:
 
             counter += 1
 
-        self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="LargeFont.TButton",
-                                                 command=self.__show_clear_dialog)
-
         self.__welcome_label.pack(pady=30)
-        self.__pw_frame.pack(pady=20)
         self.__clear_button.pack(pady=40)
+        self.__pw_frame.pack(pady=20)
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
                                name="WM_DELETE_WINDOW")

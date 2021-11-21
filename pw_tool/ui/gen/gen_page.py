@@ -37,17 +37,20 @@ class GenPage:
 
         self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                                 validate="key", validatecommand=(
-                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
+                self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
                                               background=pw_tool.helper.ui_helper.background_color)
 
-        self.__upper_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z", style="TCheckbutton")
+        self.__upper_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z",
+                                                        style="TCheckbutton")
 
-        self.__lower_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Lower Case a-z", style="TCheckbutton")
+        self.__lower_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Lower Case a-z",
+                                                        style="TCheckbutton")
 
-        self.__numeric_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9", style="TCheckbutton")
+        self.__numeric_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9",
+                                                          style="TCheckbutton")
 
         self.__symbol_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", style="TCheckbutton")
 
@@ -82,7 +85,8 @@ class GenPage:
         self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # view previously generated password
-        self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password", style="LargeFont.TButton", command=self.__show_genhist_page)
+        self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password",
+                                                   style="LargeFont.TButton", command=self.__show_genhist_page)
 
         # copied notification
         self.__notif_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
@@ -99,7 +103,7 @@ class GenPage:
         self.__numeric_checkbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
         self.__symbol_checkbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
         self.__gen_pw_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_label.grid(row=3, column=1, columnspan=50, padx=20, pady=5)
+        self.__pw_label.grid(row=3, column=1, columnspan=50, padx=20, pady=5, sticky="W")
 
         self.__error_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
@@ -142,8 +146,6 @@ class GenPage:
         character_counter = 0
 
         # used to combine all random characters to create password
-        self.__password = ""
-
         length = self.__pw_len_entry.get()
         upper = self.__upper_checkbox.instate(['selected'])
         lower = self.__lower_checkbox.instate(['selected'])
@@ -151,26 +153,23 @@ class GenPage:
         sym = self.__symbol_checkbox.instate(['selected'])
         secrets_generator = secrets.SystemRandom()
 
-        i = 0
-        while i == 0:
-            if not length or int(length) <= 11:
-                self.__error_label.configure(text="Please ensure password length is filled/valid!")
-                self.__gen_pw_label["state"] = tkinter.DISABLED
-                self.__window.after(0, lambda: self.__pw_label.configure(text=""))
-                self.__copy_button["state"] = tkinter.DISABLED
-                return
-            else:
-                if not upper and not lower and not num and not sym:
-                    self.__error_label.configure(text="Please choose the type of characters!")
-                    self.__gen_pw_label["state"] = tkinter.DISABLED
-                    self.__window.after(0, lambda: self.__pw_label.configure(text=""))
-                    self.__copy_button["state"] = tkinter.DISABLED
-                    return
-                else:
-                    self.__window.after(0, lambda: self.__error_label.configure(text=""))
-                    self.__gen_pw_label["state"] = tkinter.NORMAL
-                    self.__copy_button["state"] = tkinter.NORMAL
-                    break
+        if not length or int(length) <= 11:
+            self.__error_label.configure(text="Please ensure password length is filled/valid!")
+            self.__gen_pw_label["state"] = tkinter.DISABLED
+            self.__pw_label.configure(text="")
+            self.__copy_button["state"] = tkinter.DISABLED
+            return
+
+        if not upper and not lower and not num and not sym:
+            self.__error_label.configure(text="Please choose the type of characters!")
+            self.__gen_pw_label["state"] = tkinter.DISABLED
+            self.__pw_label.configure(text="")
+            self.__copy_button["state"] = tkinter.DISABLED
+            return
+
+        self.__error_label.configure(text="")
+        self.__gen_pw_label["state"] = tkinter.NORMAL
+        self.__copy_button["state"] = tkinter.NORMAL
 
         # adding list of selected characters to combined list
         if upper:
