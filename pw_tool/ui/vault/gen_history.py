@@ -4,9 +4,9 @@ import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.vault.clear_dialog
 
+
 class GenHistPage:
     def __init__(self, master):
-
         self.__master = master
         self.__master.withdraw()
 
@@ -29,4 +29,3 @@ class GenHistPage:
     def __show_clear_dialog(self):
         self.__window.destroy()
         pw_tool.ui.vault.clear_dialog.ClearDialog(master=self.__master)
-

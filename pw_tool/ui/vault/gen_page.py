@@ -1,9 +1,10 @@
 import binascii
-import secrets
-import tkinter.ttk
 import math
+import secrets
 import statistics
-from statsmodels.sandbox.stats.runs import runstest_1samp
+import tkinter.ttk
+
+import statsmodels.sandbox.stats.runs
 
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.gen_history
@@ -348,7 +349,7 @@ class GenPage:
 
         print('Z-statistic= ', z_value)
 
-        x = runstest_1samp(decimal_list, correction=False)
+        x = statsmodels.sandbox.stats.runs.runstest_1samp(decimal_list, correction=False)
         print(x)
 
     def __pcopy(self):
