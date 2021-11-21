@@ -36,7 +36,7 @@ def create_button_style():
     """
     style = tkinter.ttk.Style()
     style.configure(style="LargeFont.TButton", font=font)
-    style.configure(style="SmallFont.TButton", font=font)
+    style.configure(style="SmallFont.TButton", font=small_font)
     style.configure(style="TCheckbutton", font=small_font, background=background_color)
 
 

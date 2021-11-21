@@ -217,8 +217,6 @@ class GenPage:
 
         print(self.__password)
 
-        pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
-
         # permute password using feistel rounds
         # generate key using random bits
         def random_key(p):
@@ -311,6 +309,8 @@ class GenPage:
 
         self.__password = str_data[0:int(length) + 1]
         print(self.__password)
+
+        pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
         # display generated password
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,

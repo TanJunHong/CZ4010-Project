@@ -27,7 +27,7 @@ class ClearDialog:
         self.__ok_button = tkinter.ttk.Button(master=self.__inner_frame, text="OK", style="LargeFont.TButton",
                                               command=self.__clear_from_vault)
 
-        self.__cancel_button = tkinter.ttk.Button(master=self.__inner_frame, text="Cancel", style="SmallFont.TButton",
+        self.__cancel_button = tkinter.ttk.Button(master=self.__inner_frame, text="Cancel", style="LargeFont.TButton",
                                                   command=lambda: pw_tool.helper.ui_helper.back(root=self.__master,
                                                                                                 me=self.__window))
 
