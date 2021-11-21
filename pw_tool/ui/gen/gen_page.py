@@ -2,6 +2,7 @@ import binascii
 import math
 import secrets
 import statistics
+import string
 import tkinter.ttk
 
 import statsmodels.sandbox.stats.runs
@@ -10,14 +11,17 @@ import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
 
+uppercase_list = list(string.ascii_uppercase)
+lowercase_list = list(string.ascii_lowercase)
+numeric_list = list(string.digits)
+symbol_list = list(string.punctuation)
+
 
 class GenPage:
     def __init__(self, master):
         """Initialises password generator page
         """
         self.__master = master
-
-        self.__valid_digits = [str(i) for i in range(0, 10)]
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
@@ -35,9 +39,7 @@ class GenPage:
                                                 font=pw_tool.helper.ui_helper.small_font,
                                                 background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
-                                                validate="key", validatecommand=(
-                self.__gen_frame.register(func=self.digit_validation), "%S"))
+        self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font, validate="key", validatecommand=(self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
@@ -130,15 +132,6 @@ class GenPage:
     def __pw_generator(self):
         # destroy previously displayed password
 
-        # define all possible characters
-        uppercase_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
-                          "T", "U", "V", "W", "X", "Y", "Z"]
-        lowercase_list = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s",
-                          "t", "u", "v", "w", "x", "y", "z"]
-        numeric_list = self.__valid_digits
-        symbol_list = ["!", "\"", "#", "$", "%", "&", "'", "(", ")", "*", "+", ",", "-", ".", "/", ":", ";", "<", "=",
-                       ">", "?", "@", "[", "\\", "]", "^", "_", "`", "{", "|", "}", "~"]
-
         # character list used to combine all the selected characters
         characters = []
 
@@ -226,8 +219,7 @@ class GenPage:
 
         # change binary to decimal
         def bin_to_dec(binary):
-            string = int(binary, 2)
-            return string
+            return int(binary, 2)
 
         # get the index of each character
         pw_index = []
@@ -301,7 +293,7 @@ class GenPage:
         # display generated password
         self.__pw_label.configure(text=self.__password)
 
-        def runsTest(l, l_median):
+        def run_test(l, l_median):
 
             runs, n1, n2 = 0, 0, 0
 
@@ -329,7 +321,7 @@ class GenPage:
             return z
 
         l_median = statistics.median(decimal_list)
-        z_value = abs(runsTest(decimal_list, l_median))
+        z_value = abs(run_test(decimal_list, l_median))
 
         print('Z-statistic= ', z_value)
 
@@ -340,7 +332,7 @@ class GenPage:
         """Validates input, making sure it contains only digits
         Rings bell if invalid input.
         """
-        if char in self.__valid_digits:
+        if char in numeric_list:
             return True
 
         self.__gen_frame.bell()
