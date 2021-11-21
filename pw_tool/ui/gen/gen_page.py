@@ -356,14 +356,7 @@ class GenPage:
         print(x)
 
     def __pcopy(self):
-        tk = tkinter.Tk()
-        tk.withdraw()
-        _change_clipboard(string=self.__password, tk=tk)
-        tk.after(ms=10000, func=lambda: _change_clipboard(string="", tk=tk))
-        tk.after(ms=10500, func=tk.destroy)
-        self.__copynoti_label.config(text="Copied to clipboard!")
-        self.__window.after(10000, lambda: self.__copynoti_label.config(text=""))
-        print(self.__password + " uwu")
+        pw_tool.helper.ui_helper.copy_to_clipboard(password=self.__password)
 
     def __show_genhist_page(self):
         self.__window.withdraw()
