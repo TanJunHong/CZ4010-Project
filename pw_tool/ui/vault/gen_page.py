@@ -5,14 +5,12 @@ import math
 import statistics
 from statsmodels.sandbox.stats.runs import runstest_1samp
 
-
 import pw_tool.helper.ui_helper
 import pw_tool.ui.vault.gen_history
 
 
 def _change_clipboard(string, tk):
-    """Changes clipboard given string
-    """
+    # change clipboard to given string
     tk.clipboard_clear()
     tk.clipboard_append(string=string)
     tk.update()
@@ -59,10 +57,12 @@ class GenPage:
         self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9",
                                                      variable=self.__var_numeric)
 
-        self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", variable=self.__var_symbol)
+        self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*",
+                                                     variable=self.__var_symbol)
 
         # Display Generated Password
-        self.__gpassword_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:", font=("Arial", 12),
+        self.__gpassword_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
+                                                   font=("Arial", 12),
                                                    background=pw_tool.helper.ui_helper.background_color)
         self.__gpassword_label["state"] = tkinter.DISABLED
 
@@ -89,7 +89,8 @@ class GenPage:
         self.__button2_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # view previously generated password
-        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button2_frame, text="Previously Generated Password",
+        self.__pgenhistory_button = tkinter.ttk.Button(master=self.__button2_frame,
+                                                       text="Previously Generated Password",
                                                        style="TButton", command=self.__show_genhist_page)
 
         # copied notification
@@ -187,8 +188,6 @@ class GenPage:
         # adding list of selected characters to combined list
         if upper == 1:
             characters += uppercase_list
-            # value = secrets_generator.randint(0, len(uppercase_list)-1)
-            # rand_upper = uppercase_list[value]
             rand_upper = secrets_generator.choice(uppercase_list)
             character_counter += 1
 
@@ -209,9 +208,6 @@ class GenPage:
 
         # to ensure that there is at least 1 of the selected type of variable
         self.__password = rand_upper + rand_lower + rand_num + rand_sym
-        print(self.__password)
-        print(character_counter)
-        print(characters)
 
         # generate initial password by selecting random characters
         for x in range(int(length) - character_counter):
@@ -262,8 +258,6 @@ class GenPage:
         l1 = pw_bin[0:n]
         r1 = pw_bin[n::]
         m = len(r1)
-        print(l1)
-        print(r1)
 
         # generate key k1, k2 for the first and second round
         k1 = random_key(m)
@@ -272,43 +266,30 @@ class GenPage:
         k4 = random_key(m)
         k5 = random_key(m)
 
-        print(k1)
-        print(k2)
-
         # first round of feistel
         f1 = xor(r1, k1)
         r2 = xor(f1, l1)
         l2 = l1
-        print(l2)
-        print(r2)
 
         # second round of feistel
         f2 = xor(r2, k2)
         r3 = xor(f2, l2)
         l3 = r2
-        print(l3)
-        print(r3)
 
         # third round of feistel
         f3 = xor(r3, k3)
         r4 = xor(f3, l3)
         l4 = r3
-        print(l4)
-        print(r4)
 
         # fourth round of feistel
         f4 = xor(r4, k4)
         r5 = xor(f4, l4)
         l5 = r4
-        print(l5)
-        print(r5)
 
         # fifth round of feistel
         f5 = xor(r5, k5)
         r6 = xor(f5, l5)
         l6 = r5
-        print(l6)
-        print(r6)
 
         # "cipher"text
         bin_data = l6 + r6
@@ -325,8 +306,7 @@ class GenPage:
         print(str_data)
         print(decimal_list)
 
-        self.__password = str_data[0:int(length)+1]
-        #self.__password = str_data
+        self.__password = str_data[0:int(length) + 1]
         print(self.__password)
 
         # display generated password
@@ -335,22 +315,20 @@ class GenPage:
         self.__pw_label.configure(text=self.__password)
         self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
 
-        # password = "".join(password_list[])
-
         def runsTest(l, l_median):
 
             runs, n1, n2 = 0, 0, 0
 
             # Checking for start of new run
-            for i in range(len(l)):
+            for k in range(len(l)):
 
                 # no. of runs
-                if (l[i] >= l_median and l[i - 1] < l_median) or \
-                        (l[i] < l_median and l[i - 1] >= l_median):
+                if (l[k] >= l_median > l[k - 1]) or \
+                        (l[k] < l_median <= l[k - 1]):
                     runs += 1
 
                     # no. of positive values
-                if (l[i]) >= l_median:
+                if (l[k]) >= l_median:
                     n1 += 1
 
                     # no. of negative values
@@ -366,11 +344,11 @@ class GenPage:
             return z
 
         l_median = statistics.median(decimal_list)
-        Z = abs(runsTest(decimal_list, l_median))
+        z_value = abs(runsTest(decimal_list, l_median))
 
-        print('Z-statistic= ', Z)
+        print('Z-statistic= ', z_value)
 
-        x= runstest_1samp(decimal_list, correction=False)
+        x = runstest_1samp(decimal_list, correction=False)
         print(x)
 
     def __pcopy(self):
