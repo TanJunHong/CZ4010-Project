@@ -14,7 +14,7 @@ import pw_tool.helper.ui_helper
 
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
 vault_key = None
-vault = {}
+vault = default_vault = {"vault": {}, "password_generator_history": {}}
 
 
 def generate_vault_key(secret, salt):
@@ -34,7 +34,7 @@ def update_vault(website, username, password, old_value=None):
     """
     old_passwords = []
     if old_value is not None:
-        old_passwords = vault[website]["old_passwords"]
+        old_passwords = vault["vault"][website]["old_passwords"]
 
         for old_password in old_passwords:
             if passlib.hash.pbkdf2_sha256.verify(secret=password, hash=old_password):
@@ -45,7 +45,7 @@ def update_vault(website, username, password, old_value=None):
 
     del old_value
 
-    vault[website] = {"username": username, "password": password, "old_passwords": old_passwords}
+    vault["vault"][website] = {"username": username, "password": password, "old_passwords": old_passwords}
     upload_vault()
 
     del old_passwords
@@ -59,7 +59,7 @@ def update_vault(website, username, password, old_value=None):
 def delete_from_vault(website):
     """Deletes entry from vault
     """
-    del vault[website]
+    del vault["vault"][website]
 
     upload_vault()
 
@@ -67,11 +67,13 @@ def delete_from_vault(website):
 def download_vault():
     """Retrieves vault from firebase and store it in client
     """
+    global vault
+
     data = pw_tool.helper.fb_helper.database.child("vault").child(
         pw_tool.helper.fb_helper.auth_key.split("$")[-1].replace(".", "")).get(
         token=pw_tool.helper.fb_helper.user["idToken"])
 
-    pw_tool.helper.vault_helper.vault = decrypt_vault(data)
+    vault = decrypt_vault(data)
 
     del data
 
@@ -91,7 +93,7 @@ def decrypt_vault(data):
     """Decrypts vault and returns decrypted vault
     """
     if data.val() is None:
-        return {}
+        return default_vault
 
     result = json.loads(s=data.val())
 
@@ -113,8 +115,7 @@ def decrypt_vault(data):
     del nonce
     del tag
 
-    cipher = Crypto.Cipher.AES.new(key=bytes(pw_tool.helper.vault_helper.vault_key), mode=Crypto.Cipher.AES.MODE_CBC,
-                                   iv=initialization_vector)
+    cipher = Crypto.Cipher.AES.new(key=bytes(vault_key), mode=Crypto.Cipher.AES.MODE_CBC, iv=initialization_vector)
     vault_bytes = Crypto.Util.Padding.unpad(padded_data=cipher.decrypt(ciphertext=ciphertext),
                                             block_size=Crypto.Cipher.AES.block_size)
 
@@ -165,8 +166,6 @@ def destroy_variables():
     """
     global vault_key
     global vault
-    pw_tool.helper.fb_helper.auth_key = None
-    pw_tool.helper.fb_helper.mac_key = None
-    pw_tool.helper.ui_helper.vault_page = None
-    vault_key = None
-    vault = {}
+
+    pw_tool.helper.fb_helper.auth_key = pw_tool.helper.fb_helper.mac_key = pw_tool.helper.ui_helper.vault_page = vault_key = None
+    vault = default_vault

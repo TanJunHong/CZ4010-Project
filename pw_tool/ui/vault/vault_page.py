@@ -85,18 +85,18 @@ class VaultPage:
     def refresh_page(self):
         """Refreshes page
         """
+        pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
+
         if pw_tool.helper.vault_helper.vault is False:
             self.__notification_label.config(text="TAMPERED VAULT! LOGGING OUT...")
             self.__window.after(ms=5000, func=self.__logout)
             return
 
-        pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
-
         self.__labels = {}
         self.__buttons = {}
 
         counter = 0
-        for website, value in pw_tool.helper.vault_helper.vault.items():
+        for website, value in pw_tool.helper.vault_helper.vault["vault"].items():
             self.__labels[website] = tkinter.ttk.Label(master=self.__website_frame, text=website,
                                                        font=pw_tool.helper.ui_helper.font,
                                                        background=pw_tool.helper.ui_helper.background_color)
