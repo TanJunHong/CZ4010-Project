@@ -41,11 +41,11 @@ class LoginPage:
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        self.__login_button = tkinter.ttk.Button(master=self.__button_frame, text="Login", style="TButton",
+        self.__login_button = tkinter.ttk.Button(master=self.__button_frame, text="Login", style="LargeFont.TButton",
                                                  command=self.__verify_login)
 
-        self.__register_button = tkinter.ttk.Button(master=self.__button_frame, text="Register", style="TButton",
-                                                    command=self.__show_register_page)
+        self.__register_button = tkinter.ttk.Button(master=self.__button_frame, text="Register",
+                                                    style="LargeFont.TButton", command=self.__show_register_page)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
@@ -101,4 +101,5 @@ class LoginPage:
     def __create_vault_page(self):
         """Moves to vault page
         """
+        self.__window.withdraw()
         pw_tool.helper.ui_helper.vault_page = pw_tool.ui.vault.vault_page.VaultPage(master=self.__window)

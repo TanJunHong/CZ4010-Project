@@ -42,7 +42,7 @@ class ChangePWPage:
         self.__confirm_pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font,
                                                     show="*")
 
-        self.__update_button = tkinter.ttk.Button(master=self.__window, text="Update", style="TButton",
+        self.__update_button = tkinter.ttk.Button(master=self.__window, text="Update", style="LargeFont.TButton",
                                                   command=self.__change_password)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,

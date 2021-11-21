@@ -26,10 +26,10 @@ class GenHistPage:
 
         counter = 0
         for value in pw_tool.helper.vault_helper.vault["pw_gen_hist"]:
-            label = tkinter.ttk.Label(master=self.__pw_frame, text=value, font=pw_tool.helper.ui_helper.history_font,
+            label = tkinter.ttk.Label(master=self.__pw_frame, text=value, font=pw_tool.helper.ui_helper.small_font,
                                       background=pw_tool.helper.ui_helper.background_color)
 
-            button = tkinter.ttk.Button(master=self.__pw_frame, text="Copy", style="TButton",
+            button = tkinter.ttk.Button(master=self.__pw_frame, text="Copy", style="LargeFont.TButton",
                                         command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(password=value))
 
             label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
@@ -40,7 +40,7 @@ class GenHistPage:
 
             counter += 1
 
-        self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="TButton",
+        self.__clear_button = tkinter.ttk.Button(master=self.__window, text="Clear All", style="LargeFont.TButton",
                                                  command=self.__show_clear_dialog)
 
         self.__welcome_label.pack(pady=30)

@@ -41,8 +41,8 @@ class RegPage:
         self.__confirm_pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*",
                                                     font=pw_tool.helper.ui_helper.font)
 
-        self.__create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account", style="TButton",
-                                                          command=self.__create_account)
+        self.__create_account_button = tkinter.ttk.Button(master=self.__window, text="Create Account",
+                                                          style="LargeFont.TButton", command=self.__create_account)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)

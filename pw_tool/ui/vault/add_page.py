@@ -41,7 +41,7 @@ class AddPage:
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
 
-        self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="TButton",
+        self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="LargeFont.TButton",
                                                command=self.__add_to_vault)
 
         self.__website_entry.focus()

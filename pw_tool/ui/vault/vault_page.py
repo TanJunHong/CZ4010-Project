@@ -2,9 +2,9 @@ import tkinter.ttk
 
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
+import pw_tool.ui.gen.gen_page
 import pw_tool.ui.vault.add_page
 import pw_tool.ui.vault.change_pw_page
-import pw_tool.ui.gen.gen_page
 import pw_tool.ui.vault.pw_page
 
 
@@ -30,13 +30,15 @@ class VaultPage:
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        self.__add_button = tkinter.ttk.Button(master=self.__button_frame, text="+", style="TButton",
+        self.__add_button = tkinter.ttk.Button(master=self.__button_frame, text="+", style="LargeFont.TButton",
                                                command=self.__show_add_page)
 
-        self.__pw_gen_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator", style="TButton", command=self.__show_gen_page)
+        self.__pw_gen_button = tkinter.ttk.Button(master=self.__button_frame, text="Password Generator",
+                                                  style="LargeFont.TButton", command=self.__show_gen_page)
 
         self.__change_master_pw_button = tkinter.ttk.Button(master=self.__button_frame, text="Change Master Password",
-                                                            style="TButton", command=self.__change_master_password)
+                                                            style="LargeFont.TButton",
+                                                            command=self.__change_master_password)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color,
@@ -100,7 +102,8 @@ class VaultPage:
                                                        font=pw_tool.helper.ui_helper.font,
                                                        background=pw_tool.helper.ui_helper.background_color)
 
-            self.__buttons[website] = tkinter.ttk.Button(master=self.__website_frame, text="Show", style="TButton",
+            self.__buttons[website] = tkinter.ttk.Button(master=self.__website_frame, text="Show",
+                                                         style="LargeFont.TButton",
                                                          command=lambda web=website, val=value: self.__show_pw_page(
                                                              website=web, value=val))
 

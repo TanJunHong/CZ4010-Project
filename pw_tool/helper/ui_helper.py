@@ -3,7 +3,7 @@ import tkinter.ttk
 vault_page = None
 background_color = "SystemButtonFace"
 font = ("Arial", 25)
-history_font = ("Arial", 16)
+small_font = ("Arial", 12)
 window_size = "640x480"
 
 
@@ -35,7 +35,9 @@ def create_button_style():
     """Creates button style
     """
     style = tkinter.ttk.Style()
-    style.configure(style="TButton", font=font)
+    style.configure(style="LargeFont.TButton", font=font)
+    style.configure(style="SmallFont.TButton", font=font)
+    style.configure(style="TCheckbutton", font=small_font, background=background_color)
 
 
 def create_frame_style():

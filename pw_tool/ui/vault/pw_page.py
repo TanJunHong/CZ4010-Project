@@ -47,17 +47,17 @@ class PWPage:
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        self.__toggle_button = tkinter.ttk.Button(master=self.__button_frame, text="Show/Hide", style="TButton",
-                                                  command=self.__toggle_password)
+        self.__toggle_button = tkinter.ttk.Button(master=self.__button_frame, text="Show/Hide",
+                                                  style="LargeFont.TButton", command=self.__toggle_password)
 
-        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy", style="TButton",
+        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy", style="LargeFont.TButton",
                                                 command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(
                                                     password=self.__value["password"]))
 
-        self.__edit_button = tkinter.ttk.Button(master=self.__button_frame, text="Edit", style="TButton",
+        self.__edit_button = tkinter.ttk.Button(master=self.__button_frame, text="Edit", style="LargeFont.TButton",
                                                 command=self.__show_edit_page)
 
-        self.__delete_button = tkinter.ttk.Button(master=self.__button_frame, text="Delete", style="TButton",
+        self.__delete_button = tkinter.ttk.Button(master=self.__button_frame, text="Delete", style="LargeFont.TButton",
                                                   command=self.__show_delete_dialog)
 
         self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")

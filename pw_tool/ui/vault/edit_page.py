@@ -37,7 +37,7 @@ class EditPage:
         self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font, show="*")
         self.__pw_entry.insert(index=0, string=self.__value["password"])
 
-        self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="TButton",
+        self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="LargeFont.TButton",
                                                 command=self.__update_vault)
 
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
