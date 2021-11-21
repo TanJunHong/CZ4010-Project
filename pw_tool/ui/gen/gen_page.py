@@ -39,7 +39,9 @@ class GenPage:
                                                 font=pw_tool.helper.ui_helper.small_font,
                                                 background=pw_tool.helper.ui_helper.background_color)
 
-        self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font, validate="key", validatecommand=(self.__gen_frame.register(func=self.digit_validation), "%S"))
+        self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
+                                                validate="key", validatecommand=(
+                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
@@ -147,7 +149,7 @@ class GenPage:
         sym = self.__symbol_checkbox.instate(['selected'])
         secrets_generator = secrets.SystemRandom()
 
-        if not length or int(length) <= 11:
+        if not length or int(length) < 12:
             self.__error_label.configure(text="Please ensure password length is filled/valid!")
             self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__pw_label.configure(text="")
@@ -168,22 +170,22 @@ class GenPage:
         # adding list of selected characters to combined list
         if upper:
             characters += uppercase_list
-            rand_upper = secrets_generator.choice(uppercase_list)
+            rand_upper = secrets_generator.choice(seq=uppercase_list)
             character_counter += 1
 
         if lower:
             characters += lowercase_list
-            rand_lower = secrets_generator.choice(lowercase_list)
+            rand_lower = secrets_generator.choice(seq=lowercase_list)
             character_counter += 1
 
         if num:
             characters += numeric_list
-            rand_num = secrets_generator.choice(numeric_list)
+            rand_num = secrets_generator.choice(seq=numeric_list)
             character_counter += 1
 
         if sym:
             characters += symbol_list
-            rand_sym = secrets_generator.choice(symbol_list)
+            rand_sym = secrets_generator.choice(seq=symbol_list)
             character_counter += 1
 
         # to ensure that there is at least 1 of the selected type of variable
