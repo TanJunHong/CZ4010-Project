@@ -12,7 +12,6 @@ class ChangePWPage:
         """Initialises change password page
         """
         self.__master = master
-        self.__master.withdraw()
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="720x640")

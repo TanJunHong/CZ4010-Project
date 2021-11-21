@@ -10,7 +10,6 @@ class GenHistPage:
         """Initialises password history page
         """
         self.__master = master
-        self.__master.withdraw()
 
         self.__labels = []
         self.__buttons = []

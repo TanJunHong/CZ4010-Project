@@ -21,7 +21,6 @@ def _change_clipboard(string, tk):
 class GenPage:
     def __init__(self, master):
         self.__master = master
-        self.__master.withdraw()
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)

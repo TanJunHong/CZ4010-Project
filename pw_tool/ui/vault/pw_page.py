@@ -12,7 +12,6 @@ class PWPage:
         self.__default_password = "***"
 
         self.__master = master
-        self.__master.withdraw()
 
         self.__website = website
         self.__value = value
