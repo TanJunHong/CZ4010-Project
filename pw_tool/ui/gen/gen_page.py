@@ -79,14 +79,15 @@ class GenPage:
         # copy generated password to clipboard
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
                                                 style="LargeFont.TButton",
-                                                command=self.__pcopy)
+                                                command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(
+                                                    password=self.__password))
         self.__copy_button["state"] = tkinter.DISABLED
 
         self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # view previously generated password
         self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password",
-                                                   style="LargeFont.TButton", command=self.__show_genhist_page)
+                                                   style="LargeFont.TButton", command=self.__show_hist_page)
 
         # copied notification
         self.__notif_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
@@ -321,8 +322,7 @@ class GenPage:
                     n2 += 1
 
             runs_exp = ((2 * n1 * n2) / (n1 + n2)) + 1
-            stan_dev = math.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / \
-                                 (((n1 + n2) ** 2) * (n1 + n2 - 1)))
+            stan_dev = math.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / (((n1 + n2) ** 2) * (n1 + n2 - 1)))
 
             z = (runs - runs_exp) / stan_dev
 
@@ -346,9 +346,8 @@ class GenPage:
         self.__gen_frame.bell()
         return False
 
-    def __pcopy(self):
-        pw_tool.helper.ui_helper.copy_to_clipboard(password=self.__password)
-
-    def __show_genhist_page(self):
+    def __show_hist_page(self):
+        """Redirects to history page
+        """
         self.__window.withdraw()
         pw_tool.ui.gen.gen_history.GenHistPage(master=self.__window)
