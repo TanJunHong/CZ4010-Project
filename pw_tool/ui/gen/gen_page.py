@@ -11,16 +11,13 @@ import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
 
 
-def _change_clipboard(string, tk):
-    # change clipboard to given string
-    tk.clipboard_clear()
-    tk.clipboard_append(string=string)
-    tk.update()
-
-
 class GenPage:
     def __init__(self, master):
+        """Initialises password generator page
+        """
         self.__master = master
+
+        self.__valid_digits = [str(i) for i in range(0, 10)]
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
@@ -33,12 +30,14 @@ class GenPage:
         self.__gen_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # Get length of password to generate
-        self.__plength_label = tkinter.ttk.Label(master=self.__gen_frame,
-                                                 text="Length of password:\n(Minimum length = 12)",
-                                                 font=pw_tool.helper.ui_helper.small_font,
-                                                 background=pw_tool.helper.ui_helper.background_color)
+        self.__pw_len_label = tkinter.ttk.Label(master=self.__gen_frame,
+                                                text="Length of password:\n(Minimum length = 12)",
+                                                font=pw_tool.helper.ui_helper.small_font,
+                                                background=pw_tool.helper.ui_helper.background_color)
 
-        self.__plength_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font)
+        self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
+                                                validate="key", validatecommand=(
+                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__var_upper = tkinter.IntVar()
         self.__var_lower = tkinter.IntVar()
@@ -46,7 +45,8 @@ class GenPage:
         self.__var_symbol = tkinter.IntVar()
 
         # Get type of characters to include in password
-        self.__ptype_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:", font=pw_tool.helper.ui_helper.small_font,
+        self.__ptype_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
+                                               font=pw_tool.helper.ui_helper.small_font,
                                                background=pw_tool.helper.ui_helper.background_color)
 
         self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z",
@@ -79,11 +79,13 @@ class GenPage:
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
         # Generate password
-        self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate", style="LargeFont.TButton",
+        self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate",
+                                                    style="LargeFont.TButton",
                                                     command=self.__pgenerator)
 
         # copy generated password to clipboard
-        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password", style="LargeFont.TButton",
+        self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
+                                                style="LargeFont.TButton",
                                                 command=self.__pcopy)
         self.__copy_button["state"] = tkinter.DISABLED
 
@@ -99,10 +101,10 @@ class GenPage:
         self.__copynoti_label = tkinter.ttk.Label(master=self.__noti_frame, font=pw_tool.helper.ui_helper.small_font,
                                                   background=pw_tool.helper.ui_helper.background_color)
 
-        self.__plength_label.focus()
+        self.__pw_len_label.focus()
 
-        self.__plength_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
-        self.__plength_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__pw_len_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
+        self.__pw_len_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
         self.__ptype_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
         self.__ptype1_cbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
         self.__ptype2_cbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
@@ -158,7 +160,7 @@ class GenPage:
         # used to combine all random characters to create password
         self.__password = ""
 
-        length = self.__plength_entry.get()
+        length = self.__pw_len_entry.get()
         upper = self.__var_upper.get()
         lower = self.__var_lower.get()
         num = self.__var_numeric.get()
@@ -353,6 +355,16 @@ class GenPage:
 
         x = statsmodels.sandbox.stats.runs.runstest_1samp(decimal_list, correction=False)
         print(x)
+
+    def digit_validation(self, char):
+        """Validates input, making sure it contains only digits
+        Rings bell if invalid input.
+        """
+        if char in self.__valid_digits:
+            return True
+
+        self.__gen_frame.bell()
+        return False
 
     def __pcopy(self):
         pw_tool.helper.ui_helper.copy_to_clipboard(password=self.__password)
