@@ -39,27 +39,17 @@ class GenPage:
                                                 validate="key", validatecommand=(
                                                     self.__gen_frame.register(func=self.digit_validation), "%S"))
 
-        self.__var_upper = tkinter.IntVar()
-        self.__var_lower = tkinter.IntVar()
-        self.__var_numeric = tkinter.IntVar()
-        self.__var_symbol = tkinter.IntVar()
-
-        # Get type of characters to include in password
         self.__ptype_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                                font=pw_tool.helper.ui_helper.small_font,
                                                background=pw_tool.helper.ui_helper.background_color)
 
-        self.__ptype1_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z",
-                                                     variable=self.__var_upper, style="TCheckbutton")
+        self.__upper_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Upper Case A-Z", style="TCheckbutton")
 
-        self.__ptype2_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Lower Case a-z",
-                                                     variable=self.__var_lower, style="TCheckbutton")
+        self.__lower_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Lower Case a-z", style="TCheckbutton")
 
-        self.__ptype3_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9",
-                                                     variable=self.__var_numeric, style="TCheckbutton")
+        self.__numeric_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="Numeric 0-9", style="TCheckbutton")
 
-        self.__ptype4_cbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*",
-                                                     variable=self.__var_symbol, style="TCheckbutton")
+        self.__symbol_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", style="TCheckbutton")
 
         # Display Generated Password
         self.__gpassword_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
@@ -106,10 +96,10 @@ class GenPage:
         self.__pw_len_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
         self.__pw_len_entry.grid(row=0, column=1, padx=20, pady=5, sticky="E")
         self.__ptype_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
-        self.__ptype1_cbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
-        self.__ptype2_cbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
-        self.__ptype3_cbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
-        self.__ptype4_cbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
+        self.__upper_checkbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
+        self.__lower_checkbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
+        self.__numeric_checkbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
+        self.__symbol_checkbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
         self.__gpassword_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
         self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
 
@@ -161,10 +151,10 @@ class GenPage:
         self.__password = ""
 
         length = self.__pw_len_entry.get()
-        upper = self.__var_upper.get()
-        lower = self.__var_lower.get()
-        num = self.__var_numeric.get()
-        sym = self.__var_symbol.get()
+        upper = self.__upper_checkbox.instate(['selected'])
+        lower = self.__lower_checkbox.instate(['selected'])
+        num = self.__numeric_checkbox.instate(['selected'])
+        sym = self.__symbol_checkbox.instate(['selected'])
         secrets_generator = secrets.SystemRandom()
 
         i = 0
@@ -189,22 +179,22 @@ class GenPage:
                     break
 
         # adding list of selected characters to combined list
-        if upper == 1:
+        if upper:
             characters += uppercase_list
             rand_upper = secrets_generator.choice(uppercase_list)
             character_counter += 1
 
-        if lower == 1:
+        if lower:
             characters += lowercase_list
             rand_lower = secrets_generator.choice(lowercase_list)
             character_counter += 1
 
-        if num == 1:
+        if num:
             characters += numeric_list
             rand_num = secrets_generator.choice(numeric_list)
             character_counter += 1
 
-        if sym == 1:
+        if sym:
             characters += symbol_list
             rand_sym = secrets_generator.choice(symbol_list)
             character_counter += 1
