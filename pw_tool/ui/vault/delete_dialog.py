@@ -57,5 +57,5 @@ class DeleteDialog:
         """
         pw_tool.helper.vault_helper.delete_from_vault(website=self.__website)
 
-        self.__notification_label.config(text="Successfully Deleted!")
+        self.__notification_label.configure(text="Successfully Deleted!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

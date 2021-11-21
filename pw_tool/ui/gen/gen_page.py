@@ -92,14 +92,14 @@ class GenPage:
         self.__pw_len_label.focus()
 
         self.__pw_len_label.grid(row=0, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_len_entry.grid(row=0, column=1, columnspan=2, padx=20, pady=5)
+        self.__pw_len_entry.grid(row=0, column=1, padx=20, pady=5, sticky="W")
         self.__type_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
         self.__upper_checkbox.grid(row=1, column=1, padx=20, pady=5, sticky="W")
         self.__lower_checkbox.grid(row=1, column=2, padx=20, pady=5, sticky="W")
         self.__numeric_checkbox.grid(row=2, column=1, padx=20, pady=5, sticky="W")
         self.__symbol_checkbox.grid(row=2, column=2, padx=20, pady=5, sticky="W")
         self.__gen_pw_label.grid(row=3, column=0, padx=20, pady=5, sticky="W")
-        self.__pw_label.grid(row=3, column=1, columnspan=2, padx=20, pady=5)
+        self.__pw_label.grid(row=3, column=1, columnspan=50, padx=20, pady=5)
 
         self.__error_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
@@ -124,7 +124,6 @@ class GenPage:
 
     def __pw_generator(self):
         # destroy previously displayed password
-        self.__pw_label.after(1000, self.__pw_label.destroy())
 
         # define all possible characters
         uppercase_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S",
@@ -155,20 +154,20 @@ class GenPage:
         i = 0
         while i == 0:
             if not length or int(length) <= 11:
-                self.__error_label.config(text="Please ensure password length is filled/valid!")
+                self.__error_label.configure(text="Please ensure password length is filled/valid!")
                 self.__gen_pw_label["state"] = tkinter.DISABLED
-                self.__window.after(0, lambda: self.__pw_label.config(text=""))
+                self.__window.after(0, lambda: self.__pw_label.configure(text=""))
                 self.__copy_button["state"] = tkinter.DISABLED
                 return
             else:
                 if not upper and not lower and not num and not sym:
-                    self.__error_label.config(text="Please choose the type of characters!")
+                    self.__error_label.configure(text="Please choose the type of characters!")
                     self.__gen_pw_label["state"] = tkinter.DISABLED
-                    self.__window.after(0, lambda: self.__pw_label.config(text=""))
+                    self.__window.after(0, lambda: self.__pw_label.configure(text=""))
                     self.__copy_button["state"] = tkinter.DISABLED
                     return
                 else:
-                    self.__window.after(0, lambda: self.__error_label.config(text=""))
+                    self.__window.after(0, lambda: self.__error_label.configure(text=""))
                     self.__gen_pw_label["state"] = tkinter.NORMAL
                     self.__copy_button["state"] = tkinter.NORMAL
                     break
@@ -300,10 +299,7 @@ class GenPage:
         pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
         # display generated password
-        self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
-                                            background=pw_tool.helper.ui_helper.background_color)
         self.__pw_label.configure(text=self.__password)
-        self.__pw_label.grid(row=3, column=1, padx=20, pady=5, sticky="W")
 
         def runsTest(l, l_median):
 

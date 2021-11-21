@@ -89,7 +89,7 @@ class VaultPage:
         pw_tool.helper.ui_helper.destroy_children(window=self.__website_frame)
 
         if pw_tool.helper.vault_helper.vault is False:
-            self.__notification_label.config(text="TAMPERED VAULT! LOGGING OUT...")
+            self.__notification_label.configure(text="TAMPERED VAULT! LOGGING OUT...")
             self.__window.after(ms=5000, func=self.__logout)
             return
 

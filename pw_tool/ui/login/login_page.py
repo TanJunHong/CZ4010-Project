@@ -79,7 +79,7 @@ class LoginPage:
         Moves to vault page when validated.
         """
         if not self.__email_entry.get() or not self.__pw_entry.get():
-            self.__notification_label.config(text="Please ensure all fields are filled!")
+            self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
         try:
@@ -88,13 +88,13 @@ class LoginPage:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
             formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
-            self.__notification_label.config(text=formatted_message)
+            self.__notification_label.configure(text=formatted_message)
             return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
-        self.__notification_label.config(text="Login Successful! Redirecting you...")
-        self.__window.after(ms=1000, func=lambda: self.__notification_label.config(text=""))
+        self.__notification_label.configure(text="Login Successful! Redirecting you...")
+        self.__window.after(ms=1000, func=lambda: self.__notification_label.configure(text=""))
         self.__window.after(ms=1000, func=self.__create_vault_page)
 
     def __create_vault_page(self):

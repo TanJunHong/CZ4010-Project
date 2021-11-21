@@ -71,11 +71,11 @@ class RegPage:
         If successful, redirects back to login page.
         """
         if not self.__email_entry.get() or not self.__pw_entry.get() or not self.__confirm_pw_entry.get():
-            self.__notification_label.config(text="Please ensure all fields are filled!")
+            self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
         if self.__pw_entry.get() != self.__confirm_pw_entry.get():
-            self.__notification_label.config(text="Passwords do not match!")
+            self.__notification_label.configure(text="Passwords do not match!")
             return
 
         try:
@@ -84,10 +84,10 @@ class RegPage:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
             formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
-            self.__notification_label.config(text=formatted_message)
+            self.__notification_label.configure(text=formatted_message)
             return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
-        self.__notification_label.config(text="Successfully Created!")
+        self.__notification_label.configure(text="Successfully Created!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

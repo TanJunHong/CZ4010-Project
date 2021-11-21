@@ -69,7 +69,7 @@ class AddPage:
         It will upload to firebase afterwards.
         """
         if not self.__website_entry.get() or not self.__username_entry.get() or not self.__pw_entry.get():
-            self.__notification_label.config(text="Please ensure all fields are filled!")
+            self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
         pw_tool.helper.vault_helper.update_vault(website=self.__website_entry.get(),
@@ -77,5 +77,5 @@ class AddPage:
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
-        self.__notification_label.config(text="Successfully Added!")
+        self.__notification_label.configure(text="Successfully Added!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

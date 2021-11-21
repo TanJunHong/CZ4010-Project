@@ -73,15 +73,15 @@ class ChangePWPage:
         Redirects back when successful.
         """
         if not self.__old_pw_entry.get() or not self.__new_pw_entry.get() or not self.__confirm_pw_entry.get():
-            self.__notification_label.config(text="Please ensure all fields are filled!")
+            self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
         if not pw_tool.helper.fb_helper.validate_old_password(old_password=self.__old_pw_entry.get()):
-            self.__notification_label.config(text="Incorrect password!")
+            self.__notification_label.configure(text="Incorrect password!")
             return
 
         if self.__new_pw_entry.get() != self.__confirm_pw_entry.get():
-            self.__notification_label.config(text="Passwords don't match!")
+            self.__notification_label.configure(text="Passwords don't match!")
             return
 
         try:
@@ -90,10 +90,10 @@ class ChangePWPage:
             error_json = error.args[1]
             message = json.loads(s=error_json)["error"]["message"]
             formatted_message = message.replace("_", " ").replace(" : ", "\n").capitalize()
-            self.__notification_label.config(text=formatted_message)
+            self.__notification_label.configure(text=formatted_message)
             return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
-        self.__notification_label.config(text="Successfully Updated!")
+        self.__notification_label.configure(text="Successfully Updated!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))

@@ -55,5 +55,5 @@ class ClearDialog:
         """
         pw_tool.helper.vault_helper.clear_gen_history()
 
-        self.__notification_label.config(text="Successfully Cleared!")
+        self.__notification_label.configure(text="Successfully Cleared!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
