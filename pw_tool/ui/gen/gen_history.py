@@ -13,6 +13,7 @@ class GenHistPage:
         self.__master.withdraw()
 
         self.__labels = []
+        self.__buttons = []
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
@@ -26,12 +27,17 @@ class GenHistPage:
 
         counter = 0
         for value in pw_tool.helper.vault_helper.vault["pw_gen_hist"]:
-            label = tkinter.ttk.Label(master=self.__pw_frame, text=value, font=pw_tool.helper.ui_helper.font,
+            label = tkinter.ttk.Label(master=self.__pw_frame, text=value, font=pw_tool.helper.ui_helper.history_font,
                                       background=pw_tool.helper.ui_helper.background_color)
 
-            label.grid(row=counter, column=0, padx=10, pady=5)
+            button = tkinter.ttk.Button(master=self.__pw_frame, text="Copy", style="TButton",
+                                        command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(password=value))
+
+            label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
+            button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")
 
             self.__labels.append(label)
+            self.__labels.append(button)
 
             counter += 1
 
@@ -39,6 +45,7 @@ class GenHistPage:
                                                  command=self.__show_clear_dialog)
 
         self.__welcome_label.pack(pady=30)
+        self.__pw_frame.pack(pady=20)
         self.__clear_button.pack(pady=40)
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),

@@ -3,6 +3,7 @@ import tkinter.ttk
 vault_page = None
 background_color = "SystemButtonFace"
 font = ("Arial", 25)
+history_font = ("Arial", 16)
 window_size = "640x480"
 
 
@@ -58,3 +59,22 @@ def destroy_children(window):
     """
     for widgets in window.winfo_children():
         widgets.destroy()
+
+
+def change_clipboard(string, tk):
+    """Changes clipboard given string
+    """
+    tk.clipboard_clear()
+    tk.clipboard_append(string=string)
+    tk.update()
+
+
+def copy_to_clipboard(password):
+    """Copies password to clipboard
+    It will replace the clipboard with an empty string after 10 seconds, for security reasons.
+    """
+    tk = tkinter.Tk()
+    tk.withdraw()
+    change_clipboard(string=password, tk=tk)
+    tk.after(ms=10000, func=lambda: change_clipboard(string="", tk=tk))
+    tk.after(ms=10500, func=tk.destroy)
