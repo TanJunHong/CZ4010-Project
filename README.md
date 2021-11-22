@@ -209,10 +209,7 @@ a whole.
 - **pycryptodome** -> For encryption using AES-CBC 256-bit
 - **Pyrebase4** -> Pyrebase with updated dependencies, to connect to Google Firebase (Uses pycryptodome as well)
 - **ttkthemes** -> Themes for Tkinter
-- **secrets** -> For generating cryptographically strong random numbers in selecting characters in password, as well as round key for Feistel rounds 
-- **maths** -> For testing of randomness (sqrt function)
-- **statistics** -> For testing of randomness (median)
-- **statsmodels** -> For conducting Z-test 
+- **secrets** -> For generating cryptographically strong random numbers in selecting characters in password, as well as round key for Feistel rounds
 
 ### Google Firebase
 

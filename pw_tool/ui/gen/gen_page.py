@@ -1,4 +1,3 @@
-import binascii
 import secrets
 import string
 import tkinter.ttk
@@ -6,7 +5,6 @@ import tkinter.ttk
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
-import pw_tool.ui.gen.test_gen_page
 
 uppercase_list = list(string.ascii_uppercase)
 lowercase_list = list(string.ascii_lowercase)
