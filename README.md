@@ -140,7 +140,7 @@ which is why we made use of the vault key and the authentication key.
 
 To generate the password, we first create a list of all characters (alphanumeric and symbols) based on what is selected
 by the user. Using secrets module to generate random numbers, it is used as the index to the character list for picking 
-a character. This is repeated for the desired length. Since secrets module is a CSPRNG, it offers uniform and independent
+a character. This is repeated for the desired length (capped at 64 characters). Since secrets module is a CSPRNG, it offers uniform and independent
 generation of numbers, hence are unpredictable. To ensure that it contains all selected character type, check is done,
 and generation will be repeated if not fulfilled.
 
