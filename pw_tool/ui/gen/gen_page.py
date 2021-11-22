@@ -15,6 +15,8 @@ symbol_list = list(string.punctuation)
 
 
 def xor(a, b):
+    """Returns XOR of two binary strings
+    """
     return bin(int(a, 2) ^ int(b, 2))[2:].zfill(len(a))
 
 
@@ -42,7 +44,7 @@ class GenPage:
 
         self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                                 validate="key", validatecommand=(
-                self.__gen_frame.register(func=self.digit_validation), "%S"))
+                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
@@ -141,8 +143,8 @@ class GenPage:
         sym = self.__symbol_checkbox.instate(["selected"])
         secrets_generator = secrets.SystemRandom()
 
-        if not length or int(length) < 12:
-            self.__error_label.configure(text="Please ensure password length is filled/valid!")
+        if not length or int(length) < 12 or int(length) > 128:
+            self.__error_label.configure(text="Please ensure password length is filled/valid! (12-128)")
             self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__pw_label.configure(text="")
             self.__copy_button["state"] = tkinter.DISABLED
@@ -172,28 +174,20 @@ class GenPage:
         if sym:
             characters += symbol_list
 
-        self.__password = ""
-
-        for i in range(int(length)):
-            self.__password += characters[secrets_generator.randint(0, len(characters) - 1)]
-
         # permute password using feistel rounds
         # generate key using random bits
         def random_key(p):
             key1 = ""
             p = int(p)
             for j in range(p):
-                temp = secrets_generator.randint(0, 1)
+                temp = secrets_generator.randint(a=0, b=1)
                 temp = str(temp)
                 key1 += temp
             return key1
 
-        # get the index of each character
         pw_index = []
-        for x in self.__password:
-            index = characters.index(x)
-            pw_index.append(index)
-        # print(pw_index)
+        for i in range(int(length)):
+            pw_index.append(secrets.randbelow(exclusive_upper_bound=len(characters)))
 
         # convert decimal index to 8 bit binary
         pw_bin = [format(y, "08b") for y in pw_index]
@@ -260,7 +254,7 @@ class GenPage:
         # display generated password
         self.__pw_label.configure(text=self.__password)
 
-        pw_tool.ui.gen.test_gen_page.run_test(lst=decimal_list)
+        # pw_tool.ui.gen.test_gen_page.run_test(lst=decimal_list)
 
     def digit_validation(self, char):
         """Validates input, making sure it contains only digits
