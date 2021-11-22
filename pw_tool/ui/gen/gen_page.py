@@ -19,7 +19,7 @@ class GenPage:
         self.__master = master
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
+        self.__window.geometry(newGeometry="960x480")
         self.__window.title(string="Password Generator")
 
         self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Generator",
@@ -123,8 +123,8 @@ class GenPage:
         """
         length = int(self.__pw_len_entry.get()) if self.__pw_len_entry.get() else 0
 
-        if not length or length < 12 or length > 128:
-            self.__error_label.configure(text="Please ensure password length is filled/valid! (12-128)")
+        if not length or length < 12 or length > 64:
+            self.__error_label.configure(text="Please ensure password length is filled/valid! (12-64)")
             self.__pw_label.configure(text="")
             self.__gen_pw_label.configure(state=tkinter.DISABLED)
             self.__copy_button.configure(state=tkinter.DISABLED)

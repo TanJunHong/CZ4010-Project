@@ -12,10 +12,10 @@ class GenHistPage:
         self.__master = master
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
+        self.__window.geometry(newGeometry="960x720")
         self.__window.title(string="Generated Passwords")
 
-        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Previously Generated Passwords",
+        self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Last 10 Generated Passwords",
                                                  font=pw_tool.helper.ui_helper.font,
                                                  background=pw_tool.helper.ui_helper.background_color)
 
