@@ -42,7 +42,7 @@ class PWPage:
                                             background=pw_tool.helper.ui_helper.background_color)
 
         self.__actual_pw_label = tkinter.ttk.Label(master=self.__label_frame, text=self.__default_password,
-                                                   font=pw_tool.helper.ui_helper.font,
+                                                   font=pw_tool.helper.ui_helper.small_font,
                                                    background=pw_tool.helper.ui_helper.background_color)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
@@ -61,8 +61,8 @@ class PWPage:
                                                   command=self.__show_delete_dialog)
 
         self.__username_label.grid(row=0, column=0, padx=20, pady=5, sticky="E")
-        self.__actual_username_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
-        self.__pw_label.grid(row=1, column=0, padx=20, pady=5, sticky="E")
+        self.__actual_username_label.grid(row=0, column=1, padx=20, pady=5, sticky="W")
+        self.__pw_label.grid(row=1, column=0, padx=20, pady=5, sticky="W")
         self.__actual_pw_label.grid(row=1, column=1, padx=20, pady=5, sticky="E")
 
         self.__toggle_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")

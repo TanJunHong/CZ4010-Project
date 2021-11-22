@@ -159,12 +159,11 @@ class GenPage:
 
         while True:
             self.__password = "".join(secrets.choice(seq=characters) for _ in range(length))
-            if upper and sum(char.isupper() for char in self.__password) < 1 or \
-                    lower and sum(char.islower() for char in self.__password) < 1 or \
-                    numeric and sum(char.isnumeric() for char in self.__password) < 1 or \
-                    symbol and sum(char in string.punctuation for char in self.__password) < 1:
-                continue
-            break
+            if (not upper or any(char.isupper() for char in self.__password)) and \
+                    (not lower or any(char.islower() for char in self.__password)) and \
+                    (not numeric or any(char.isnumeric() for char in self.__password)) and \
+                    (not symbol or any(char in string.punctuation for char in self.__password)):
+                break
 
         pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
