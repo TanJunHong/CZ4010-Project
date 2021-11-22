@@ -173,9 +173,9 @@ disable clipboard history.
 
 #### Password History
 
-To aid users in choosing a password, we decided to store up to 10 generated passwords. This way, users can view and
+To aid users in choosing a password, we decided to display up to 10 generated passwords. This way, users can view and
 choose the desired password. Moreover, should a user forgets to save the newly generated password, he can still retrieve
-it easily. The list of passwords automatically refreshes upon hitting more than 10 stored passwords.
+it easily. The list of passwords automatically removes the oldest password upon hitting more than 10 stored passwords.
 
 ### Security
 
