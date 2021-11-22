@@ -14,12 +14,6 @@ numeric_list = list(string.digits)
 symbol_list = list(string.punctuation)
 
 
-def xor(a, b):
-    """Returns XOR of two binary strings
-    """
-    return bin(int(a, 2) ^ int(b, 2))[2:].zfill(len(a))
-
-
 class GenPage:
     def __init__(self, master):
         """Initialises password generator page
@@ -43,8 +37,8 @@ class GenPage:
                                                 background=pw_tool.helper.ui_helper.background_color)
 
         self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
-                                                validate="key", validatecommand=(
-                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
+                                                validate="key", validatecommand=(self.__gen_frame.register(
+                                                                    func=self.__validate_digit), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
@@ -80,8 +74,7 @@ class GenPage:
 
         # Generate password
         self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate",
-                                                    style="LargeFont.TButton",
-                                                    command=self.__pw_generator)
+                                                    style="LargeFont.TButton", command=self.__generate_pw)
 
         # copy generated password to clipboard
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
@@ -134,26 +127,38 @@ class GenPage:
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
-    def __pw_generator(self):
-        # used to combine all random characters to create password
-        length = self.__pw_len_entry.get()
-        upper = self.__upper_checkbox.instate(["selected"])
-        lower = self.__lower_checkbox.instate(["selected"])
-        num = self.__numeric_checkbox.instate(["selected"])
-        sym = self.__symbol_checkbox.instate(["selected"])
-        secrets_generator = secrets.SystemRandom()
+    def __generate_pw(self):
+        """Generates password, stores in vault and displays it
+        """
+        length = int(self.__pw_len_entry.get()) if self.__pw_len_entry.get() else 0
 
-        if not length or int(length) < 12 or int(length) > 128:
+        if not length or length < 12 or length > 128:
             self.__error_label.configure(text="Please ensure password length is filled/valid! (12-128)")
-            self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__pw_label.configure(text="")
+            self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__copy_button["state"] = tkinter.DISABLED
             return
 
-        if not upper and not lower and not num and not sym:
+        characters = []
+
+        upper = self.__upper_checkbox.instate(statespec=["selected"])
+        lower = self.__lower_checkbox.instate(statespec=["selected"])
+        numeric = self.__numeric_checkbox.instate(statespec=["selected"])
+        symbol = self.__symbol_checkbox.instate(statespec=["selected"])
+
+        if upper:
+            characters += uppercase_list
+        if lower:
+            characters += lowercase_list
+        if numeric:
+            characters += numeric_list
+        if symbol:
+            characters += symbol_list
+
+        if not characters:
             self.__error_label.configure(text="Please choose the type of characters!")
-            self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__pw_label.configure(text="")
+            self.__gen_pw_label["state"] = tkinter.DISABLED
             self.__copy_button["state"] = tkinter.DISABLED
             return
 
@@ -161,102 +166,25 @@ class GenPage:
         self.__gen_pw_label["state"] = tkinter.NORMAL
         self.__copy_button["state"] = tkinter.NORMAL
 
-        characters = []
-        if upper:
-            characters += uppercase_list
+        i = 0
 
-        if lower:
-            characters += lowercase_list
-
-        if num:
-            characters += numeric_list
-
-        if sym:
-            characters += symbol_list
-
-        # permute password using feistel rounds
-        # generate key using random bits
-        def random_key(p):
-            key1 = ""
-            p = int(p)
-            for j in range(p):
-                temp = secrets_generator.randint(a=0, b=1)
-                temp = str(temp)
-                key1 += temp
-            return key1
-
-        pw_index = []
-        for i in range(int(length)):
-            pw_index.append(secrets.randbelow(exclusive_upper_bound=len(characters)))
-
-        # convert decimal index to 8 bit binary
-        pw_bin = [format(y, "08b") for y in pw_index]
-        pw_bin = "".join(pw_bin)
-        # print(pw_bin)
-
-        n = int(len(pw_bin) // 2)
-        l1 = pw_bin[0:n]
-        r1 = pw_bin[n:]
-        m = len(r1)
-
-        # generate key k1, k2 for the first and second round
-        k1 = random_key(m)
-        k2 = random_key(m)
-        k3 = random_key(m)
-        k4 = random_key(m)
-        k5 = random_key(m)
-
-        # first round of feistel
-        f1 = xor(r1, k1)
-        r2 = xor(f1, l1)
-        l2 = l1
-
-        # second round of feistel
-        f2 = xor(r2, k2)
-        r3 = xor(f2, l2)
-        l3 = r2
-
-        # third round of feistel
-        f3 = xor(r3, k3)
-        r4 = xor(f3, l3)
-        l4 = r3
-
-        # fourth round of feistel
-        f4 = xor(r4, k4)
-        r5 = xor(f4, l4)
-        l5 = r4
-
-        # fifth round of feistel
-        f5 = xor(r5, k5)
-        r6 = xor(f5, l5)
-        l6 = r5
-
-        # "cipher"text
-        bin_data = l6 + r6
-        str_data = " "
-        decimal_list = []
-        for i in range(0, len(bin_data), 7):
-            temp_data = bin_data[i:i + 7]
-            # print(temp_data)
-            decimal_data = int(temp_data, 2)
-            decimal_data %= len(characters)
-            decimal_list.append(decimal_data)
-            # print(decimal_data)
-            str_data = str_data + characters[decimal_data]
-
-        # print(str_data)
-        # print(decimal_list)
-
-        self.__password = str_data[0:int(length) + 1]
+        while True:
+            if i == 1:
+                print("regen")
+            self.__password = "".join(secrets.choice(seq=characters) for _ in range(length))
+            if upper and sum(char.isupper() for char in self.__password) < 1 or \
+                    lower and sum(char.islower() for char in self.__password) < 1 or \
+                    numeric and sum(char.isnumeric() for char in self.__password) < 1 or \
+                    symbol and sum(char in string.punctuation for char in self.__password) < 1:
+                i += 1
+                continue
+            break
 
         pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
-        # display generated password
         self.__pw_label.configure(text=self.__password)
 
-        # pw_tool.ui.gen.test_gen_page.run_test(lst=decimal_list)
-
-    def digit_validation(self, char):
+    def __validate_digit(self, char):
         """Validates input, making sure it contains only digits
         Rings bell if invalid input.
         """
