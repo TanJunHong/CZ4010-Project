@@ -2,6 +2,7 @@ import tkinter.ttk
 
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
+import pw_tool.ui.gen.gen_page
 
 
 class AddPage:
@@ -41,6 +42,9 @@ class AddPage:
         self.__notification_label = tkinter.ttk.Label(master=self.__window, font=pw_tool.helper.ui_helper.font,
                                                       background=pw_tool.helper.ui_helper.background_color)
 
+        self.__gen_pw_button = tkinter.ttk.Button(master=self.__window, text="Generate Password",
+                                                  style="LargeFont.TButton", command=self.__gen_pw)
+
         self.__add_button = tkinter.ttk.Button(master=self.__window, text="Add To Vault", style="LargeFont.TButton",
                                                command=self.__add_to_vault)
 
@@ -56,6 +60,7 @@ class AddPage:
         self.__title_label.pack(pady=20)
         self.__entry_frame.pack(pady=30)
         self.__notification_label.pack(pady=5)
+        self.__gen_pw_button.pack(pady=5)
         self.__add_button.pack(pady=5)
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
@@ -72,10 +77,19 @@ class AddPage:
             self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
-        pw_tool.helper.vault_helper.update_vault(website=self.__website_entry.get(),
-                                                 username=self.__username_entry.get(), password=self.__pw_entry.get())
+        if not pw_tool.helper.vault_helper.update_vault(website=self.__website_entry.get(),
+                                                        username=self.__username_entry.get(),
+                                                        password=self.__pw_entry.get()):
+            self.__notification_label.configure(text="Website already exists!")
+            return
 
         pw_tool.helper.ui_helper.clear_fields(window=self.__entry_frame)
 
         self.__notification_label.configure(text="Successfully Added!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
+
+    def __gen_pw(self):
+        """Redirects to password page
+        """
+        self.__window.withdraw()
+        pw_tool.ui.gen.gen_page.GenPage(master=self.__window, pw_entry=self.__pw_entry)

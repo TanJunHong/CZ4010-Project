@@ -51,7 +51,10 @@ def update_vault(website, username, password, old_value=None):
     """Updates vault with new entry
     """
     old_passwords = []
-    if old_value is not None:
+    if old_value is None:
+        if website in vault["vault"]:
+            return False
+    else:
         old_passwords = vault["vault"][website]["old_passwords"]
 
         for old_password in old_passwords:

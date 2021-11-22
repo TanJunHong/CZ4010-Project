@@ -5,6 +5,7 @@ import tkinter.ttk
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
+import pw_tool.ui.vault.vault_page
 
 uppercase_list = list(string.ascii_uppercase)
 lowercase_list = list(string.ascii_lowercase)
@@ -13,10 +14,13 @@ symbol_list = list(string.punctuation)
 
 
 class GenPage:
-    def __init__(self, master):
+    def __init__(self, master, pw_entry=None):
         """Initialises password generator page
         """
         self.__master = master
+
+        self.__password = ""
+        self.__pw_entry = pw_entry
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry="960x480")
@@ -53,9 +57,8 @@ class GenPage:
         self.__symbol_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", style="TCheckbutton")
 
         self.__gen_pw_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
-                                                font=pw_tool.helper.ui_helper.small_font,
+                                                state=tkinter.DISABLED, font=pw_tool.helper.ui_helper.small_font,
                                                 background=pw_tool.helper.ui_helper.background_color)
-        self.__gen_pw_label.configure(state=tkinter.DISABLED)
 
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                             background=pw_tool.helper.ui_helper.background_color)
@@ -71,15 +74,16 @@ class GenPage:
                                                     style="LargeFont.TButton", command=self.__generate_pw)
 
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
-                                                style="LargeFont.TButton",
+                                                state=tkinter.DISABLED, style="LargeFont.TButton",
                                                 command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(
                                                     password=self.__password))
-        self.__copy_button.configure(state=tkinter.DISABLED)
 
-        self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
+        self.__dynamic_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password",
-                                                   style="LargeFont.TButton", command=self.__show_hist_page)
+        self.__dynamic_button = tkinter.ttk.Button(master=self.__dynamic_frame, text="Previously Generated Password",
+                                                   style="LargeFont.TButton", command=self.__show_hist_page) \
+            if pw_entry is None else tkinter.ttk.Button(master=self.__dynamic_frame, text="Use Password",
+                                                        style="LargeFont.TButton", command=self.__show_master_page)
 
         self.__notif_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         self.__copy_notif_label = tkinter.ttk.Label(master=self.__notif_frame, font=pw_tool.helper.ui_helper.small_font,
@@ -102,7 +106,7 @@ class GenPage:
         self.__generate_button.grid(row=0, column=0, padx=20, pady=5, sticky="E")
         self.__copy_button.grid(row=0, column=1, padx=20, pady=5, sticky="W")
 
-        self.__history_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
+        self.__dynamic_button.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
         self.__copy_notif_label.grid(row=0, column=1, padx=20, pady=5, sticky="E")
 
@@ -110,7 +114,7 @@ class GenPage:
         self.__gen_frame.pack(pady=5)
         self.__error_frame.pack(pady=5)
         self.__button_frame.pack(pady=5)
-        self.__history_frame.pack(pady=5)
+        self.__dynamic_frame.pack(pady=5)
         self.__notif_frame.pack(pady=5)
 
         self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
@@ -184,3 +188,10 @@ class GenPage:
         """
         self.__window.withdraw()
         pw_tool.ui.gen.gen_history.GenHistPage(master=self.__window)
+
+    def __show_master_page(self):
+        """Fills password and redirects back to master page
+        """
+        self.__pw_entry.delete(first=0, last=tkinter.END)
+        self.__pw_entry.insert(index=0, string=self.__password)
+        pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window)
