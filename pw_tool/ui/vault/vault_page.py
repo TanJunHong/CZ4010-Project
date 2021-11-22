@@ -15,7 +15,7 @@ class VaultPage:
         self.__master = master
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry="720x480")
+        self.__window.geometry(newGeometry="640x720")
         self.__window.title(string="Password Manager")
         self.__welcome_label = tkinter.ttk.Label(master=self.__window, text="Password Vault",
                                                  font=pw_tool.helper.ui_helper.font,

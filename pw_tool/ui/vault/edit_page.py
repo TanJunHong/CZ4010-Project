@@ -2,6 +2,7 @@ import tkinter.ttk
 
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
+import pw_tool.ui.gen.gen_page
 
 
 class EditPage:
@@ -14,7 +15,7 @@ class EditPage:
         self.__value = value
 
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
+        self.__window.geometry(newGeometry="640x640")
         self.__window.title(string="Password Manager")
 
         self.__website_label = tkinter.ttk.Label(master=self.__window, text=self.__website,
@@ -37,6 +38,9 @@ class EditPage:
         self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, font=pw_tool.helper.ui_helper.font, show="*")
         self.__pw_entry.insert(index=0, string=self.__value["password"])
 
+        self.__gen_pw_button = tkinter.ttk.Button(master=self.__window, text="Generate Password",
+                                                  style="LargeFont.TButton", command=self.__gen_pw)
+
         self.__edit_button = tkinter.ttk.Button(master=self.__window, text="Update", style="LargeFont.TButton",
                                                 command=self.__update_vault)
 
@@ -52,6 +56,7 @@ class EditPage:
 
         self.__website_label.pack(pady=50)
         self.__entry_frame.pack(pady=5)
+        self.__gen_pw_button.pack(pady=5)
         self.__edit_button.pack(pady=50)
         self.__notification_label.pack(pady=5)
 
@@ -82,3 +87,9 @@ class EditPage:
 
         self.__notification_label.configure(text="Successfully Updated!")
         self.__window.after(ms=1000, func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window))
+
+    def __gen_pw(self):
+        """Redirects to password page
+        """
+        self.__window.withdraw()
+        pw_tool.ui.gen.gen_page.GenPage(master=self.__window, pw_entry=self.__pw_entry)
