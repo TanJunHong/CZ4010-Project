@@ -1,16 +1,9 @@
-import secrets
-import string
 import tkinter.ttk
 
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
 import pw_tool.ui.vault.vault_page
-
-uppercase_list = list(string.ascii_uppercase)
-lowercase_list = list(string.ascii_lowercase)
-numeric_list = list(string.digits)
-symbol_list = list(string.punctuation)
 
 
 class GenPage:
@@ -134,23 +127,12 @@ class GenPage:
             self.__copy_button.configure(state=tkinter.DISABLED)
             return
 
-        characters = []
+        config = {"upper":   self.__upper_checkbox.instate(statespec=["selected"]),
+                  "lower":   self.__lower_checkbox.instate(statespec=["selected"]),
+                  "numeric": self.__numeric_checkbox.instate(statespec=["selected"]),
+                  "symbol":  self.__symbol_checkbox.instate(statespec=["selected"])}
 
-        upper = self.__upper_checkbox.instate(statespec=["selected"])
-        lower = self.__lower_checkbox.instate(statespec=["selected"])
-        numeric = self.__numeric_checkbox.instate(statespec=["selected"])
-        symbol = self.__symbol_checkbox.instate(statespec=["selected"])
-
-        if upper:
-            characters += uppercase_list
-        if lower:
-            characters += lowercase_list
-        if numeric:
-            characters += numeric_list
-        if symbol:
-            characters += symbol_list
-
-        if not characters:
+        if not any(value for value in config.values()):
             self.__error_label.configure(text="Please choose the type of characters!")
             self.__pw_label.configure(text="")
             self.__gen_pw_label.configure(state=tkinter.DISABLED)
@@ -161,13 +143,7 @@ class GenPage:
         self.__gen_pw_label.configure(state=tkinter.NORMAL)
         self.__copy_button.configure(state=tkinter.NORMAL)
 
-        while True:
-            self.__password = "".join(secrets.choice(seq=characters) for _ in range(length))
-            if (not upper or any(char.isupper() for char in self.__password)) and \
-                    (not lower or any(char.islower() for char in self.__password)) and \
-                    (not numeric or any(char.isnumeric() for char in self.__password)) and \
-                    (not symbol or any(char in string.punctuation for char in self.__password)):
-                break
+        self.__password = pw_tool.helper.vault_helper.generate_pw(length=length, config=config)
 
         pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
@@ -177,7 +153,7 @@ class GenPage:
         """Validates input, making sure it contains only digits
         Rings bell if invalid input.
         """
-        if char in numeric_list:
+        if char in pw_tool.helper.vault_helper.numeric_list:
             return True
 
         self.__gen_frame.bell()

@@ -1,5 +1,7 @@
 import base64
 import json
+import secrets
+import string
 
 import Crypto.Cipher.AES
 import Crypto.Cipher.ChaCha20
@@ -11,6 +13,11 @@ import passlib.hash
 
 import pw_tool.helper.fb_helper
 import pw_tool.helper.ui_helper
+
+uppercase_list = list(string.ascii_uppercase)
+lowercase_list = list(string.ascii_lowercase)
+numeric_list = list(string.digits)
+symbol_list = list(string.punctuation)
 
 context = passlib.context.CryptContext(schemes=["pbkdf2_sha256"], pbkdf2_sha256__default_rounds=100000)
 vault_key = default_vault_key = b""
@@ -27,6 +34,28 @@ def generate_vault_key(secret, salt):
 
     del secret
     del salt
+
+
+def generate_pw(length, config):
+    """Generates password based on length and configuration
+    """
+    characters = []
+    if config["upper"]:
+        characters += uppercase_list
+    if config["lower"]:
+        characters += lowercase_list
+    if config["numeric"]:
+        characters += numeric_list
+    if config["symbol"]:
+        characters += symbol_list
+
+    while True:
+        password = "".join(secrets.choice(seq=characters) for _ in range(length))
+        if (not config["upper"] or any(char.isupper() for char in password)) and \
+                (not config["lower"] or any(char.islower() for char in password)) and \
+                (not config["numeric"] or any(char.isnumeric() for char in password)) and \
+                (not config["symbol"] or any(char in string.punctuation for char in password)):
+            return password
 
 
 def add_gen_pw(password):
