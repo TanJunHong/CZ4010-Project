@@ -59,7 +59,7 @@ class GenPage:
         self.__gen_pw_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
                                                 font=pw_tool.helper.ui_helper.small_font,
                                                 background=pw_tool.helper.ui_helper.background_color)
-        self.__gen_pw_label["state"] = tkinter.DISABLED
+        self.__gen_pw_label.configure(state=tkinter.DISABLED)
 
         self.__pw_label = tkinter.ttk.Label(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                             background=pw_tool.helper.ui_helper.background_color)
@@ -81,7 +81,7 @@ class GenPage:
                                                 style="LargeFont.TButton",
                                                 command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(
                                                     password=self.__password))
-        self.__copy_button["state"] = tkinter.DISABLED
+        self.__copy_button.configure(state=tkinter.DISABLED)
 
         self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
@@ -135,8 +135,8 @@ class GenPage:
         if not length or length < 12 or length > 128:
             self.__error_label.configure(text="Please ensure password length is filled/valid! (12-128)")
             self.__pw_label.configure(text="")
-            self.__gen_pw_label["state"] = tkinter.DISABLED
-            self.__copy_button["state"] = tkinter.DISABLED
+            self.__gen_pw_label.configure(state=tkinter.DISABLED)
+            self.__copy_button.configure(state=tkinter.DISABLED)
             return
 
         characters = []
@@ -158,25 +158,20 @@ class GenPage:
         if not characters:
             self.__error_label.configure(text="Please choose the type of characters!")
             self.__pw_label.configure(text="")
-            self.__gen_pw_label["state"] = tkinter.DISABLED
-            self.__copy_button["state"] = tkinter.DISABLED
+            self.__gen_pw_label.configure(state=tkinter.DISABLED)
+            self.__copy_button.configure(state=tkinter.DISABLED)
             return
 
         self.__error_label.configure(text="")
-        self.__gen_pw_label["state"] = tkinter.NORMAL
-        self.__copy_button["state"] = tkinter.NORMAL
-
-        i = 0
+        self.__gen_pw_label.configure(state=tkinter.NORMAL)
+        self.__copy_button.configure(state=tkinter.NORMAL)
 
         while True:
-            if i == 1:
-                print("regen")
             self.__password = "".join(secrets.choice(seq=characters) for _ in range(length))
             if upper and sum(char.isupper() for char in self.__password) < 1 or \
                     lower and sum(char.islower() for char in self.__password) < 1 or \
                     numeric and sum(char.isnumeric() for char in self.__password) < 1 or \
                     symbol and sum(char in string.punctuation for char in self.__password) < 1:
-                i += 1
                 continue
             break
 
