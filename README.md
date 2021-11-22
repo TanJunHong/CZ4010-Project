@@ -100,6 +100,16 @@ These are the criteria we are looking for:
 above. The documentations state that scrypt algorithm is used for the password hashing. scrypt is a PBKDF specifically
 designed to make it costly to perform large-scale custom hardware attacks by requiring large amounts of memory.
 
+### Choosing the cryptographic library
+
+We need to choose a cryptographic lirary for the generation of "secure" passwords. These are the criteria we are looking for:
+
+- Should be designed for security or cryptography
+- Should be able to generate cryptographically strong random numbers
+- Widely used and well documented
+- Compatible with python which is the language we are using
+
+[**Secrets**](https://docs.python.org/3/library/secrets.html) is eventually chosen as it fulfils the considerations mentioned above.
 ### Usage of parameters
 
 After choosing the functions, we need to figure out how to effectively use them. We researched on how other existing
@@ -125,6 +135,19 @@ which is why we made use of the vault key.
 To generate the MAC key, we used (UUID | vault key) as the plaintext, and (password | authentication key) as salt. The
 explanation is similar to that of generating the vault key. We have to make sure we are not reusing the key or the salt,
 which is why we made use of the vault key and the authentication key.
+
+#### Generating "secure" passwords
+
+To generate the password, we first create a list of all characters (alphanumeric and symbols) based on what is selected
+by the user. Using secrets module to generate random numbers, it is used as the index to the character list for picking 
+a character. This is repeated for the desired length. Since secrets module is a CSPRNG, it offers uniform and independent
+generation of numbers, hence are unpredictable. To ensure that it contains all selected character type, check is done,
+and generation will be repeated if not fulfilled.
+
+Previously, we have implemented Feistel rounds as a password generator. This idea came about as we found that Feistel
+rounds is an elegant and clean method which offers both substitution and permutations for generation of random values. 
+However, we decide to do away with it as we are unsure of the possible weaknesses in design due to the lack of expertise.
+Moreover, due to the small sample length of password generated, it is diffiuclt to test if it is truly random. 
 
 ## Design
 
