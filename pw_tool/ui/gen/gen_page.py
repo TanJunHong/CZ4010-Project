@@ -23,6 +23,8 @@ class GenPage:
         """
         self.__master = master
 
+        self.__password = ""
+
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Generator")
@@ -132,15 +134,6 @@ class GenPage:
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
     def __pw_generator(self):
-        # destroy previously displayed password
-
-        # character list used to combine all the selected characters
-        characters = []
-
-        # used to select one character from each list to fulfill selected character requirement
-        rand_upper = rand_lower = rand_num = rand_sym = ""
-        character_counter = 0
-
         # used to combine all random characters to create password
         length = self.__pw_len_entry.get()
         upper = self.__upper_checkbox.instate(['selected'])
@@ -167,36 +160,21 @@ class GenPage:
         self.__gen_pw_label["state"] = tkinter.NORMAL
         self.__copy_button["state"] = tkinter.NORMAL
 
-        # adding list of selected characters to combined list
+        characters = []
         if upper:
             characters += uppercase_list
-            rand_upper = secrets_generator.choice(seq=uppercase_list)
-            character_counter += 1
 
         if lower:
             characters += lowercase_list
-            rand_lower = secrets_generator.choice(seq=lowercase_list)
-            character_counter += 1
 
         if num:
             characters += numeric_list
-            rand_num = secrets_generator.choice(seq=numeric_list)
-            character_counter += 1
 
         if sym:
             characters += symbol_list
-            rand_sym = secrets_generator.choice(seq=symbol_list)
-            character_counter += 1
 
-        # to ensure that there is at least 1 of the selected type of variable
-        self.__password = rand_upper + rand_lower + rand_num + rand_sym
-
-        # generate initial password by selecting random characters
-        for x in range(int(length) - character_counter):
-            value = secrets_generator.randint(0, len(characters) - 1)
-            self.__password += characters[value]
-
-        print(self.__password)
+        for i in range(int(length)):
+            self.__password += characters[secrets_generator.randint(0, len(characters) - 1)]
 
         # permute password using feistel rounds
         # generate key using random bits
@@ -211,29 +189,19 @@ class GenPage:
 
         # func for bit XOR
         def xor(a, b):
-            temp = ""
-            for j in range(n):
-                if a[j] == b[j]:
-                    temp += "0"
-                else:
-                    temp += "1"
-            return temp
-
-        # change binary to decimal
-        def bin_to_dec(binary):
-            return int(binary, 2)
+            return bin(int(a, 2) ^ int(b, 2))[2:].zfill(n)
 
         # get the index of each character
         pw_index = []
         for x in self.__password:
             index = characters.index(x)
             pw_index.append(index)
-        print(pw_index)
+        # print(pw_index)
 
         # convert decimal index to 8 bit binary
         pw_bin = [format(y, '08b') for y in pw_index]
         pw_bin = "".join(pw_bin)
-        print(pw_bin)
+        # print(pw_bin)
 
         n = int(len(pw_bin) // 2)
         l1 = pw_bin[0:n]
@@ -278,14 +246,15 @@ class GenPage:
         decimal_list = []
         for i in range(0, len(bin_data), 7):
             temp_data = bin_data[i:i + 7]
-            decimal_data = bin_to_dec(temp_data)
+            # print(temp_data)
+            decimal_data = int(temp_data, 2)
             decimal_data %= len(characters)
             decimal_list.append(decimal_data)
-            print(decimal_data)
+            # print(decimal_data)
             str_data = str_data + characters[decimal_data]
 
-        print(str_data)
-        print(decimal_list)
+        # print(str_data)
+        # print(decimal_list)
 
         self.__password = str_data[0:int(length) + 1]
         print(self.__password)
@@ -325,10 +294,10 @@ class GenPage:
         l_median = statistics.median(decimal_list)
         z_value = abs(run_test(decimal_list, l_median))
 
-        print('Z-statistic= ', z_value)
+        # print('Z-statistic= ', z_value)
 
         x = statsmodels.sandbox.stats.runs.runstest_1samp(decimal_list, correction=False)
-        print(x)
+        # print(x)
 
     def digit_validation(self, char):
         """Validates input, making sure it contains only digits
