@@ -32,8 +32,11 @@ def generate_vault_key(secret, salt):
 def add_gen_pw(password):
     """Adds generated password to history
     This is done in case user forgets to save their generated passwords.
+    It will only store the last 5 passwords.
     """
-    vault["pw_gen_hist"].append(password)
+    vault["pw_gen_hist"].insert(0, password)
+    while len(vault["pw_gen_hist"]) > 5:
+        vault["pw_gen_hist"].pop(len(vault["pw_gen_hist"]) - 1)
     upload_vault()
 
 
