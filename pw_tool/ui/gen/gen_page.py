@@ -1,15 +1,12 @@
 import binascii
-import math
 import secrets
-import statistics
 import string
 import tkinter.ttk
-
-import statsmodels.sandbox.stats.runs
 
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
+import pw_tool.ui.gen.test_gen_page
 
 uppercase_list = list(string.ascii_uppercase)
 lowercase_list = list(string.ascii_lowercase)
@@ -17,13 +14,15 @@ numeric_list = list(string.digits)
 symbol_list = list(string.punctuation)
 
 
+def xor(a, b):
+    return bin(int(a, 2) ^ int(b, 2))[2:].zfill(len(a))
+
+
 class GenPage:
     def __init__(self, master):
         """Initialises password generator page
         """
         self.__master = master
-
-        self.__password = ""
 
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
@@ -43,7 +42,7 @@ class GenPage:
 
         self.__pw_len_entry = tkinter.ttk.Entry(master=self.__gen_frame, font=pw_tool.helper.ui_helper.small_font,
                                                 validate="key", validatecommand=(
-                                                    self.__gen_frame.register(func=self.digit_validation), "%S"))
+                self.__gen_frame.register(func=self.digit_validation), "%S"))
 
         self.__type_label = tkinter.ttk.Label(master=self.__gen_frame, text="Type of characters:",
                                               font=pw_tool.helper.ui_helper.small_font,
@@ -136,10 +135,10 @@ class GenPage:
     def __pw_generator(self):
         # used to combine all random characters to create password
         length = self.__pw_len_entry.get()
-        upper = self.__upper_checkbox.instate(['selected'])
-        lower = self.__lower_checkbox.instate(['selected'])
-        num = self.__numeric_checkbox.instate(['selected'])
-        sym = self.__symbol_checkbox.instate(['selected'])
+        upper = self.__upper_checkbox.instate(["selected"])
+        lower = self.__lower_checkbox.instate(["selected"])
+        num = self.__numeric_checkbox.instate(["selected"])
+        sym = self.__symbol_checkbox.instate(["selected"])
         secrets_generator = secrets.SystemRandom()
 
         if not length or int(length) < 12:
@@ -173,6 +172,8 @@ class GenPage:
         if sym:
             characters += symbol_list
 
+        self.__password = ""
+
         for i in range(int(length)):
             self.__password += characters[secrets_generator.randint(0, len(characters) - 1)]
 
@@ -187,10 +188,6 @@ class GenPage:
                 key1 += temp
             return key1
 
-        # func for bit XOR
-        def xor(a, b):
-            return bin(int(a, 2) ^ int(b, 2))[2:].zfill(n)
-
         # get the index of each character
         pw_index = []
         for x in self.__password:
@@ -199,13 +196,13 @@ class GenPage:
         # print(pw_index)
 
         # convert decimal index to 8 bit binary
-        pw_bin = [format(y, '08b') for y in pw_index]
+        pw_bin = [format(y, "08b") for y in pw_index]
         pw_bin = "".join(pw_bin)
         # print(pw_bin)
 
         n = int(len(pw_bin) // 2)
         l1 = pw_bin[0:n]
-        r1 = pw_bin[n::]
+        r1 = pw_bin[n:]
         m = len(r1)
 
         # generate key k1, k2 for the first and second round
@@ -242,7 +239,7 @@ class GenPage:
 
         # "cipher"text
         bin_data = l6 + r6
-        str_data = ' '
+        str_data = " "
         decimal_list = []
         for i in range(0, len(bin_data), 7):
             temp_data = bin_data[i:i + 7]
@@ -257,47 +254,13 @@ class GenPage:
         # print(decimal_list)
 
         self.__password = str_data[0:int(length) + 1]
-        print(self.__password)
 
         pw_tool.helper.vault_helper.add_gen_pw(password=self.__password)
 
         # display generated password
         self.__pw_label.configure(text=self.__password)
 
-        def run_test(l, l_median):
-
-            runs, n1, n2 = 0, 0, 0
-
-            # Checking for start of new run
-            for k in range(len(l)):
-
-                # no. of runs
-                if (l[k] >= l_median > l[k - 1]) or \
-                        (l[k] < l_median <= l[k - 1]):
-                    runs += 1
-
-                    # no. of positive values
-                if (l[k]) >= l_median:
-                    n1 += 1
-
-                    # no. of negative values
-                else:
-                    n2 += 1
-
-            runs_exp = ((2 * n1 * n2) / (n1 + n2)) + 1
-            stan_dev = math.sqrt((2 * n1 * n2 * (2 * n1 * n2 - n1 - n2)) / (((n1 + n2) ** 2) * (n1 + n2 - 1)))
-
-            z = (runs - runs_exp) / stan_dev
-
-            return z
-
-        l_median = statistics.median(decimal_list)
-        z_value = abs(run_test(decimal_list, l_median))
-
-        # print('Z-statistic= ', z_value)
-
-        x = statsmodels.sandbox.stats.runs.runstest_1samp(decimal_list, correction=False)
-        # print(x)
+        pw_tool.ui.gen.test_gen_page.run_test(lst=decimal_list)
 
     def digit_validation(self, char):
         """Validates input, making sure it contains only digits
