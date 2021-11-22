@@ -11,9 +11,6 @@ class GenHistPage:
         """
         self.__master = master
 
-        self.__labels = []
-        self.__buttons = []
-
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Generated Passwords")
@@ -37,9 +34,6 @@ class GenHistPage:
 
             label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
             button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")
-
-            self.__labels.append(label)
-            self.__labels.append(button)
 
             counter += 1
 

@@ -1,7 +1,6 @@
 import json
 
 import Crypto.Protocol.KDF
-import Crypto.Random
 import pyrebase
 import requests
 
@@ -20,8 +19,7 @@ firebaseConfig = {
 firebase = pyrebase.initialize_app(config=firebaseConfig)
 database = firebase.database()
 auth = firebase.auth()
-auth_key = None
-mac_key = None
+auth_key = mac_key = None
 user = {}
 
 

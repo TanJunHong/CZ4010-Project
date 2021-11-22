@@ -68,8 +68,8 @@ class EditPage:
             self.__notification_label.configure(text="Please ensure all fields are filled!")
             return
 
-        if self.__username_entry.get() == self.__value["username"] and self.__pw_entry.get() == self.__value[
-                "password"]:
+        if self.__username_entry.get() == self.__value["username"] and \
+                self.__pw_entry.get() == self.__value["password"]:
             self.__notification_label.configure(text="Please change the fields!")
             return
 

@@ -14,9 +14,6 @@ class VaultPage:
         """
         self.__master = master
 
-        self.__labels = {}
-        self.__buttons = {}
-
         self.__window = tkinter.Toplevel()
         self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
         self.__window.title(string="Password Manager")
@@ -93,22 +90,17 @@ class VaultPage:
             self.__window.after(ms=5000, func=self.__logout)
             return
 
-        self.__labels = {}
-        self.__buttons = {}
-
         counter = 0
         for website, value in pw_tool.helper.vault_helper.vault["vault"].items():
-            self.__labels[website] = tkinter.ttk.Label(master=self.__website_frame, text=website,
-                                                       font=pw_tool.helper.ui_helper.font,
-                                                       background=pw_tool.helper.ui_helper.background_color)
+            label = tkinter.ttk.Label(master=self.__website_frame, text=website, font=pw_tool.helper.ui_helper.font,
+                                      background=pw_tool.helper.ui_helper.background_color)
 
-            self.__buttons[website] = tkinter.ttk.Button(master=self.__website_frame, text="Show",
-                                                         style="LargeFont.TButton",
-                                                         command=lambda web=website, val=value: self.__show_pw_page(
-                                                             website=web, value=val))
+            button = tkinter.ttk.Button(master=self.__website_frame, text="Show", style="LargeFont.TButton",
+                                        command=lambda web=website, val=value: self.__show_pw_page(website=web,
+                                                                                                   value=val))
 
-            self.__labels[website].grid(row=counter, column=0, padx=10, pady=5, sticky="W")
-            self.__buttons[website].grid(row=counter, column=1, padx=10, pady=5, sticky="E")
+            label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
+            button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")
 
             counter += 1
 

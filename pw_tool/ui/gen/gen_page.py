@@ -28,7 +28,6 @@ class GenPage:
 
         self.__gen_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        # Get length of password to generate
         self.__pw_len_label = tkinter.ttk.Label(master=self.__gen_frame,
                                                 text="Length of password:\n(Minimum length = 12)",
                                                 font=pw_tool.helper.ui_helper.small_font,
@@ -53,7 +52,6 @@ class GenPage:
 
         self.__symbol_checkbox = tkinter.ttk.Checkbutton(master=self.__gen_frame, text="!@#$%^&*", style="TCheckbutton")
 
-        # Display Generated Password
         self.__gen_pw_label = tkinter.ttk.Label(master=self.__gen_frame, text="Generated Password:",
                                                 font=pw_tool.helper.ui_helper.small_font,
                                                 background=pw_tool.helper.ui_helper.background_color)
@@ -64,17 +62,14 @@ class GenPage:
 
         self.__error_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        # Error message if no input
         self.__error_label = tkinter.ttk.Label(master=self.__error_frame, font=pw_tool.helper.ui_helper.small_font,
                                                background=pw_tool.helper.ui_helper.background_color)
 
         self.__button_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        # Generate password
         self.__generate_button = tkinter.ttk.Button(master=self.__button_frame, text="Generate",
                                                     style="LargeFont.TButton", command=self.__generate_pw)
 
-        # copy generated password to clipboard
         self.__copy_button = tkinter.ttk.Button(master=self.__button_frame, text="Copy Password",
                                                 style="LargeFont.TButton",
                                                 command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(
@@ -83,11 +78,9 @@ class GenPage:
 
         self.__history_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
 
-        # view previously generated password
         self.__history_button = tkinter.ttk.Button(master=self.__history_frame, text="Previously Generated Password",
                                                    style="LargeFont.TButton", command=self.__show_hist_page)
 
-        # copied notification
         self.__notif_frame = tkinter.ttk.Frame(master=self.__window, style="TFrame")
         self.__copy_notif_label = tkinter.ttk.Label(master=self.__notif_frame, font=pw_tool.helper.ui_helper.small_font,
                                                     background=pw_tool.helper.ui_helper.background_color)
