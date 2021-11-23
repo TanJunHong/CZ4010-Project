@@ -30,7 +30,8 @@ class GenHistPage:
                                       background=pw_tool.helper.ui_helper.background_color)
 
             button = tkinter.ttk.Button(master=self.__pw_frame, text="Copy", style="SmallFont.TButton",
-                                        command=lambda: pw_tool.helper.ui_helper.copy_to_clipboard(password=value))
+                                        command=lambda val=value: pw_tool.helper.ui_helper.copy_to_clipboard(
+                                            password=val))
 
             label.grid(row=counter, column=0, padx=10, pady=5, sticky="W")
             button.grid(row=counter, column=1, padx=10, pady=5, sticky="E")

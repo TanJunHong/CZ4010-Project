@@ -3,7 +3,6 @@ import tkinter.ttk
 import pw_tool.helper.ui_helper
 import pw_tool.helper.vault_helper
 import pw_tool.ui.gen.gen_history
-import pw_tool.ui.vault.vault_page
 
 
 class GenPage:
@@ -120,7 +119,7 @@ class GenPage:
         """
         length = int(self.__pw_len_entry.get()) if self.__pw_len_entry.get() else 0
 
-        if not length or length < 12 or length > 64:
+        if length < 12 or length > 64:
             self.__error_label.configure(text="Please ensure password length is filled/valid! (12-64)")
             self.__pw_label.configure(text="")
             self.__gen_pw_label.configure(state=tkinter.DISABLED)

@@ -65,9 +65,8 @@ class AddPage:
 
         pw_tool.helper.ui_helper.centre_window(window=self.__window)
 
-        self.__window.protocol(
-            func=lambda root=master, window=self.__window: pw_tool.helper.ui_helper.back(root=master, me=self.__window),
-            name="WM_DELETE_WINDOW")
+        self.__window.protocol(func=lambda: pw_tool.helper.ui_helper.back(root=self.__master, me=self.__window),
+                               name="WM_DELETE_WINDOW")
 
     def __add_to_vault(self):
         """Adds entry to vault

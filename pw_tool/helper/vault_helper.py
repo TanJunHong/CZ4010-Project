@@ -55,6 +55,9 @@ def generate_pw(length, config):
                 (not config["lower"] or any(char.islower() for char in password)) and \
                 (not config["numeric"] or any(char.isnumeric() for char in password)) and \
                 (not config["symbol"] or any(char in string.punctuation for char in password)):
+            del length
+            del config
+
             return password
 
 
@@ -64,6 +67,9 @@ def add_gen_pw(password):
     It will only store the last 10 passwords.
     """
     vault["pw_gen_hist"].insert(0, password)
+
+    del password
+
     while len(vault["pw_gen_hist"]) > 10:
         vault["pw_gen_hist"].pop(len(vault["pw_gen_hist"]) - 1)
     upload_vault()
@@ -220,3 +226,4 @@ def destroy_variables():
     pw_tool.helper.fb_helper.auth_key = pw_tool.helper.fb_helper.mac_key = pw_tool.helper.ui_helper.vault_page = None
     vault_key = default_vault_key
     vault = default_vault
+    pw_tool.helper.fb_helper.user = {}
