@@ -78,6 +78,10 @@ class RegPage:
             self.__notification_label.configure(text="Passwords do not match!")
             return
 
+        if len(self.__pw_entry.get()) < 12:
+            self.__notification_label.configure(text="Please use at least 12 characters!")
+            return
+
         try:
             pw_tool.helper.fb_helper.register(email=self.__email_entry.get(), password=self.__pw_entry.get())
         except requests.HTTPError as error:

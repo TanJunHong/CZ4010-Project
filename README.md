@@ -8,8 +8,6 @@
 - Tan Jun Hong
 - Lim Xiao Wei
 
----
-
 ## Motivation
 
 According to Dr Tay Kian Boon, there are many incorrect applications of cryptography in the real world. For instance,
@@ -18,8 +16,6 @@ implementations. As such, there are many minefields to be aware of.
 <br>In order to gain a deeper understanding of cryptography, it is crucial to apply these concepts, preferably on a
 project. As such, we decided to create a secure and authenticated password management tool, which will give a deeper
 insights on the inner workings.
-
----
 
 ## Research
 
@@ -158,8 +154,6 @@ password, potentially making it more unpredictable. However, we decide to scrap 
 weaknesses in design due to the lack of expertise. Moreover, due to the short length of password, it is difficult to
 test if the randomness is cryptographically secure.
 
----
-
 ## Design
 
 There are two things in mind when it comes to our design - convenience and security Since we are storing passwords, it
@@ -234,8 +228,6 @@ careful in handling the keys and initialization vectors for each encryption. It 
 wrong usage will make the vault vulnerable. As such, we decided to go with the entire vault being encrypted/decrypted as
 a whole.
 
----
-
 ## Development
 
 ### Python
@@ -268,8 +260,6 @@ Please ensure you have Python 3.10 installed. (Only tested in Python 3.10, may w
 4. Run `main.py`. You should see the following screen ![Login Screen](Login Screen.png)
 5. Register for an account, and you are ready to go!
 
----
-
 ## Limitations
 
 ### Immutable String in Python
@@ -278,8 +268,6 @@ Strings in python are immutable, so there is a chance the password is still in m
 the possibility the operating system will swap the whole memory page ut to disk, where it could sit for months. However,
 since this requires an attack on the client, we consider the risk of this attack minimal. If the attacker has access to
 the client, there are more serious things to worry about.
-
----
 
 ## Glossary
 
@@ -292,8 +280,6 @@ the client, there are more serious things to worry about.
 - **AES** - Advanced Encryption Standard
 - **CBC** - Cipher-Block Chaining
 - **UUID** - User Universally Unique Identifier
-
----
 
 ## Precautions
 
