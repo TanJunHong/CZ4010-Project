@@ -32,7 +32,7 @@ We began searching for a password hashing library that meets the following crite
 - Frequently updated, in order to keep up with the latest best security practices
 - Compatible with Python, since that is the language we are using
 
-[**Passlib**](https://passlib.readthedocs.io/en/stable/index.html) is eventually chosen for the as it fulfills the
+[**Passlib**](https://passlib.readthedocs.io/en/stable/index.html) is eventually chosen as it fulfills the
 considerations mentioned above.
 
 [**PyCryptodome**](https://pycryptodome.readthedocs.io/en/latest/index.html) is also used as Passlib does not support
@@ -302,9 +302,7 @@ component. Follow these basic guidelines to ensure that your vault is safe even 
 
 - Do not reuse your password
 - Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
-  * Best if it is generated through a reputable password management tool (or ours!)
+    * Best if it is generated through a reputable password management tool (or ours!)
 - Use sufficiently long password
-  * We did not set a minimum master password strength for easier testing of this project. In real-life cases, it is
-    important to set a sufficiently long password that takes long to brute-force.
 - Do not include personal information or words in the password
 - Never share your password, not even with your most trusted friends!
