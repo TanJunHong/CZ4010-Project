@@ -8,6 +8,8 @@
 - Tan Jun Hong
 - Lim Xiao Wei
 
+---
+
 ## Motivation
 
 According to Dr Tay Kian Boon, there are many incorrect applications of cryptography in the real world. For instance,
@@ -16,6 +18,8 @@ implementations. As such, there are many minefields to be aware of.
 <br>In order to gain a deeper understanding of cryptography, it is crucial to apply these concepts, preferably on a
 project. As such, we decided to create a secure and authenticated password management tool, which will give a deeper
 insights on the inner workings.
+
+---
 
 ## Research
 
@@ -113,7 +117,7 @@ criteria we are looking for:
 [**secrets**](https://docs.python.org/3/library/secrets.html) is eventually chosen as it fulfils the considerations
 mentioned above.
 
-### Usage of parameters
+### Generating cryptographically secure secrets
 
 After choosing the functions, we need to figure out how to effectively use them. We researched on how other existing
 password managers worked, and borrowed their concepts. One of the videos we referenced from is [**How Password Managers
@@ -139,7 +143,7 @@ To generate the MAC key, we used (UUID | vault key) as the plaintext, and (passw
 explanation is similar to that of generating the vault key. We have to make sure we are not reusing the key or the salt,
 which is why we made use of the vault key and the authentication key.
 
-#### Generating "secure" passwords
+#### Generating secure passwords
 
 To generate the password, we first create a list of all characters (alphanumeric and symbols) based on what is selected
 by the user. We then use secrets to pick a character from the list. This is repeated for the desired length (capped at
@@ -153,6 +157,8 @@ rounds is an elegant and clean method which offers both substitution and permuta
 password, potentially making it more unpredictable. However, we decide to scrap it as we are unsure of the possible
 weaknesses in design due to the lack of expertise. Moreover, due to the short length of password, it is difficult to
 test if the randomness is cryptographically secure.
+
+---
 
 ## Design
 
@@ -228,6 +234,8 @@ careful in handling the keys and initialization vectors for each encryption. It 
 wrong usage will make the vault vulnerable. As such, we decided to go with the entire vault being encrypted/decrypted as
 a whole.
 
+---
+
 ## Development
 
 ### Python
@@ -271,6 +279,8 @@ the possibility the operating system will swap the whole memory page ut to disk,
 since this requires an attack on the client, we consider the risk of this attack minimal. If the attacker has access to
 the client, there are more serious things to worry about.
 
+---
+
 ## Glossary
 
 - **CS** - Cryptographically Secure
@@ -283,24 +293,18 @@ the client, there are more serious things to worry about.
 - **CBC** - Cipher-Block Chaining
 - **UUID** - User Universally Unique Identifier
 
+---
+
 ## Precautions
 
 This password management tool securely encrypts your passwords but this security is only as strong as the weakest
 component. Follow these basic guidelines to ensure that your vault is safe even if your passwords are exposed:
 
-- Choose a unique password that is not used anywhere else
+- Do not reuse your password
 - Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
-    * Best if it is generated through a reputable password management tool
+  * Best if it is generated through a reputable password management tool (or ours!)
 - Use sufficiently long password
-    * We did not set a minimum password strength for easier testing of this project. In real-life cases, it is important
-      to set a sufficiently long password that takes long to brute-force.
+  * We did not set a minimum master password strength for easier testing of this project. In real-life cases, it is
+    important to set a sufficiently long password that takes long to brute-force.
 - Do not include personal information or words in the password
 - Never share your password, not even with your most trusted friends!
-
-## TODO
-
-- Generation of random passwords
-    * Auto copy password to fill in, with timer expiry
-    * Generate password - save generated passwords and show history
-- Slides
-- Video
