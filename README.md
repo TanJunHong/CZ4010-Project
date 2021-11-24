@@ -100,16 +100,19 @@ These are the criteria we are looking for:
 above. The documentations state that scrypt algorithm is used for the password hashing. scrypt is a PBKDF specifically
 designed to make it costly to perform large-scale custom hardware attacks by requiring large amounts of memory.
 
-### Choosing the cryptographic library
+### Choosing the cryptographically secure library
 
-We need to choose a cryptographic lirary for the generation of "secure" passwords. These are the criteria we are looking for:
+We need to choose a library that is cryptographically secure for the generation of secure passwords. These are the
+criteria we are looking for:
 
-- Should be designed for security or cryptography
-- Should be able to generate cryptographically strong random numbers
+- Cryptographically secure, for generating cryptographically strong random numbers
+- Written and approved by security experts
 - Widely used and well documented
-- Compatible with python which is the language we are using
+- Compatible with Python
 
-[**Secrets**](https://docs.python.org/3/library/secrets.html) is eventually chosen as it fulfils the considerations mentioned above.
+[**secrets**](https://docs.python.org/3/library/secrets.html) is eventually chosen as it fulfils the considerations
+mentioned above.
+
 ### Usage of parameters
 
 After choosing the functions, we need to figure out how to effectively use them. We researched on how other existing
@@ -139,15 +142,17 @@ which is why we made use of the vault key and the authentication key.
 #### Generating "secure" passwords
 
 To generate the password, we first create a list of all characters (alphanumeric and symbols) based on what is selected
-by the user. Using secrets module to generate random numbers, it is used as the index to the character list for picking 
-a character. This is repeated for the desired length (capped at 64 characters). Since secrets module is a CSPRNG, it offers uniform and independent
-generation of numbers, hence are unpredictable. To ensure that it contains all selected character type, check is done,
-and generation will be repeated if not fulfilled.
+by the user. We then use secrets to pick a character from the list. This is repeated for the desired length (capped at
+64 characters). Since secrets module is cryptographically secure, it offers independent generation of numbers, and have
+equal chance of being any character, making the password unpredictable. To ensure that it contains the type of
+characters selected, a check is done after generation, and the password generation process is repeated if the condition
+is not fulfilled.
 
 Previously, we have implemented Feistel rounds as a password generator. This idea came about as we found that Feistel
-rounds is an elegant and clean method which offers both substitution and permutations for generation of random values. 
-However, we decide to do away with it as we are unsure of the possible weaknesses in design due to the lack of expertise.
-Moreover, due to the small sample length of password generated, it is diffiuclt to test if it is truly random. 
+rounds is an elegant and clean method which offers both substitution and permutations, which mixes the generated
+password, potentially making it more unpredictable. However, we decide to scrap it as we are unsure of the possible
+weaknesses in design due to the lack of expertise. Moreover, due to the short length of password, it is difficult to
+test if the randomness is cryptographically secure.
 
 ## Design
 
@@ -173,9 +178,9 @@ disable clipboard history.
 
 #### Password History
 
-To aid users in choosing a password, we decided to display up to 10 generated passwords. This way, users can view and
-choose the desired password. Moreover, should a user forgets to save the newly generated password, he can still retrieve
-it easily. The list of passwords automatically removes the oldest password upon hitting more than 10 stored passwords.
+To aid users in choosing a password, we decided to display the last 10 generated passwords. This way, users can view
+previously generated passwords. Moreover, if a user forgets to save his/her newly generated password, he/she can still
+retrieve it easily. Upon reaching 10 passwords, the oldest password will be removed.
 
 ### Security
 
@@ -238,7 +243,8 @@ a whole.
 - **pycryptodome** -> For encryption using AES-CBC 256-bit
 - **Pyrebase4** -> Pyrebase with updated dependencies, to connect to Google Firebase (Uses pycryptodome as well)
 - **ttkthemes** -> Themes for Tkinter
-- **secrets** -> For generating cryptographically strong random numbers in selecting characters in password, as well as round key for Feistel rounds
+- **secrets** -> For generating cryptographically strong random numbers in selecting characters in password, as well as
+  round key for Feistel rounds
 
 ### Google Firebase
 
