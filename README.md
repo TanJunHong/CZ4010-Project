@@ -257,7 +257,7 @@ Please ensure you have Python 3.10 installed. (Only tested in Python 3.10, may w
 1. Clone this repository
 2. From the root folder, run `pip install -r requirements.txt`
 3. Navigate to the `pw_tool` folder
-4. Run `main.py`. You should see the following screen ![Login Screen](https://github.com/TanJunHong/CZ4010-Project/blob/main/Login%20Screen.png?raw=true)
+4. Run `main.py`. You should see the following screen ![Login Screen](https://github.com/TanJunHong/CZ4010-Project/blob/main/Login%20Screen.png)
 5. Register for an account, and you are ready to go!
 
 ## Limitations
