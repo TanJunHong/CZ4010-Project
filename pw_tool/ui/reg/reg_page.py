@@ -13,7 +13,7 @@ class RegPage:
         """
         self.__master = master
         self.__window = tkinter.Toplevel()
-        self.__window.geometry(newGeometry=pw_tool.helper.ui_helper.window_size)
+        self.__window.geometry(newGeometry="720x480")
         self.__window.title(string="Registration Page")
 
         self.__title_label = tkinter.ttk.Label(master=self.__window, text="Registration",
@@ -34,7 +34,7 @@ class RegPage:
 
         self.__pw_entry = tkinter.ttk.Entry(master=self.__entry_frame, show="*", font=pw_tool.helper.ui_helper.font)
 
-        self.__confirm_pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Confirm PW",
+        self.__confirm_pw_label = tkinter.ttk.Label(master=self.__entry_frame, text="Confirm Password",
                                                     font=pw_tool.helper.ui_helper.font,
                                                     background=pw_tool.helper.ui_helper.background_color)
 
