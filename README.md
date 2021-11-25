@@ -274,6 +274,8 @@ Please ensure you have Python 3.10 installed. (Only tested in Python 3.10, may w
 4. Run `main.py`. You should see the following screen ![Login Screen](https://github.com/TanJunHong/CZ4010-Project/blob/main/Login%20Screen.png)
 5. Register for an account, and you are ready to go!
 
+Alternatively, download the `BoHack.exe` file from releases, run it and follow step 5.
+
 ## Limitations
 
 ### Immutable String in Python
