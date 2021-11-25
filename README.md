@@ -5,8 +5,22 @@
 
 ## Group Members
 
-- Tan Jun Hong
+- Tan Jun Hong 
+  * Individual Contributions - Password Vault, Database, User Interface, Clipboard, README
 - Lim Xiao Wei
+  * Individual Contributions - Password Generator, Demonstration, Slides, Video Editing, README
+
+## Precautions
+
+This password management tool securely encrypts your passwords but this security is only as strong as the weakest
+component. Follow these basic guidelines to ensure that your vault is safe even if your passwords are exposed:
+
+- Do not reuse your password
+- Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
+    * Best if it is generated through a reputable password management tool (or ours!)
+- Use sufficiently long password
+- Do not include personal information or words in the password
+- Never share your password, not even with your most trusted friends!
 
 ## Motivation
 
@@ -281,14 +295,3 @@ the client, there are more serious things to worry about.
 - **CBC** - Cipher-Block Chaining
 - **UUID** - User Universally Unique Identifier
 
-## Precautions
-
-This password management tool securely encrypts your passwords but this security is only as strong as the weakest
-component. Follow these basic guidelines to ensure that your vault is safe even if your passwords are exposed:
-
-- Do not reuse your password
-- Use a highly-varied set of different characters (alphanumeric, symbols, spaces)
-    * Best if it is generated through a reputable password management tool (or ours!)
-- Use sufficiently long password
-- Do not include personal information or words in the password
-- Never share your password, not even with your most trusted friends!
